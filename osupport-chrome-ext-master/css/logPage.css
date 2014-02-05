@@ -1,0 +1,76 @@
+/* stylesheet for the tipsy pop-up.*/
+
+
+table {
+	font-size : 10pt !important ;
+}
+
+th {
+	font-size: 9pt !important;
+	border-top: none !important;
+	/*font-style: italic !important;*/
+}
+.atable td { 
+     border-top: none; 
+ }
+/*h3 {letter-spacing:10pt !important;
+ }*/
+
+ .header1 {
+ 	color: #3276b1 !important;
+ 	/*letter-spacing:5pt !important;*/
+ 	display:inline;
+ }
+
+ .configheaders {
+  	 	color: #3276b1 !important;
+
+  }
+
+  .MyBillHeaders {
+  	color:brown !important;
+  }
+
+ .header2 {
+ 	color: brown !important;
+ 	display:inline;
+ }
+
+.btn-lotto {
+    float:right; 
+	width: 40%;
+	font-size: 10pt !important;
+	font-weight: bold;
+}
+
+.div-lotto-btn {
+	/*text-align:center;*/
+}
+.paypal-btn {
+	position:relative;
+    float:right; 
+}
+
+.tab-content {
+	border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+}
+
+
+.nav-tabs {
+    margin-bottom: 0;
+}
+
+#tabfont {
+	font-weight:bold;
+}
+
+#metricSlash {
+	font-size: 20pt;
+}
+
+#configTitles {
+	font-size: 15pt;
+}
