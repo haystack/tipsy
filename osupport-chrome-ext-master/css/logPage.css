@@ -63,6 +63,14 @@ th {
     margin-bottom: 0;
 }
 
+
+#left {
+	float: left;
+}
+
+/*#right {
+	float:right;
+}*/
 #tabfont {
 	font-weight:bold;
 }

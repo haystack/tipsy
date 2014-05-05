@@ -413,7 +413,10 @@ for (var i = 0; i < localStorage.length; i++) {
 		};
 		var dLastTimeVisited = new Date(lastTimeVisited);
 		var imsrc = "http://www.google.com/s2/favicons?domain=" +hostname;
-		$('#myTable > tbody').append('<tr><td><img src='+imsrc+'/>'+'     '+String(hostname)+'</td><td>'+String(visitCount)+'</td><td>'+String(msToTime(timeSpent))+'</td><td>'+dLastTimeVisited.toLocaleString()+'</td><td>'+lastTimePaid+'</td></tr>');
+		if (timeSpent > 5000 ){
+			$('#myTable > tbody').append('<tr><td><img src='+imsrc+'/>'+'     '+String(hostname)+'</td><td>'+String(visitCount)+'</td><td>'+String(msToTime(timeSpent))+'</td><td>'+dLastTimeVisited.toLocaleString()+'</td><td>'+lastTimePaid+'</td></tr>');
+			//console.log(timeSpent);
+		}
 	};
 };
 
