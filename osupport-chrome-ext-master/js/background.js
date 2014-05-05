@@ -20,10 +20,10 @@ var curpage = null;
 var lastFocusedWindowID = null;
 
 var isIdle = false;
-
+var IDLETIME = 15;
 
 // Set idle time
-chrome.idle.setDetectionInterval(15);
+chrome.idle.setDetectionInterval(IDLETIME);
 
 // function (bool) to check if html5 storage is supported
 function supports_html5_storage() {
@@ -31,7 +31,8 @@ function supports_html5_storage() {
 		return 'localStorage' in window && window['localStorage'] !== null;
 	} catch (e) {
 		return false;
-	}};
+	}
+};
 
 
 /*
@@ -60,38 +61,64 @@ function getSubValue(key, value) {
  */
  function setValue(key, value, newVal) {
  	var list = JSON.parse(localStorage.getItem("log-link: "+key));
+
+ 	console.log(newVal);
+ 	console.log(list);
+ 	console.log(list[value]);
  	list[value] = newVal;
+
  	localStorage.setItem("log-link: "+key, JSON.stringify(list));
  };
 
 // helper method that tells you if the site has already
 // been visited
 function alreadyVisited(hostname) {
-	if (JSON.parse(localStorage.getItem("log-link: "+hostname)) === null) {
+	if (JSON.parse(localStorage.getItem("log-link: "+hostname)) == null) {
 		return false;
 	} else {
 		return true;
 	};
 };
 
+// helper method that creates a new entry into localStorage
 function createNewEntry(hostname, visitCount, timeSpent, lastTimeVisited, lastTimePaid) {
 	var newEntry = {"visitCount" : visitCount,
 	"timeSpent": timeSpent,
 	"lastTimeVisited": lastTimeVisited,
-	"lastTimePaid": lastTimePaid};
+	"lastTimePaid": lastTimePaid,
+	"paymentInfo": null};
 	localStorage.setItem("log-link: "+hostname, JSON.stringify(newEntry));
 };
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    // console.log(sender.tab ?
+    //             "from a content script:" + sender.tab.url :
+    //             "from the extension");
+    console.log("received");
+    var payInfoEntry = {"paypalId": request.paypalId,
+						"bitcoinId": request.bitcoinId};
+	//console.log(alreadyVisited(request.hostname));
+	if (alreadyVisited(request.hostname)) {
+    	setValue(request.hostname, "paymentInfo", JSON.stringify(payInfoEntry));
+    }
 
-// will be called when Tipsy icon is clicked
+    //alert(request.hostname);
+    //alert(request.bitcoinId);
+    //alert(request.paypalId);
+    //if (request.greeting == "testing1234") {
+    //	alert("testing");
+    
+      sendResponse({farewell: "goodbye"});
+  	}
+  );
+// will be called when Tipsy icon is clicked. Opens up the Tipsy UI.
 chrome.browserAction.onClicked.addListener(function() {
 
 	if (!isIdle) {
 
 		var d = new Date();
 		curTime = d.getTime();
-
-		/*prevpage = undefined. WHY???*/
-
+		
 		var oldTimeSpent = getSubValue(curpage, "timeSpent");
 		var prevLastTimeVisited = getSubValue(curpage, "lastTimeVisited");
 		var newTimeSpent = oldTimeSpent + curTime - prevLastTimeVisited;
@@ -101,25 +128,23 @@ chrome.browserAction.onClicked.addListener(function() {
 		};
 
 		prevpage = null;
-	//curpage = null;
-	prevtabID = null;
-	chrome.windows.create({url:chrome.extension.getURL('html/logPage.html'), type:'popup'}, function(window){});
+		prevtabID = null;
+		chrome.windows.create({url:chrome.extension.getURL('html/logPage.html'), type:'popup'}, function(window){});
 	
-	if (supports_html5_storage) {
-		null
-	};
-	
+		if (supports_html5_storage) {
+			null
+		};
 	}; //isidle
 });
 
 // called when focused moved to a new tab
 chrome.tabs.onActivated.addListener(function(focusedTab) {
-
+	console.log(document);
+	//console.log(focusedTab);
 	if (!isIdle) {
-
 		var d = new Date();
 		curTime = d.getTime();
-		console.log('focus tab changed ' + d.toLocaleString());
+		//console.log('focus tab changed ' + d.toLocaleString());
 		prevtabID = focusedTab.tabId;
 
 		chrome.tabs.get(focusedTab.tabId, function(tabInfo) {
@@ -131,44 +156,39 @@ chrome.tabs.onActivated.addListener(function(focusedTab) {
 			var cookiesEnabled = navigator.cookieEnabled;
 			if (cookiesEnabled) {
 				if ( prevpage !== curpage) {
-				//console.log("focused");
-				//console.log(curpage);
-				//createNewEntry(curpage, 1,2,3);
 
-				if (alreadyVisited(curpage)) {
-					var oldVisitCount = getSubValue(curpage, "visitCount");
-					var oldLastTimeVisited = getSubValue(curpage, "lastTimeVisited");
+					if (alreadyVisited(curpage)) {
+						var oldVisitCount = getSubValue(curpage, "visitCount");
+						var oldLastTimeVisited = getSubValue(curpage, "lastTimeVisited");
 
-					var newVisitCount = oldVisitCount + 1;
-					var newLastTimeVisited = curTime;
+						var newVisitCount = oldVisitCount + 1;
+						var newLastTimeVisited = curTime;
 
-					setValue(curpage, "visitCount", newVisitCount);
-					setValue(curpage, "lastTimeVisited", newLastTimeVisited);
+						setValue(curpage, "visitCount", newVisitCount);
+						setValue(curpage, "lastTimeVisited", newLastTimeVisited);
 
-					var oldTimeSpent = getSubValue(prevpage, "timeSpent");
-					var prevLastTimeVisited = getSubValue(prevpage, "lastTimeVisited");
-					var newTimeSpent = oldTimeSpent + curTime - prevLastTimeVisited;
-					console.log(prevpage);
-					if (prevpage !== null) {
-						setValue(prevpage, "timeSpent", newTimeSpent);
-					};
-				} else {
-					createNewEntry(curpage, 1, 0, curTime, 0);
-					var oldTimeSpent = getSubValue(prevpage, "timeSpent");
-					var prevLastTimeVisited = getSubValue(prevpage, "lastTimeVisited");
-					var newTimeSpent = oldTimeSpent + curTime - prevLastTimeVisited;
-					if (alreadyVisited(prevpage) && (prevpage !== null)) {
-						//console.log('here');
+						var oldTimeSpent = getSubValue(prevpage, "timeSpent");
+						var prevLastTimeVisited = getSubValue(prevpage, "lastTimeVisited");
+						var newTimeSpent = oldTimeSpent + curTime - prevLastTimeVisited;
 						//console.log(prevpage);
-						setValue(prevpage, "timeSpent", newTimeSpent);
+						if (prevpage !== null) {
+							setValue(prevpage, "timeSpent", newTimeSpent);
+						};
+					} else {
+						createNewEntry(curpage, 1, 0, curTime, 0);
+						var oldTimeSpent = getSubValue(prevpage, "timeSpent");
+						var prevLastTimeVisited = getSubValue(prevpage, "lastTimeVisited");
+						var newTimeSpent = oldTimeSpent + curTime - prevLastTimeVisited;
+						if (alreadyVisited(prevpage) && (prevpage !== null)) {
+							setValue(prevpage, "timeSpent", newTimeSpent);
+						};
 					};
 				};
-			};
-			prevpage = curpage;
+				prevpage = curpage;
 			//console.log(prevpage);
 
-		};	
-	});
+			};	
+		});
 	}; //isidle
 });
 
@@ -179,7 +199,7 @@ chrome.tabs.onUpdated.addListener(function(updatedTabId){
 	if (!isIdle) {
 		var d = new Date();
 		curTime = d.getTime();
-		console.log("tab change " +d.toLocaleString());
+	//	console.log("tab change " +d.toLocaleString());
 
 		chrome.tabs.get(updatedTabId, function(tabInfo){
 			parser.href = tabInfo.url;
@@ -189,7 +209,7 @@ chrome.tabs.onUpdated.addListener(function(updatedTabId){
 			var cookiesEnabled = navigator.cookieEnabled;
 		//console.log((updatedTabId== prevtabID) === (updatedTabId===prevtabID));
 		
-		console.log(prevpage + ' ' + nowpage);
+	//	console.log(prevpage + ' ' + nowpage);
 
 		if (true) { // cookiesenableed
 			if ( prevpage !== nowpage
@@ -242,12 +262,12 @@ chrome.windows.onFocusChanged.addListener(function(winId) {
 
 		var d = new Date();
 		curTime = d.getTime();
-		console.log("focus changed " + d.toLocaleString());
+	//	console.log("focus changed " + d.toLocaleString());
 
 
 		if (winId === -1) {
 			STATE = 'out';
-			console.log(STATE);
+		//	console.log(STATE);
 
 			var oldTimeSpent = getSubValue(curpage, "timeSpent");
 			var prevLastTimeVisited = getSubValue(curpage, "lastTimeVisited");
@@ -304,7 +324,7 @@ STATE = 'in';
 chrome.idle.onStateChanged.addListener(function(result){
 	var d = new Date();
 	curTime = d.getTime();
-	console.log(result + d.toLocaleString());
+	//console.log(result + d.toLocaleString());
 	
 
 	var winId;
@@ -319,7 +339,7 @@ chrome.idle.onStateChanged.addListener(function(result){
 
 			var d = new Date();
 			curTime = d.getTime();
-			console.log(STATE);
+		//	console.log(STATE);
 			if (STATE == 'in'){
 				var oldTimeSpent = getSubValue(curpage, "timeSpent");
 				var prevLastTimeVisited = getSubValue(curpage, "lastTimeVisited");
@@ -343,7 +363,7 @@ chrome.idle.onStateChanged.addListener(function(result){
 
 			var d = new Date();
 			curTime = d.getTime();
-			console.log(STATE);
+			//console.log(STATE);
 			if (STATE == 'in'){
 				var oldTimeSpent = getSubValue(curpage, "timeSpent");
 				var prevLastTimeVisited = getSubValue(curpage, "lastTimeVisited");
@@ -405,7 +425,23 @@ chrome.idle.onStateChanged.addListener(function(result){
 
 
 	 Questions:
-	 	1) How/Should we do the calculate since thing.
-	 	2) 
+	 	1) How/Should I implement the "calculate since"? NOT DOING
+	 	2) Should I implement payment or lottery first?
+	 	2b) How should payment look like?
+	 	3) How to cap maximum?
+		4) At what point is this done?
+		5) SelectCount is good?
+		6) What should reminder look like?
+
+
+		notification when threshold reached
+		visit count
+		click count
+
+
+
+
+	Group meeting 2/11/2014
+
 
 */

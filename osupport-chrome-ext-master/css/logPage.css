@@ -74,3 +74,6 @@ th {
 #configTitles {
 	font-size: 15pt;
 }
+#payMethodWord {
+	font-weight: bold;
+}
