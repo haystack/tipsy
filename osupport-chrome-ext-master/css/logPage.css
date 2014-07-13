@@ -1,4 +1,6 @@
-/* stylesheet for the tipsy pop-up.*/
+/* stylesheet for the tipsy pop-up.
+* --Philippe Schiff
+*/
 
 
 table {
@@ -8,17 +10,13 @@ table {
 th {
 	font-size: 9pt !important;
 	border-top: none !important;
-	/*font-style: italic !important;*/
 }
 .atable td { 
      border-top: none; 
  }
-/*h3 {letter-spacing:10pt !important;
- }*/
 
  .header1 {
  	color: #3276b1 !important;
- 	/*letter-spacing:5pt !important;*/
  	display:inline;
  }
 
@@ -67,10 +65,6 @@ th {
 #left {
 	float: left;
 }
-
-/*#right {
-	float:right;
-}*/
 #tabfont {
 	font-weight:bold;
 }

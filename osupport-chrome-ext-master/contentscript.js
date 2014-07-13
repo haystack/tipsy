@@ -1,9 +1,8 @@
-//alert("hello");
-//console.log(window.location.hostname);
-
-
-//console.log(document.getElementsByTagName('link')[0]['rel']);
-//console.log(document.getElementsByTagName('link')[0].getAttribute('blargh'));
+/**
+* contentscript.js (https://developer.chrome.com/extensions/content_scripts)
+* to parse the payment information.
+* -- Philippe Schiff
+*/
 
 var linksAr = document.getElementsByTagName('link');
 var len = linksAr.length;

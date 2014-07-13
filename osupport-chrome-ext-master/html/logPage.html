@@ -54,7 +54,6 @@
           </div>
 
           <div class="tab-pane" id="configurationpage">  
-            <!--   <h4 class = text-left> Payment method:</h4> -->
             <hr>
             <div class="span12"><h3> <span class="configheaders">Payment Settings:</span></h3> </div>
             <br>
@@ -77,14 +76,6 @@
                   <input type="text" class="form-control" id="thresholdInput" placeholder="Please input threshold $ amount..." min="0.00" step="0.01" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$" >
                 </div><div class="col-sm-3"></div>
               </div>
-
-             <!--  <div class="form-group" id="maxPaymentErrDiv">
-                <label for="maxpayInput" class="col-sm-3 control-label">Max Payment:  $</label>
-                <div class="col-sm-6">
-                  <input type="text" class="form-control" id="maxpayInput" placeholder="Please input max payment $ amount..." min="0.00" step="0.01" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$">
-                </div><div class="col-sm-3"></div>
-              </div> -->
-
               <div class="form-group" >
                 <label for="metric" class="col-sm-3 control-label">Calculation: $ </label>
                 <div class="col-sm-2" id="metricAmountErrDiv"> <input type="text" class="form-control" placeholder="$ amount..." id="metricAmountInput"></div>
@@ -161,7 +152,7 @@
         <div class="span12"><h3> <span class="MyBillHeaders">My Contribution:</span></h3> </div>
         <div class="span12"><h4><span id="payMethodSpan">You have chosen the </span> payment method.</h4></div>
         <div class= "span12"id="outer"><div class="span12" id = "reachedThreshDiv"></div></div>
-       <div id="left"><h4>The breakdown of you contribution is as follows: </h4> <button  type="button" class="btn btn-primary btn-sm btn-lotto"></div><div id="right"><span class='glyphicon glyphicon-retweet'></span> RUN LOTTERY</button></div>
+       <div id="left"><h4>The breakdown of you contribution is as follows: </h4> </div>
         <table id="payTable" class="atable tablesorter table table-bordered table-striped">
               <thead>
                 <tr>
@@ -179,28 +170,8 @@
     </div>
   </div>
 </div>
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="/js/logPage.js"></script>
   <link rel="stylesheet" href="../css/logPage.css">
 </body>
 </html>
-
-
-
-
-
-
 <div> &nbsp</div>
-
-<!-- <div> &nbsp</div>
-<div> &nbsp</div>
-<div> &nbsp</div>
-<div class='span12'>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" class='paypal-btn'>
-  <input type="hidden" name="cmd" value="_s-xclick">
-  <input type="hidden" name="hosted_button_id" value="85PNUEGH4NVAW">
-  <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-  <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-  </form>
-</div>
- -->

@@ -2,7 +2,6 @@ define([
 	"jquery",
 	],
 	function($) {
-
 		var setup_listener = function() {
 			chrome.runtime.onMessage.addListener(
 				function(request, sender, sendResponse) {
@@ -14,7 +13,6 @@ define([
 				}
 			);
 		}
-
 		return {
 			setup_listener: setup_listener,
 		}

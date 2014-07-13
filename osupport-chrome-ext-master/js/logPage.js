@@ -13,7 +13,6 @@ Philippe Schiff
 
 $( document ).ready(function() {
     calculate();
-
 });
 
 
@@ -82,7 +81,6 @@ if (localStorage.getItem("setting: THRESHMETRICTIMESPAN") === null) {
 	THRESHMETRICTIMESPAN = null;
 } else {
 	THRESHMETRICTIMESPAN = localStorage.getItem("setting: THRESHMETRICTIMESPAN");
-	//console.log(THRESHMETRICTIMESPAN);
 	$("#metricTimeSpanDD").val(THRESHMETRICTIMESPAN);
 };
 
@@ -132,8 +130,6 @@ if (localStorage.getItem("setting: THRESHREACHED") === null ||
 Handles the Apply Changes button.
 @modifies the globals and Local Storage
 */
-
-
 $("#applyChangesBtn").click(function() {
 	var formsComplete = true;
 
@@ -144,11 +140,7 @@ $("#applyChangesBtn").click(function() {
 		$("#payMethodErrDiv").addClass("has-error");
 		formsComplete = false;
 
-	} else
-
-	//if ($("#selectPayMethodDD").val() !== null &&
-		//$("#selectPayMethodDD").val() !== "") 
-	{
+	} else {
 		$("#payMethodErrDiv").removeClass("has-error");
 		PAYMETHOD = $("#selectPayMethodDD").val();
 		localStorage.setItem("setting: PAYMETHOD", PAYMETHOD);
@@ -160,11 +152,7 @@ $("#applyChangesBtn").click(function() {
 	if (!dolPattern.test($("#thresholdInput").val())) {
 		$("#thresholErrDiv").addClass("has-error");
 		formsComplete = false;
-	} else
-
-	//if ($("#thresholdInput").val() !== null &&
-	//	$("#thresholdInput").val() !== "") 
-	{
+	} else {
 		$("#thresholErrDiv").removeClass("has-error");
 		THRESHOLD = $("#thresholdInput").val();
 		localStorage.setItem("setting: THRESHOLD", THRESHOLD);
@@ -176,32 +164,20 @@ $("#applyChangesBtn").click(function() {
 		$("#maxpayInput").val() != "") {
 		$("#maxPaymentErrDiv").addClass("has-error");
 		formsComplete = false;
-	} else 
-
-	//if ($("#maxpayInput").val() !== null &&
-	//	$("#maxpayInput").val() !== "") 
-	{
+	} else {
 		MAXPAYMENT = $("#maxpayInput").val();
 		localStorage.setItem("setting: MAXPAYMENT", MAXPAYMENT);
 		$("#maxPaymentErrDiv").removeClass("has-error");
 	};
 
-
 	if (!dolPattern.test($("#metricAmountInput").val())) {
 		$("#metricAmountErrDiv").addClass("has-error");
 		formsComplete = false;
-	} else 
-
-
-	//if ($("#metricAmountInput").val() !== null &&
-	//	$("#metricAmountInput").val() !== "") 
-	{
+	} else 	{
 		THRESHMETRICAMOUNT = $("#metricAmountInput").val();
 		$("#metricAmountErrDiv").removeClass("has-error");
 		localStorage.setItem("setting: THRESHMETRICAMOUNT", THRESHMETRICAMOUNT);
 	};
-
-
 
 	if ($("#metricTimeSpanDD").val() != 'second' &&
 		$("#metricTimeSpanDD").val() != 'min' &&
@@ -209,17 +185,11 @@ $("#applyChangesBtn").click(function() {
 
 		$("#metricTimeSpanErrDiv").addClass("has-error");
 		formsComplete = false;
-	} else 
-
-	//if ($("#metricTimeSpanDD").val() !== null &&
-	//	$("#metricTimeSpanDD").val() !== "") 
-	{
+	} else {
 		THRESHMETRICTIMESPAN = $("#metricTimeSpanDD").val();
 		localStorage.setItem("setting: THRESHMETRICTIMESPAN", THRESHMETRICTIMESPAN);
 		$("#metricTimeSpanErrDiv").removeClass("has-error");
 	};
-
-
 
 	if ($("#optionCalcSince1").is(':checked')) {
 		CALCULATESINCE = 'last';
@@ -229,14 +199,9 @@ $("#applyChangesBtn").click(function() {
 		if ($("#datepicker").val() == "") {
 			$("#dateErrDiv").addClass("has-error");
 			formsComplete = false;
-		} else 
-
-		//if ($("#datepicker").val() !== null &&
-		//	$("#datepicker").val() !== "") 
-		{
+		} else 	{
 			CALCULATESINCE = $("#datepicker").val();
 			$("#dateErrDiv").removeClass("has-error");
-			//console.log(CALCULATESINCE);
 			localStorage.setItem("setting: CALCULATESINCE", CALCULATESINCE);
 		};
 	};
@@ -274,12 +239,10 @@ $("#applyChangesBtn").click(function() {
 			$('#al').alert('close');
 		}, 2000);
 	}
-
-
-
 	// CALCULATE!
 	calculate();
 });
+
 $('td').keypress(function(evt){
     if(evt.which == 13){
         event.preventDefault();
@@ -314,44 +277,33 @@ function calculate() {
 			 		default:
 			 			timeDenom = 'no time metric';
 			 	};
-			 //	console.log(THRESHMETRICTIMESPAN);
 			 	$("#payTable tr:gt(0)").remove(); // removes all rows except first
 			 	$("#myTable tr:gt(0)").css('font-weight', 'normal');
 			 	for (var i = 0; i < localStorage.length; i++) {
 			 		
 			 		hostname = localStorage.key(i);
 					extensionID = chrome.runtime.id;
-					//console.log('here');
 			 		if (hostname !== "log-link: newtab" && 
 			 			hostname !== "log-link: "+ extensionID &&
 			 			hostname !== "log-link: " &&
 			 			hostname !== "log-link:" &&
 			 			hostname !== "" &&
 			 			 hostname.substring(0,10) == "log-link: "){
-			 			//yesconsole.log('here');
-			 			//console.log(timeDenom);
+
 			 			calcRow = JSON.parse(localStorage.getItem(localStorage.key(i)));
 			 			timeMS =  parseInt(calcRow['timeSpent']);
 			 			if (timeDenom != 'no time metric'){
 			 				time = timeMS / timeDenom;
-			 				//console.log(THRESHMETRICAMOUNT);
 			 				price = time * THRESHMETRICAMOUNT;
 			 				totalPrice += price;
-			 				if (price > 0.01){//(price >= THRESHOLD) {
-			 					//console.log(hostname);
-			 					//$("#priceDiv").append(hostname.replace("log-link:", "") + ": $"+price+"<br>");
+			 				if (price > 0.01) {  //(price >= THRESHOLD) {  
+
 			 					var search = hostname.replace("log-link: ", "");
-			 				//	console.log(search);
 			 					var imsrc = "http://www.google.com/s2/favicons?domain=" +search;
 			 					$('#payTable > tbody').append('<tr><td><img src='+imsrc+'/>'+'     '+String(search)+'</td><td contenteditable=\'true\'>'+ "$ "+String(price.toFixed(2))+'</td></tr>');
-			 					 // $('#payTable > tbody').append('<tr><td><img src='+imsrc+'/>'+'     '+String(search)+"</td><td><div class='input-group' id='"+search+"id'><span class='input-group-addon'>$</span><input type='text' class='form-control'></div>");
-			 					 // $('#'+search+'id').val(900);	
-			 					//$(function(){
-   								//console.log(search);
    								$("#myTable tr").filter(function() {
         							return $(this).text().indexOf(search) != -1;
     							}).css('font-weight','bold');
-    							//});
 			 				};
 			 			};
 			 		};
@@ -359,15 +311,10 @@ function calculate() {
 			 	if (totalPrice >= THRESHOLD) {
 			 		$('#reachedThreshDiv').remove();
 			 		$('#outer').append("<div class=\"span12\" id = \"reachedThreshDiv\"><h3 class=\"alert alert-warning\">You have reached your threshold value of $" + THRESHOLD+" with a total amount of $"+String(totalPrice.toFixed(2))+".</h3></div>");
-			 		//$('#reachedThreshDiv').toggle('highlight');
 			 	} else {
 			 		$('#reachedThreshDiv').remove();
 			 		$('#outer').append("<div class=\"span12\" id = \"reachedThreshDiv\"><h4 class=\"alert alert-info\">You current total browsing contribution amounts to $"+String(totalPrice.toFixed(2))+". This has not yet reached the threshold of $"+THRESHOLD+".</h4></div>");
 			 	}
-
-
-			 	//console.log(totalPrice);
-			 	//console.log(document.data);
 			};
 		};
 	};
@@ -395,11 +342,9 @@ var d = new Date
 for (var i = 0; i < localStorage.length; i++) {
 	hostname = localStorage.key(i);
 	extensionID = chrome.runtime.id;
-	//console.log(extensionID);
 	if (hostname !== 'log-link: newtab' && hostname !== "log-link: "+extensionID && hostname.substring(0,10) == "log-link: "){
 		hostname = hostname.replace("log-link: ", "");
 		row = JSON.parse(localStorage.getItem(localStorage.key(i)));
-		//console.log(row)
 		visitCount = row['visitCount'];
 		timeSpent = row['timeSpent'];
 		lastTimeVisited = row['lastTimeVisited'];
@@ -415,7 +360,6 @@ for (var i = 0; i < localStorage.length; i++) {
 		var imsrc = "http://www.google.com/s2/favicons?domain=" +hostname;
 		if (timeSpent > 5000 ){
 			$('#myTable > tbody').append('<tr><td><img src='+imsrc+'/>'+'     '+String(hostname)+'</td><td>'+String(visitCount)+'</td><td>'+String(msToTime(timeSpent))+'</td><td>'+dLastTimeVisited.toLocaleString()+'</td><td>'+lastTimePaid+'</td></tr>');
-			//console.log(timeSpent);
 		}
 	};
 };
