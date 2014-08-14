@@ -36,14 +36,3 @@ the dependencies, run:
 ``` bash
 bower install
 ```
-
-### Building Chrome extension ###
-
-To build the Chrome extension, you will need [Google
-Chrome](http://chrome.com/) installed.
-
-Once it is installed and configured you can build with:
-
-``` bash
-npm run build
-```
