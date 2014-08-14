@@ -1,177 +1,188 @@
 <!-- HTML file for the tipsy display page pop-up
- Philippe Schiff -->
+  Philippe Schiff -->
 
- <!DOCTYPE html>
- <html>
- <head>
-  <title>Tipsy</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8" />
-  <meta name="google" content="notranslate" />
-  <meta http-equiv="Content-Language" content="en_US" />
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tipsy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <meta http-equiv="Content-Language" content="en_US" />
 
-  <script src="../js/lib/jquery.js"></script>
-  <script src="../jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
-  <script src="../js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="../tablesorter-master/js/jquery.tablesorter.js"></script>
+    <link rel="stylesheet" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../bower_components/tablesorter/themes/blue/style.css">
+    <link rel="stylesheet" href="../css/logPage.css">
+  </head>
 
-  <link rel ="stylesheet" href="../jquery-ui-1.10.4.custom/css/smoothness/jquery-ui-1.10.4.custom.css">
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="../tablesorter-master/css/theme.default.css">
-
-    </head>
-    <body>
-      <div class="container">
-        <ul class="nav nav-tabs" id="tipsyTabs">
-          <li class="active"><a href="#logTable" data-toggle="tab" id="tabfont"><span  class="glyphicon glyphicon-list" ></span> Log Page</a></li>
-          <li><a href="#configurationpage" data-toggle="tab" id="tabfont"><span class="glyphicon glyphicon-cog"></span> Configuration</a></li>
-          <li><a href="#myBillPage" data-toggle="tab" id="tabfont"><span class="glyphicon glyphicon-globe"></span> My Contribution</a></li>
-        </ul>
-
-        <div class="tab-content">
-
-          <div class=" tab-pane active" id="logTable">
-            <div>
-              <span class="span12">&nbsp </span>
-              <div class="span6"><h3 class="header1">TIPSY</h3></div>
-              <div class="span6"><h3 class="header2">logpage</h3></div>
-            </div>
+  <body>
+    <div class="container">
+      <ul class="nav nav-tabs" id="tipsyTabs">
+        <li class="active"><a href="#logTable" data-toggle="tab" id="tabfont"><span  class="glyphicon glyphicon-list" ></span> Log Page</a></li>
+        <li><a href="#configurationpage" data-toggle="tab" id="tabfont"><span class="glyphicon glyphicon-cog"></span> Configuration</a></li>
+        <li><a href="#myBillPage" data-toggle="tab" id="tabfont"><span class="glyphicon glyphicon-globe"></span> My Contribution</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class=" tab-pane active" id="logTable">
+          <div>
             <span class="span12">&nbsp </span>
-            <table id="myTable" class="atable tablesorter table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th>WEB SITE</th>
-                  <th>VISIT COUNT</th>
-                  <th>TIME SPENT</th>
-                  <th>LAST TIME VISITED</th>
-                  <th>LAST TIME PAID</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
+            <div class="span6">
+              <h3 class="header1">TIPSY</h3>
+            </div>
+            <div class="span6">
+              <h3 class="header2">logpage</h3>
+            </div>
           </div>
-
-          <div class="tab-pane" id="configurationpage">  
-            <hr>
-            <div class="span12"><h3> <span class="configheaders">Payment Settings:</span></h3> </div>
-            <br>
-            <form class="form-horizontal" role ="form">
-              <div class="form-group" id="payMethodErrDiv">
-                <label for="selectPayMethodDD" class="col-sm-3 control-label">Payment Method:</label>
-                <div class="col-sm-6">
-                  <select class="form-control" id="selectPayMethodDD" required>
-                    <option value="" disabled selected style='display:none;'> Please select payment calculation method</option>
-                    <option> Threshold </option>
-                    <option> Lottery </option>
-                  </select>
-                </div>
-                <div class="col-sm-3"></div>
+          <span class="span12">&nbsp </span>
+          <table id="myTable" class="atable tablesorter table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>WEB SITE</th>
+                <th>VISIT COUNT</th>
+                <th>TIME SPENT</th>
+                <th>LAST TIME VISITED</th>
+                <th>LAST TIME PAID</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane" id="configurationpage">
+          <hr>
+          <div class="span12">
+            <h3> <span class="configheaders">Payment Settings:</span></h3>
+          </div>
+          <br>
+          <form class="form-horizontal" role ="form">
+            <div class="form-group" id="payMethodErrDiv">
+              <label for="selectPayMethodDD" class="col-sm-3 control-label">Payment Method:</label>
+              <div class="col-sm-6">
+                <select class="form-control" id="selectPayMethodDD" required>
+                  <option value="" disabled selected style='display:none;'> Please select payment calculation method</option>
+                  <option> Threshold </option>
+                  <option> Lottery </option>
+                </select>
               </div>
-
-              <div class="form-group" id="thresholErrDiv">
-                <label for="thresholdInput" class="col-sm-3 control-label">Threshold:  $</label>
-                <div class="col-sm-6">
-                  <input type="text" class="form-control" id="thresholdInput" placeholder="Please input threshold $ amount..." min="0.00" step="0.01" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$" >
-                </div><div class="col-sm-3"></div>
+              <div class="col-sm-3"></div>
+            </div>
+            <div class="form-group" id="thresholErrDiv">
+              <label for="thresholdInput" class="col-sm-3 control-label">Threshold:  $</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="thresholdInput" placeholder="Please input threshold $ amount..." min="0.00" step="0.01" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$" >
               </div>
-              <div class="form-group" >
-                <label for="metric" class="col-sm-3 control-label">Calculation: $ </label>
-                <div class="col-sm-2" id="metricAmountErrDiv"> <input type="text" class="form-control" placeholder="$ amount..." id="metricAmountInput"></div>
-                <div class="col-sm-1"><p class="text-center" id="metricSlash">/</p></div>
-
-                <div class="col-sm-3" id="metricTimeSpanErrDiv">
-                  <select class="form-control" id="metricTimeSpanDD">
-                    <option value="" disabled selected style='display:none;'>time span...</option>
-                    <option value="second"> second </option>
-                    <option value="min"> min </option>
-                    <option value="page visit"> page visit </option>
-                  </select>
-                </div>
-                <div class="col-sm-1"></div>
+              <div class="col-sm-3"></div>
+            </div>
+            <div class="form-group" >
+              <label for="metric" class="col-sm-3 control-label">Calculation: $ </label>
+              <div class="col-sm-2" id="metricAmountErrDiv"> <input type="text" class="form-control" placeholder="$ amount..." id="metricAmountInput"></div>
+              <div class="col-sm-1">
+                <p class="text-center" id="metricSlash">/</p>
               </div>
-
-              <div class="form-group">	  
-               <label for="datefrom" class="col-sm-3 control-label">Calculate Since:</label>
-               <div class="col-sm-6">
+              <div class="col-sm-3" id="metricTimeSpanErrDiv">
+                <select class="form-control" id="metricTimeSpanDD">
+                  <option value="" disabled selected style='display:none;'>time span...</option>
+                  <option value="second"> second </option>
+                  <option value="min"> min </option>
+                  <option value="page visit"> page visit </option>
+                </select>
+              </div>
+              <div class="col-sm-1"></div>
+            </div>
+            <div class="form-group">
+              <label for="datefrom" class="col-sm-3 control-label">Calculate Since:</label>
+              <div class="col-sm-6">
                 <div class="radio">
-                 <label>
+                  <label>
                   <input type="radio" name="optionsRadio" id="optionCalcSince1" value="option1" checked>
                   Since last time paid.
-                </label>
+                  </label>
+                </div>
+                <div class="radio" id="dateErrDiv">
+                  <label>
+                  <input type="radio" name="optionsRadio" id="optionCalcSince2" value="option2">
+                  <input class="form-control" type="text" id="datepicker" placeholder="Please choose a date...">
+                  </label>
+                </div>
               </div>
-              <div class="radio" id="dateErrDiv">
-               <label>
-                <input type="radio" name="optionsRadio" id="optionCalcSince2" value="option2">
-                <input class="form-control" type="text" id="datepicker" placeholder="Please choose a date...">
-              </label>
             </div>
-
+          </form>
+          <hr>
+          <div class="span12">
+            <h3><span class="configheaders"> Reminder Settings:</span></h3>
           </div>
-        </div>
-      </form>
-
-      <hr>
-
-      <div class="span12"><h3><span class="configheaders"> Reminder Settings:</span></h3> </div>
-      <br>
-      <form class="form-horizontal" role ="form">
-        <div class="form-group">
-          <label for="metric" class="col-sm-3 control-label">Remind Me... </label>
-          <div class="col-sm-2"> <input type="number" id="remindMeNumber" class="form-control" placeholder="1" min="0" max="30" step="1"></div>
-          <div class="col-sm-1"><p class="text-center" id="remindertimesa">times a</p></div>
-          <div class="col-sm-3">
-            <select class="form-control" id="remindMePeriodDD">
-              <option value="" disabled selected style='display:none;'>period...</option>
-              <option> day </option>
-              <option> week </option>
-              <option> month </option>
-              <option> year </option>
-            </select>
-          </div>
-          <div class="col-sm-2"></div>
-        </div>
-        <div class="form-group">
-          <label for="metric" class="col-sm-3 control-label">&nbsp;</label>
-          <div class="col-sm-6">
-            <label class="checkbox-inline">
-              <input type="checkbox" id="threshReachedCB" value="option1"> Whenever threshold is reached</label>
+          <br>
+          <form class="form-horizontal" role ="form">
+            <div class="form-group">
+              <label for="metric" class="col-sm-3 control-label">Remind Me... </label>
+              <div class="col-sm-2"> <input type="number" id="remindMeNumber" class="form-control" placeholder="1" min="0" max="30" step="1"></div>
+              <div class="col-sm-1">
+                <p class="text-center" id="remindertimesa">times a</p>
+              </div>
+              <div class="col-sm-3">
+                <select class="form-control" id="remindMePeriodDD">
+                  <option value="" disabled selected style='display:none;'>period...</option>
+                  <option> day </option>
+                  <option> week </option>
+                  <option> month </option>
+                  <option> year </option>
+                </select>
+              </div>
+              <div class="col-sm-2"></div>
             </div>
+            <div class="form-group">
+              <label for="metric" class="col-sm-3 control-label">&nbsp;</label>
+              <div class="col-sm-6">
+                <label class="checkbox-inline">
+                <input type="checkbox" id="threshReachedCB" value="option1"> Whenever threshold is reached</label>
+              </div>
+            </div>
+          </form>
+          <hr>
+          <div class='span12'>
+            <button type="button" class="btn btn-primary pull-right" id="applyChangesBtn">Apply Changes and Recalculate</button>
           </div>
-        </form>
-        <hr>
-        <div class='span12'>
-          <button type="button" class="btn btn-primary pull-right" id="applyChangesBtn">Apply Changes and Recalculate</button>
+          <div class="span12">&nbsp;</div>
+          <div class="span12">&nbsp;</div>
+          <div class="span12" id='alertDiv'></div>
         </div>
-        <div class="span12">&nbsp;</div>
-        <div class="span12">&nbsp;</div>
-        <div class="span12" id='alertDiv'></div>
-      </div>
-      <div class="tab-pane" id="myBillPage">
-        <div class="span12"><h3> <span class="MyBillHeaders">My Contribution:</span></h3> </div>
-        <div class="span12"><h4><span id="payMethodSpan">You have chosen the </span> payment method.</h4></div>
-        <div class= "span12"id="outer"><div class="span12" id = "reachedThreshDiv"></div></div>
-       <div id="left"><h4>The breakdown of you contribution is as follows: </h4> </div>
-        <table id="payTable" class="atable tablesorter table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th>WEB SITE</th>
-                  <th>DOLLAR AMOUNT</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-        <div class="span12" id="priceDiv"><div id="right"><button  type="button" class="btn btn-primary btn-sm btn-lotto"><span class='glyphicon glyphicon-usd'></span> Pay Now</button></div><div> &nbsp</div><div> &nbsp</div></div>
-
+        <div class="tab-pane" id="myBillPage">
+          <div class="span12">
+            <h3> <span class="MyBillHeaders">My Contribution:</span></h3>
+          </div>
+          <div class="span12">
+            <h4><span id="payMethodSpan">You have chosen the </span> payment method.</h4>
+          </div>
+          <div class= "span12"id="outer">
+            <div class="span12" id = "reachedThreshDiv"></div>
+          </div>
+          <div id="left">
+            <h4>The breakdown of you contribution is as follows: </h4>
+          </div>
+          <table id="payTable" class="atable tablesorter table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>WEB SITE</th>
+                <th>DOLLAR AMOUNT</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <div class="span12" id="priceDiv">
+            <div id="right"><button  type="button" class="btn btn-primary btn-sm btn-lotto"><span class='glyphicon glyphicon-usd'></span> Pay Now</button></div>
+            <div> &nbsp</div>
+            <div> &nbsp</div>
+          </div>
+        </div>
       </div>
     </div>
-    </div>
-  </div>
-</div>
-  <script src="/js/logPage.js"></script>
-  <link rel="stylesheet" href="../css/logPage.css">
-</body>
+
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/jquery-ui/jquery-ui.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/tablesorter/jquery.tablesorter.js"></script>
+    <script src="/js/logPage.js"></script>
+  </body>
 </html>
-<div> &nbsp</div>
