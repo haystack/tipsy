@@ -1,61 +1,65 @@
 {
-	"manifest_version": 2,
-	"name": "__MSG_extName__",
-	"version": "0.1.0",
-	"description": "__MSG_extDescription__", 
-	"icons": {
-		"16": "img/test16.png",
-		"48": "img/test48.png",
-		"128": "img/test128.png"
-	},
-	"default_locale": "en",
-
-	"background": {
-		"scripts": ["js/lib/jquery.js",
-					"js/background.js"					]
-	},
-
-	"browser_action": {     
-		"default_icon": {
-			"19": "img/test19.png",
-			"38": "img/test38.png"
-		},
-		"default_title": "__MSG_browserActionTitle__"
-	},
-
-	"content_scripts": [
-		{
-			"matches": ["http://*/*"],
-			"js": [
-				"contentscript.js"]
-				//"js/lib/require.js",
-				//"js/requireContent.js",
-				//"js/requireConfig.js",
-				//"js/content_script.js"]
-		}, {
-			"matches": ["https://accounts.google.com/o/oauth2/approval*"],
-			"js": ["/oauth2/oauth2_inject.js"],
-			"run_at": "document_start"
-		}, {
-			"matches": ["https://www.dwolla.com/robots.txt*"],
-			"js": ["/oauth2/oauth2_inject.js"],
-			"run_at": "document_start"
-		}
-	],
-
-	"permissions": [
-		"notifications",
-		"tabs",
-		"https://accounts.google.com/o/oauth2/token",
-		"https://www.googleapis.com/",
-		"history",
-		"idle"
-	],
-
-	// "options_page": "options.html",
-
-	"web_accessible_resources": [
-		"js/modules/*",
-		"js/lib/*"
-	]
-} 
+  "manifest_version": 2,
+  "name": "__MSG_extName__",
+  "version": "0.1.0",
+  "description": "__MSG_extDescription__",
+  "icons": {
+    "16": "img/logo16.png",
+    "48": "img/logo48.png",
+    "128": "img/logo128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "bower_components/jquery/dist/jquery.js",
+      "js/background.js"
+    ]
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "img/logo19.png",
+      "38": "img/logo38.png"
+    },
+    "default_title": "__MSG_browserActionTitle__"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*"
+      ],
+      "js": [
+        "contentscript.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://accounts.google.com/o/oauth2/approval*"
+      ],
+      "js": [
+        "/oauth2/oauth2_inject.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://www.dwolla.com/robots.txt*"
+      ],
+      "js": [
+        "/oauth2/oauth2_inject.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [
+    "notifications",
+    "tabs",
+    "https://accounts.google.com/o/oauth2/token",
+    "https://www.googleapis.com/",
+    "history",
+    "idle"
+  ],
+  "web_accessible_resources": [
+    "js/modules/*",
+    "bower_components/**/*"
+  ]
+}
