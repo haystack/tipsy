@@ -8,10 +8,11 @@ module.exports = ->
       id: 'pjiifpoianefbagliipadlmiiifdpbhn'
       chrome: '/usr/bin/google-chrome-stable'
       clean: true
-      certDir: 'certificates'
+      certDir: 'certs'
       buildDir: 'dist'
+      extensionDir: 'chrome-extension'
       resources: [
-        'bower_components/**'
-        'src/**'
-        '_locales/**'
+        '**'
+        # Do not include the certificates into the bundle.
+        '!certs/**'
       ]

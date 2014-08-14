@@ -1,0 +1,20 @@
+module.exports = ->
+  @loadNpmTasks "grunt-contrib-copy"
+
+  dest = 'chrome-extension/dist/tmp'
+
+  @config 'copy',
+    'chrome-extension':
+      files: [
+        { src: ['bower_components/**/*'], expand: true, dest: dest }
+        { src: ['**/*'], expand: true, cwd: 'shared', dest: dest }
+        {
+          src: [
+            'manifest.json'
+            '_locales/**'
+          ]
+          expand: true
+          cwd: 'chrome-extension'
+          dest: dest
+        }
+      ]

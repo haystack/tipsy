@@ -4,21 +4,21 @@
   "version": "0.1.0",
   "description": "__MSG_extDescription__",
   "icons": {
-    "16": "src/img/logo16.png",
-    "48": "src/img/logo48.png",
-    "128": "src/img/logo128.png"
+    "16": "img/logo16.png",
+    "48": "img/logo48.png",
+    "128": "img/logo128.png"
   },
   "default_locale": "en",
   "background": {
     "scripts": [
       "bower_components/jquery/dist/jquery.js",
-      "src/js/background.js"
+      "js/background.js"
     ]
   },
   "browser_action": {
     "default_icon": {
-      "19": "src/img/logo19.png",
-      "38": "src/img/logo38.png"
+      "19": "img/logo19.png",
+      "38": "img/logo38.png"
     },
     "default_title": "__MSG_browserActionTitle__"
   },
@@ -28,7 +28,7 @@
         "http://*/*"
       ],
       "js": [
-        "src/contentscript.js"
+        "contentscript.js"
       ]
     },
     {
@@ -36,7 +36,7 @@
         "https://accounts.google.com/o/oauth2/approval*"
       ],
       "js": [
-        "/src/oauth2/oauth2_inject.js"
+        "/oauth2/oauth2_inject.js"
       ],
       "run_at": "document_start"
     },
@@ -45,7 +45,7 @@
         "https://www.dwolla.com/robots.txt*"
       ],
       "js": [
-        "/src/oauth2/oauth2_inject.js"
+        "/oauth2/oauth2_inject.js"
       ],
       "run_at": "document_start"
     }
@@ -59,7 +59,7 @@
     "idle"
   ],
   "web_accessible_resources": [
-    "src/js/modules/*",
-    "bower_components/**/*"
+    "js/modules/*",
+    "../bower_components/**/*"
   ]
 }
