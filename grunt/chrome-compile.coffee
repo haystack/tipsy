@@ -8,9 +8,8 @@ module.exports = ->
       id: 'pjiifpoianefbagliipadlmiiifdpbhn'
       chrome: '/usr/bin/google-chrome-stable'
       clean: true
-      certDir: 'cert'
-      buildDir: 'build'
+      certDir: 'certificates'
+      buildDir: 'chrome-ext/build'
       resources: [
-        '**'
-        '!cert/tipsy.pem'
+        'chrome-ext/**'
       ]

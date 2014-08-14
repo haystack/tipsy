@@ -9,5 +9,8 @@
     "jquery": "~2.1.1",
     "ember": "~1.6.1",
     "tablesorter": "*"
+  },
+  "resolutions": {
+    "jquery": "~2.1.1"
   }
 }
