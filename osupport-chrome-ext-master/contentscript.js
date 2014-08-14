@@ -3,27 +3,29 @@
 * to parse the payment information.
 * -- Philippe Schiff
 */
+(function(window) {
+  'use strict';
 
-var linksAr = document.getElementsByTagName('link');
-var len = linksAr.length;
-var hostname = window.location.hostname;
-var bitcoinId = null;
-var payPalId = null;
-for (var i = 0; i < len; i++) {
-	if (linksAr[i].getAttribute('bitcoinid') != null) {
-		bitcoinId = linksAr[i].getAttribute('bitcoinid');
-	}
-	if (linksAr[i].getAttribute('paypalid') != null) {
-		payPalId = linksAr[i].getAttribute('paypalid');
-	}
+  // Find all links on the page.
+  var links = document.getElementsByTagName('link');
 
-	// can add more...
-	console.log(payPalId);
-	console.log(bitcoinId);
-	if (payPalId != null || bitcoinId != null ) {
-		chrome.runtime.sendMessage({hostname: hostname, bitcoinId: bitcoinId, payPalId: payPalId}, function(response) {
-  		console.log(response.farewell);
-});
-	}
-}
+  // Ensure we're working with a NodeList that inherits Array.prototype.
+  links.__proto__ = Array.prototype;
 
+  // Build up an object with page and author details for the extension.
+  var messageBody = {
+    hostname: window.location.hostname
+  };
+
+  // Iterate over all links and filter down to the last link that contains the
+  // correct metadata.
+  links.filter(function(link) {
+    return link.rel === 'author';
+  }).slice(-1).forEach(function(link) {
+    messageBody.bitcoinId = link.getAttribute('bitcoinid');
+    messageBody.paypalId = link.getAttribute('paypalid');
+  });
+
+  // Send this message body back to the extension.
+  chrome.runtime.sendMessage(body);
+})(this);
