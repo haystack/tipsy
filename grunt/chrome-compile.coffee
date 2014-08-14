@@ -9,7 +9,9 @@ module.exports = ->
       chrome: '/usr/bin/google-chrome-stable'
       clean: true
       certDir: 'certificates'
-      buildDir: 'chrome-ext/build'
+      buildDir: 'dist'
       resources: [
-        'chrome-ext/**'
+        'bower_components/**'
+        'src/**'
+        '_locales/**'
       ]
