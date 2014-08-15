@@ -2,6 +2,7 @@ module.exports = ->
   @loadTasks 'grunt'
 
   @registerTask 'default', [
+    'jshint'
     'chrome-extension'
   ]
 
@@ -10,4 +11,3 @@ module.exports = ->
     'compress:chrome-extension'
     'copy:chrome-extension'
     'shell:chrome-extension'
-  ]
