@@ -6,8 +6,8 @@ module.exports = ->
   ]
 
   @registerTask 'chrome-extension', [
+    'clean:chrome-extension'
     'compress:chrome-extension'
     'copy:chrome-extension'
     'shell:chrome-extension'
-    'clean:chrome-extension'
   ]

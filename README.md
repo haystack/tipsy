@@ -37,13 +37,25 @@ the dependencies, run:
 bower install
 ```
 
-### Building Chrome extension ###
+### Working on Chrome extension ###
 
 To build the Chrome extension, you will need [Google
 Chrome](http://chrome.com/) installed.
 
-Once it is installed and configured you can build with:
+Once it is installed and configured you can build the extension with:
 
 ``` bash
 npm run build
 ```
+
+or more specifically:
+
+``` bash
+grunt chrome-extension
+```
+
+#### Loading the unpacked extension ####
+
+The source code necessary to run the extension as unpacked lives in the
+*dist/tipsy* directory and can be dragged into the Extensions tab within
+Chrome.

@@ -7,7 +7,15 @@ module.exports = ->
     'chrome-extension':
       files: [
         { src: ['bower_components/**/*'], expand: true, dest: dest }
-        { src: ['**/*'], expand: true, cwd: 'shared', dest: dest }
+        {
+          src: [
+            '**/*'
+            '!_assets/**'
+          ]
+          expand: true
+          cwd: 'shared'
+          dest: dest
+        }
         {
           src: [
             'manifest.json'
