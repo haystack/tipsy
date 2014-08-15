@@ -1,5 +1,5 @@
 module.exports = ->
-  @loadNpmTasks "grunt-contrib-compress"
+  @loadNpmTasks 'grunt-contrib-compress'
 
   @config 'compress',
     'chrome-extension':
