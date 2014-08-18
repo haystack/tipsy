@@ -60,6 +60,6 @@
   ],
   "web_accessible_resources": [
     "js/modules/*",
-    "bower_components/**/*"
+    "../bower_components/**/*"
   ]
 }
