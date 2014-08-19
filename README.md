@@ -1,6 +1,9 @@
 Tipsy
 -----
 
+[![Build Status](https://travis-ci.org/haystack/tipsy.png?branch=master)](https://travis-ci.org/haystack/tipsy)
+
+
 ### Developing ###
 
 If you wish to work on Tipsy, you can find instructions on getting started

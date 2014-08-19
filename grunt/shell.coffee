@@ -1,9 +1,9 @@
 module.exports = ->
-  @loadNpmTasks "grunt-shell"
+  @loadNpmTasks 'grunt-shell'
 
   # Find Chrome binary here...
 
-  @config "shell",
+  @config 'shell',
     'chrome-extension':
       command: 'google-chrome ' + [
         '--pack-extension=chrome-extension/dist/tipsy'

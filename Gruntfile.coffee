@@ -2,7 +2,13 @@ module.exports = ->
   @loadTasks 'grunt'
 
   @registerTask 'default', [
+    'jshint'
     'chrome-extension'
+  ]
+
+  @registerTask 'test', [
+    'default'
+    'simplemocha:chrome-extension'
   ]
 
   @registerTask 'chrome-extension', [

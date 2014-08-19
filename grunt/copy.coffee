@@ -1,5 +1,5 @@
 module.exports = ->
-  @loadNpmTasks "grunt-contrib-copy"
+  @loadNpmTasks 'grunt-contrib-copy'
 
   dest = 'chrome-extension/dist/tipsy'
 
