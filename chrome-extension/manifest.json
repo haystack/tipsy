@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "__MSG_extName__",
+  "name": "tipsy",
   "version": "0.1.0",
-  "description": "__MSG_extDescription__",
+  "description": "A prototype",
   "icons": {
     "16": "img/logo16.png",
     "48": "img/logo48.png",
@@ -10,17 +10,14 @@
   },
   "default_locale": "en",
   "background": {
-    "scripts": [
-      "bower_components/jquery/dist/jquery.js",
-      "js/background.js"
-    ]
+    "scripts": ["js/background.js"]
   },
   "browser_action": {
     "default_icon": {
       "19": "img/logo19.png",
       "38": "img/logo38.png"
     },
-    "default_title": "__MSG_browserActionTitle__"
+    "default_title": "Tipsy"
   },
   "content_scripts": [
     {
@@ -60,6 +57,6 @@
   ],
   "web_accessible_resources": [
     "js/modules/*",
-    "../bower_components/**/*"
+    "bower_components/**/*"
   ]
 }
