@@ -1,153 +1,71 @@
-/**
+'use strict';
 
-Script for the popup. Takes care of all 3 tabs: Log Page,
-Conifguration and My Bill.
-
-Uses Local Storage for storing settings.
-
-Philippe Schiff
-
-
-*/
-
-
-$( document ).ready(function() {
-    calculate();
-});
-
-
-$(function(){
-  $("#myTable").tablesorter({
-  	sortList: [[2,1]]
-	});
-
-  $("#payTable").tablesorter({
-  	sortList: [[1,1]]
-  });
-});
+calculate();
 
 $('#datepicker').datepicker();
-
 $('#tipsyTabs a[href="#logTable"]').tab('show');
 
-
-// Threshold globals
-
-var PAYMETHOD = null;
-var THRESHOLD = null;
-var MAXPAYMENT = null;
-var THRESHMETRICAMOUNT = null;
-var THRESHMETRICTIMESPAN = null;
-var CALCULATESINCE = null;
-var REMINDMENUM = null; 
-var REMINDMEPERIOD = null;
-var THRESHREACHED = null;
+var extensionID = null;
 var dolPattern =  /^\$?[0-9]+(\.[0-9][0-9])?$/;
 var numPat0to30 = /^([1-9]|[12]\d|3[0-6])$/;
 
-if (localStorage.getItem("setting: PAYMETHOD") === null) {
-	PAYMETHOD = null;
-} else {
-	PAYMETHOD = localStorage.getItem("setting: PAYMETHOD");
-	$("#selectPayMethodDD").val(PAYMETHOD);
-	$("#payMethodSpan").append("<span id=\"payMethodWord\">"+PAYMETHOD+"</span>");
+"PAYMETHOD": {
+  $("#selectPayMethodDD").val(PAYMETHOD);
+  $("#payMethodSpan").append("<span id=\"payMethodWord\">"+PAYMETHOD+"</span>");
 }
-
-if (localStorage.getItem("setting: THRESHOLD") === null ) {
-	THRESHOLD = null;
-} else {
+"THRESHOLD": {
 	THRESHOLD = localStorage.getItem("setting: THRESHOLD");
 	$("#thresholdInput").val(THRESHOLD);
-};
-
-
-if (localStorage.getItem("setting: MAXPAYMENT") === null) {
-	MAXPAYMENT = null;	
-} else {
+}
+"MAXPAYMENT": {
 	MAXPAYMENT = localStorage.getItem("setting: MAXPAYMENT");
 	$("#maxpayInput").val(MAXPAYMENT);
-};
-
-
-if (localStorage.getItem("setting: THRESHMETRICAMOUNT") === null) {
-	THRESHMETRICAMOUNT = null;
-} else {
+}
+"THRESHMETRICAMOUNT": {
 	THRESHMETRICAMOUNT = localStorage.getItem("setting: THRESHMETRICAMOUNT");
 	$("#metricAmountInput").val(THRESHMETRICAMOUNT);
-};
-
-
-if (localStorage.getItem("setting: THRESHMETRICTIMESPAN") === null) {
-	THRESHMETRICTIMESPAN = null;
-} else {
+}
+"THRESHMETRICTIMESPAN": {
 	THRESHMETRICTIMESPAN = localStorage.getItem("setting: THRESHMETRICTIMESPAN");
 	$("#metricTimeSpanDD").val(THRESHMETRICTIMESPAN);
-};
+}
+// TODO This needs more work.
+"CALCULATESINCE": {
+  if (localStorage.getItem("setting: CALCULATESINCE") == 'last'){
+    CALCULATESINCE = 'last';
+    $("#optionCalcSince1").prop("checked", true);
+  } else {
 
-
-if (localStorage.getItem("setting: CALCULATESINCE") === null) {
-	CALCULATESINCE = null;
-} else {
-
-	if (localStorage.getItem("setting: CALCULATESINCE") == 'last'){
-		CALCULATESINCE = 'last';
-		$("#optionCalcSince1").prop("checked", true);
-	} else {
-
-		CALCULATESINCE = localStorage.getItem("setting: CALCULATESINCE");
-		$("#datepicker").datepicker("setDate", CALCULATESINCE);
-	};
-};
-
-
-if (localStorage.getItem("setting: REMINDMENUM") === null ) {
-	REMINDMENUM = null;
-} else {
+    CALCULATESINCE = localStorage.getItem("setting: CALCULATESINCE");
+    $("#datepicker").datepicker("setDate", CALCULATESINCE);
+  }
+}
+"REMINDMENUM": {
 	REMINDMENUM = localStorage.getItem("setting: REMINDMENUM");
 	$("#remindMeNumber").val(REMINDMENUM);
-};
-
-
-if (localStorage.getItem("setting: REMINDMEPERIOD") === null) {
-	REMINDMEPERIOD = null;
-} else {
+}
+"REMINDMEPERIOD": {
 	REMINDMEPERIOD = localStorage.getItem("setting: REMINDMEPERIOD");
 	$("#remindMePeriodDD").val(REMINDMEPERIOD);
-};
-
-
-if (localStorage.getItem("setting: THRESHREACHED") === null ||
-	localStorage.getItem("setting: THRESHREACHED") == "false") {
-	THRESHREACHED = false;
-	$("#threshReachedCB").prop('checked', false);
-}  else {
+}
+"THRESHREACHED": {
 	THRESHREACHED = true;
-	$("#threshReachedCB").prop('checked', true);
-};
+	$("#threshReachedCB").prop('checked', THRESHREACHED);
+}
 
-
-/**
-Handles the Apply Changes button.
-@modifies the globals and Local Storage
-*/
 $("#applyChangesBtn").click(function() {
 	var formsComplete = true;
 
 	if ($("#selectPayMethodDD").val() != "Threshold" &&
 		$("#selectPayMethodDD").val() != "Lottery") {
-
-
 		$("#payMethodErrDiv").addClass("has-error");
-		formsComplete = false;
 
+		formsComplete = false;
 	} else {
 		$("#payMethodErrDiv").removeClass("has-error");
 		PAYMETHOD = $("#selectPayMethodDD").val();
 		localStorage.setItem("setting: PAYMETHOD", PAYMETHOD);
-	};
-
-
-
+	}
 
 	if (!dolPattern.test($("#thresholdInput").val())) {
 		$("#thresholErrDiv").addClass("has-error");
@@ -229,7 +147,7 @@ $("#applyChangesBtn").click(function() {
 	// ALERT BAR
 	if (formsComplete) {
 		$('#alertDiv').html('<div id="al" class="alert alert-success">You\'re changes have been saved!</div>');
-	
+
 		window.setTimeout(function() {
 			$('#al').alert('close');
 		}, 2000);
@@ -243,19 +161,9 @@ $("#applyChangesBtn").click(function() {
 	calculate();
 });
 
-$('td').keypress(function(evt){
-    if(evt.which == 13){
-        event.preventDefault();
-        var cellindex = $(this).index()
-        // get next row, then select same cell index
-        var rowindex = $(this).parents('tr').index() + 1
-        $(this).parents('table').find('tr:eq('+rowindex+') td:eq('+cellindex+')').focus()
-    }
-})
-
 function calculate() {
 	if (PAYMETHOD == 'Threshold') {
-		if (THRESHOLD != null && 
+		if (THRESHOLD != null &&
 			THRESHMETRICAMOUNT != null &&
 			THRESHMETRICTIMESPAN != null
 			) {
@@ -280,10 +188,10 @@ function calculate() {
 			 	$("#payTable tr:gt(0)").remove(); // removes all rows except first
 			 	$("#myTable tr:gt(0)").css('font-weight', 'normal');
 			 	for (var i = 0; i < localStorage.length; i++) {
-			 		
+
 			 		hostname = localStorage.key(i);
 					extensionID = chrome.runtime.id;
-			 		if (hostname !== "log-link: newtab" && 
+			 		if (hostname !== "log-link: newtab" &&
 			 			hostname !== "log-link: "+ extensionID &&
 			 			hostname !== "log-link: " &&
 			 			hostname !== "log-link:" &&
@@ -296,7 +204,7 @@ function calculate() {
 			 				time = timeMS / timeDenom;
 			 				price = time * THRESHMETRICAMOUNT;
 			 				totalPrice += price;
-			 				if (price > 0.01) {  //(price >= THRESHOLD) {  
+			 				if (price > 0.01) {  //(price >= THRESHOLD) {
 
 			 					var search = hostname.replace("log-link: ", "");
 			 					var imsrc = "http://www.google.com/s2/favicons?domain=" +search;
@@ -319,48 +227,3 @@ function calculate() {
 		};
 	};
 };
-
-function msToTime(s) {
-  var ms = s % 1000;
-  s = (s - ms) / 1000;
-  var secs = s % 60;
-  s = (s - secs) / 60;
-  var mins = s % 60;
-  var hrs = (s - mins) / 60;
-
-  return hrs + ':' + mins + ':' + secs;
-}
-
-var row;
-var hostname;
-var visitCount;
-var timeSpent;
-var lastTimeVisited;
-var lastTimePaid;
-var d = new Date
-
-for (var i = 0; i < localStorage.length; i++) {
-	hostname = localStorage.key(i);
-	extensionID = chrome.runtime.id;
-	if (hostname !== 'log-link: newtab' && hostname !== "log-link: "+extensionID && hostname.substring(0,10) == "log-link: "){
-		hostname = hostname.replace("log-link: ", "");
-		row = JSON.parse(localStorage.getItem(localStorage.key(i)));
-		visitCount = row['visitCount'];
-		timeSpent = row['timeSpent'];
-		lastTimeVisited = row['lastTimeVisited'];
-		lastTimePaid = row['lastTimePaid'];
-
-		if (lastTimePaid == 0) {
-			lastTimePaid = 'never';
-		} else {
-			 lastTimePaid = new Date(lastTimePaid);
-			lastTimePaid = lastTimePaid.toLocaleString();
-		};
-		var dLastTimeVisited = new Date(lastTimeVisited);
-		var imsrc = "http://www.google.com/s2/favicons?domain=" +hostname;
-		if (timeSpent > 5000 ){
-			$('#myTable > tbody').append('<tr><td><img src='+imsrc+'/>'+'     '+String(hostname)+'</td><td>'+String(visitCount)+'</td><td>'+String(msToTime(timeSpent))+'</td><td>'+dLastTimeVisited.toLocaleString()+'</td><td>'+lastTimePaid+'</td></tr>');
-		}
-	};
-};
-

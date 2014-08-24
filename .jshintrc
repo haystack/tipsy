@@ -1,0 +1,8 @@
+{
+  "eqnull": true,
+  "node": true,
+  "esnext": true,
+  "globals": {
+    "chrome": true
+  }
+}

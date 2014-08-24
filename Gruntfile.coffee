@@ -1,5 +1,5 @@
 module.exports = ->
-  @loadTasks 'grunt'
+  @loadTasks 'build/tasks'
 
   @registerTask 'default', [
     'jshint'
@@ -15,5 +15,7 @@ module.exports = ->
     'clean:chrome-extension'
     'compress:chrome-extension'
     'copy:chrome-extension'
+    'stylus:chrome-extension'
+    'es6'
     'shell:chrome-extension'
   ]

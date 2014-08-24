@@ -1,8 +1,3 @@
-/**
-* contentscript.js (https://developer.chrome.com/extensions/content_scripts)
-* to parse the payment information.
-* -- Philippe Schiff
-*/
 (function(window) {
   'use strict';
 
