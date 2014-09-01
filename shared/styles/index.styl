@@ -1,0 +1,48 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:100)
+@import url(/node_modules/purecss/tables.css)
+@import url(/node_modules/purecss/forms.css)
+
+// Tabs.
+#log
+  @import "tabs/log.styl"
+
+html, body
+  box-sizing border-box
+  padding 15px
+  font-family Helvetica, Arial, sans-serif
+
+nav 
+  border-bottom 1px solid #EFEFEF
+
+  h1
+    display inline-block
+    margin-right 20px
+    font-family 'Lato', sans-serif
+
+    sub
+      color #939393
+      font-size 70%
+
+  a
+    display inline-block
+    color #666
+    text-decoration none
+    padding 10px
+    font-size 80%
+
+    &.active, &:hover
+      color #000
+      background #F1F1F1
+
+hr
+  outline none
+  border none
+  border-bottom 1px solid #EFEFEF
+
+section
+  display none
+  padding 10px
+  padding-top 15px
+
+:target
+  display block

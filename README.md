@@ -62,3 +62,15 @@ grunt chrome-extension
 The source code necessary to run the extension as unpacked lives in the
 *dist/tipsy* directory and can be dragged into the Extensions tab within
 Chrome.
+
+#### Automatically reload the extension ####
+
+During development it is advantageous to automatically reload the extension
+window while developing.
+
+Once you have launched Chrome, ensure that you have loaded the unpacked
+extension and open the main entry point:
+
+chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html
+
+Finally run `grunt watch:chrome-extension` to monitor the filesystem.

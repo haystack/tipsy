@@ -25,7 +25,7 @@ beforeEach(function() {
 
   driver.manage().timeouts().implicitlyWait(1000);
   this.extensionDriver = new ExtensionDriver(driver, id);
-  return this.extensionDriver.navigate('html/logPage.html');
+  return this.extensionDriver.navigate('html/index.html');
 });
 
 afterEach(function() {
