@@ -8,4 +8,4 @@ module.exports = ->
       formatter: new transpiler.formatters.bundle
 
     container.getModule 'index'
-    container.write 'chrome-extension/dist/tipsy.js'
+    container.write 'chrome-extension/dist/tipsy/js/tipsy.js'

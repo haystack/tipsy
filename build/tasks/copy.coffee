@@ -6,7 +6,7 @@ module.exports = ->
   @config 'copy',
     'chrome-extension':
       files: [
-        { src: ['bower_components/**/*'], expand: true, dest: dest }
+        { src: ['node_modules/purecss/*'], expand: true, dest: dest }
         {
           src: [
             '**/*'

@@ -8,7 +8,7 @@ module.exports = ->
         mode: 'zip'
 
       files: [
-        { src: ['bower_components/**/*'], dest: '.' }
+        { src: ['node_modules/purecss/*'], dest: '.' }
         { src: ['**/*'], expand: true, cwd: 'shared' }
         {
           src: [

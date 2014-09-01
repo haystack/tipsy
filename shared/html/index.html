@@ -6,165 +6,41 @@
 
   <title>Tipsy</title>
 
-  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/tipsy.css">
 </head>
   
 <body>
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#logTable" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> Log Page</a></li>
+  <nav>
+    <h1>tipsy <sub>beta</sub></h1>
+    <a href="#log">Log</a>
+    <a href="#settings">Settings</a>
+    <a href="#billing">Billing</a>
+  </nav>
 
-    <li><a href="#configurationpage" data-toggle="tab"><i class="glyphicon glyphicon-cog"></i> Configuration</a></li>
+  <section id="log">
+    <input type="search" placeholder="Search">
 
-    <li><a href="#myBillPage" data-toggle="tab"><i class="glyphicon glyphicon-globe"></i> My Contribution</a></li>
-  </ul>
+    <table class="pure-table pure-table-bordered pure-table-striped">
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>Visit Count</th>
+          <th>Time Spent</th>
+          <th>Last Time Visited</th>
+          <th>Last Time Paid</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
 
-  <div class="tab-content">
-    <div class="tab-pane active">
-      <div>
-        <div class="span6"><h3 class="header1">TIPSY</h3></div>
-        <div class="span6"><h3 class="header2">logpage</h3></div>
-      </div>
+  <section id="settings">
+    Settings page
+  </section>
 
-      <table class="atable tablesorter table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>WEB SITE</th>
-            <th>VISIT COUNT</th>
-            <th>TIME SPENT</th>
-            <th>LAST TIME VISITED</th>
-            <th>LAST TIME PAID</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="tab-pane">
-      <div class="span12">
-        <h3><span class="configheaders">Payment Settings:</span></h3>
-      </div>
-
-      <form class="form-horizontal" role="form">
-        <div class="form-group">
-          <label for="selectPayMethodDD" class="col-sm-3 control-label">Payment Method:</label>
-
-          <div class="col-sm-6">
-            <select class="form-control" required>
-              <option value="" disabled selected>Please select payment calculation method</option>
-              <option>Threshold</option>
-              <option>Lottery</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="thresholdInput" class="col-sm-3 control-label">Threshold:  $</label>
-
-          <div class="col-sm-6">
-            <input type="text" class="form-control" placeholder="Please input threshold $ amount..." min="0.00" step="0.01" pattern="^\\$?(([1-9](\\d*|\\d{0,2}(,\\d{3})*))|0)(\\.\\d{1,2})?$">
-          </div>
-        </div>
-
-        <div class="form-group" >
-          <label for="metric" class="col-sm-3 control-label">Calculation: $ </label>
-          <div class="col-sm-2"><input type="text" class="form-control" placeholder="$ amount..."></div>
-          <div class="col-sm-1">
-            <p class="text-center">/</p>
-          </div>
-          <div class="col-sm-3">
-            <select class="form-control">
-              <option value="" disabled selected style='display:none;'>time span...</option>
-              <option value="second"> second </option>
-              <option value="min"> min </option>
-              <option value="page visit"> page visit </option>
-            </select>
-          </div>
-          <div class="col-sm-1"></div>
-        </div>
-
-        <div class="form-group">
-          <label for="datefrom" class="col-sm-3 control-label">Calculate Since:</label>
-          <div class="col-sm-6">
-            <div class="radio">
-              <input type="radio" name="optionsRadio" value="option1" checked>
-              <label for="optionsRadio">
-              Since last time paid.
-              </label>
-            </div>
-            <div class="radio">
-              <input type="radio" name="optionsRadio" value="option2">
-              <input class="form-control" type="text" placeholder="Please choose a date...">
-            </div>
-          </div>
-        </div>
-      </form>
-      <hr>
-      <div class="span12">
-        <h3><span class="configheaders"> Reminder Settings:</span></h3>
-      </div>
-      <br>
-      <form class="form-horizontal" role ="form">
-        <div class="form-group">
-          <label for="metric" class="col-sm-3 control-label">Remind Me... </label>
-          <div class="col-sm-2"> <input type="number" class="form-control" placeholder="1" min="0" max="30" step="1"></div>
-          <div class="col-sm-1">
-            <p class="text-center">times a</p>
-          </div>
-          <div class="col-sm-3">
-            <select class="form-control">
-              <option value="" disabled selected style='display:none;'>period...</option>
-              <option> day </option>
-              <option> week </option>
-              <option> month </option>
-              <option> year </option>
-            </select>
-          </div>
-          <div class="col-sm-2"></div>
-        </div>
-        <div class="form-group">
-          <label for="metric" class="col-sm-3 control-label">&nbsp;</label>
-          <div class="col-sm-6">
-            <label class="checkbox-inline">
-            <input type="checkbox" value="option1"> Whenever threshold is reached</label>
-          </div>
-        </div>
-      </form>
-      <hr>
-      <div class='span12'>
-        <button type="button" class="btn btn-primary pull-right">Apply Changes and Recalculate</button>
-      </div>
-      <div class="span12">&nbsp;</div>
-      <div class="span12">&nbsp;</div>
-      <div class="span12"></div>
-    </div>
-    <div class="tab-pane">
-      <div class="span12">
-        <h3> <span class="MyBillHeaders">My Contribution:</span></h3>
-      </div>
-      <div class="span12">
-        <h4><span>You have chosen the </span> payment method.</h4>
-      </div>
-      <div class= "span12">
-        <div class="span12" id = "reachedThreshDiv"></div>
-      </div>
-      <div>
-        <h4>The breakdown of you contribution is as follows: </h4>
-      </div>
-      <table class="atable tablesorter table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>WEB SITE</th>
-            <th>DOLLAR AMOUNT</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-      <div class="span12">
-        <div><button type="button" class="btn btn-primary btn-sm btn-lotto"><span class='glyphicon glyphicon-usd'></span> Pay Now</button></div>
-      </div>
-    </div>
-  </div>
+  <section id="billing">
+    Billing page
+  </section>
 
   <script src="/js/tipsy.js"></script>
 </body>

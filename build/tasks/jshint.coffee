@@ -4,8 +4,8 @@ module.exports = ->
   # Run your source code through JSHint's defaults.
   @config 'jshint',
     options:
-      jshintrc: ".jshintrc"
+      jshintrc: '.jshintrc'
 
     files: [
-      'shared/**/index.js'
+      'shared/**/*.js'
     ]

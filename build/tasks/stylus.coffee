@@ -4,4 +4,4 @@ module.exports = ->
   @config 'stylus',
     'chrome-extension':
       files:
-        'chrome-extension/dist/tipsy/css/index.css': 'shared/styles/index.styl'
+        'chrome-extension/dist/tipsy/css/tipsy.css': 'shared/styles/index.styl'

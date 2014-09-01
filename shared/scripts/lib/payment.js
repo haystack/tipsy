@@ -1,6 +1,4 @@
-'use strict';
-
-var storage = require('./storage');
+import storage from './storage';
 
 /**
  * Payment
@@ -16,7 +14,6 @@ function Payment() {
  * calculate
  *
  * @return
- */
 Payment.prototype.calculate = function() {
 	if (PAYMETHOD == 'Threshold') {
 		if (THRESHOLD != null && THRESHMETRICAMOUNT != null && THRESHMETRICTIMESPAN != null) {
@@ -75,5 +72,6 @@ Payment.prototype.calculate = function() {
 		};
 	};
 };
+*/
 
-module.exports = Payment;
+export default Payment;

@@ -1,6 +1,4 @@
-function Storage() {
-
-}
+var storage = {};
 
 /**
  * setSync
@@ -8,7 +6,7 @@ function Storage() {
  * @param sync
  * @return
  */
-Storage.prototype.setSync = function(sync) {
+storage.setSync = function(sync) {
   this.sync = Boolean(sync);
 };
 
@@ -17,7 +15,7 @@ Storage.prototype.setSync = function(sync) {
  *
  * @return
  */
-Storage.prototype.engine = function() {
+storage.engine = function() {
   return this.sync ? chrome.storage : window.localStorage;
 };
 
@@ -27,7 +25,7 @@ Storage.prototype.engine = function() {
  * @param keyPath
  * @return
  */
-Storage.prototype.get = function(keyPath) {
+storage.get = function(keyPath) {
 
 };
 
@@ -38,8 +36,8 @@ Storage.prototype.get = function(keyPath) {
  * @param value
  * @return
  */
-Storage.prototype.set = function(keyPath, value) {
+storage.set = function(keyPath, value) {
 
 };
 
-export default Storage;
+export default storage;

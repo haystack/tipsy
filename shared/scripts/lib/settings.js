@@ -20,7 +20,7 @@ var defaults = {
  * @param memo
  * @return
  */
-function proxySettings(key, memo) {
+function proxySettings(memo, key) {
   Object.defineProperty(memo, key, {
     get: function() {
       return storage.get('setting.' + key) || defaults[key];

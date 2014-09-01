@@ -1,3 +1,4 @@
+/*
 var row;
 var hostname;
 var visitCount;
@@ -40,3 +41,4 @@ $('td').keypress(function(evt){
         $(this).parents('table').find('tr:eq('+rowindex+') td:eq('+cellindex+')').focus()
     }
 })
+*/

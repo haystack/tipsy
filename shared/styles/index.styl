@@ -1,83 +1,48 @@
-html {
-  min-width: 520px;
-}
+@import url(http://fonts.googleapis.com/css?family=Lato:100)
+@import url(/node_modules/purecss/tables.css)
+@import url(/node_modules/purecss/forms.css)
 
-body {
-  min-height: 500px;
-  padding: 15px;
-  overflow-y: scroll;
-}
+// Tabs.
+#log
+  @import "tabs/log.styl"
 
-table {
-  font-size : 10pt !important ;
-}
+html, body
+  box-sizing border-box
+  padding 15px
+  font-family Helvetica, Arial, sans-serif
 
-th {
-  font-size: 9pt !important;
-  border-top: none !important;
-}
+nav 
+  border-bottom 1px solid #EFEFEF
 
-.atable td { 
-  border-top: none; 
-}
+  h1
+    display inline-block
+    margin-right 20px
+    font-family 'Lato', sans-serif
 
-.header1 {
-  color: #3276b1 !important;
-  display:inline;
-}
+    sub
+      color #939393
+      font-size 70%
 
-.configheaders {
-  color: #3276b1 !important;
-}
+  a
+    display inline-block
+    color #666
+    text-decoration none
+    padding 10px
+    font-size 80%
 
-.MyBillHeaders {
-  color: brown !important;
-}
+    &.active, &:hover
+      color #000
+      background #F1F1F1
 
-.header2 {
-  color: brown !important;
-  display:inline;
-}
+hr
+  outline none
+  border none
+  border-bottom 1px solid #EFEFEF
 
-.btn-lotto {
-  float:right; 
-  width: 40%;
-  font-size: 10pt !important;
-  font-weight: bold;
-}
+section
+  display none
+  padding 10px
+  padding-top 15px
 
-.paypal-btn {
-  position:relative;
-  float:right; 
-}
-
-.tab-content {
-  border-bottom: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  padding: 10px;
-}
-
-.nav-tabs {
-  margin-bottom: 0;
-}
-
-#left {
-  float: left;
-}
-
-#tabfont {
-  font-weight:bold;
-}
-
-#metricSlash {
-  font-size: 20pt;
-}
-
-#configTitles {
-  font-size: 15pt;
-}
-
-#payMethodWord {
-  font-weight: bold;
-}
+:target
+  display block

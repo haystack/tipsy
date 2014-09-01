@@ -17,8 +17,7 @@
       "19": "img/logo19.png",
       "38": "img/logo38.png"
     },
-    "default_title": "Tipsy",
-    "default_popup": "html/index.html"
+    "default_title": "Tipsy"
   },
   "content_scripts": [
     {
@@ -28,24 +27,6 @@
       "js": [
         "scripts/contentscript.js"
       ]
-    },
-    {
-      "matches": [
-        "https://accounts.google.com/o/oauth2/approval*"
-      ],
-      "js": [
-        "/oauth2/oauth2_inject.js"
-      ],
-      "run_at": "document_start"
-    },
-    {
-      "matches": [
-        "https://www.dwolla.com/robots.txt*"
-      ],
-      "js": [
-        "/oauth2/oauth2_inject.js"
-      ],
-      "run_at": "document_start"
     }
   ],
   "permissions": [

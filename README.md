@@ -71,6 +71,6 @@ window while developing.
 Once you have launched Chrome, ensure that you have loaded the unpacked
 extension and open the main entry point:
 
-chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/logPage.html
+chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html
 
 Finally run `grunt watch:chrome-extension` to monitor the filesystem.
