@@ -5,14 +5,17 @@ module.exports = ->
     'chrome-extension':
       files: [
         'chrome-extension/**/*'
-        'shared/**/*'
         '!chrome-extension/dist/**/*'
+        'firefox-extension/**/*'
+        '!firefox-extension/dist/**/*'
+        'shared/**/*'
       ]
 
       tasks: [
         'jshint'
         'clean:chrome-extension'
         'copy:chrome-extension'
-        'es6'
+        'es6-chrome'
         'stylus:chrome-extension'
+        'firefox-extension'
       ]
