@@ -1,14 +1,11 @@
 'use strict';
 
-var assert = require('assert');
-var path = require('path');
-
-var webdriver = require('selenium-webdriver');
-var RemoteDriver = require('selenium-webdriver/remote');
 var FirefoxProfile = require('firefox-profile');
 var profile = new FirefoxProfile();
 
-var ExtensionDriver = require('./extension-driver');
+ExtensionDriver.prototype.navigate = function(url) {
+  return this._driver.get('resource://' + this._id + '/tipsy/data/' + url);
+};
 
 var id = 'jid1-onbkbcx9o5ylwa-at-jetpack';
 
@@ -32,25 +29,8 @@ before(function(done) {
         .withCapabilities(capabilities)
         .build();
 
-      done();
-    });
-  });
-});
-
-beforeEach(function() {
-  this.timeout(20000);
-  this.extensionDriver = new ExtensionDriver(this.driver, id);
-  return this.extensionDriver.navigate('html/index.html');
-});
-
-afterEach(function() {
-  return this.extensionDriver.quit();
-});
-
-describe('extension', function() {
-  it('loads', function() {
-    return this.extensionDriver.getTitle().then(function(title) {
-      assert.equal(title, 'Tipsy');
+      test.extensionDriver = new ExtensionDriver(test.driver, id);
+      test.extensionDriver.navigate('html/index.html').then(done);
     });
   });
 });

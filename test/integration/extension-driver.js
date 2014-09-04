@@ -10,15 +10,6 @@ function ExtensionDriver(driver, id) {
 module.exports = ExtensionDriver;
 
 /**
- * Open the application index page.
- *
- * @returns {Promise}
- */
-ExtensionDriver.prototype.navigate = function(url) {
-  return this._driver.get('chrome-extension://' + this._id + '/' + url);
-};
-
-/**
  * Refresh the current page.
  *
  * @returns {Promise}
