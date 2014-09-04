@@ -9,8 +9,7 @@ module.exports = ->
 
   @registerTask 'test', [
     'default'
-    'simplemocha:shared'
-    'simplemocha:chrome-extension'
+    'simplemocha'
   ]
 
   @registerTask 'chrome-extension', [

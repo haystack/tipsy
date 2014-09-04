@@ -5,5 +5,8 @@ module.exports = ->
     'chrome-extension':
       src: ['chrome-extension/test/integration.js']
 
+    'firefox-extension':
+      src: ['firefox-extension/test/integration.js']
+
     'shared':
       src: ['shared/test/runner.js', 'shared/test/tests/**/*.js']
