@@ -1,12 +1,13 @@
 module.exports = ->
   @loadNpmTasks 'grunt-contrib-copy'
 
-  dest = 'chrome-extension/dist/tipsy'
+  chromeDest = 'chrome-extension/dist/tipsy'
+  firefoxDest = 'firefox-extension/dist/tipsy'
 
   @config 'copy',
     'chrome-extension':
       files: [
-        { src: ['node_modules/purecss/*'], expand: true, dest: dest }
+        { src: ['node_modules/purecss/*'], expand: true, dest: chromeDest }
         {
           src: [
             '**/*'
@@ -14,7 +15,7 @@ module.exports = ->
           ]
           expand: true
           cwd: 'shared'
-          dest: dest
+          dest: chromeDest
         }
         {
           src: [
@@ -23,6 +24,30 @@ module.exports = ->
           ]
           expand: true
           cwd: 'chrome-extension'
-          dest: dest
+          dest: chromeDest
+        }
+      ]
+
+    'firefox-extension':
+      files: [
+        { src: ['node_modules/purecss/*'], expand: true, dest: firefoxDest }
+        {
+          src: [
+            '**/*'
+            '!_assets/**'
+          ]
+          expand: true
+          cwd: 'shared'
+          dest: firefoxDest + '/data'
+        }
+        {
+          src: [
+            'data/**'
+            'lib/**'
+            'package.json'
+          ]
+          expand: true
+          cwd: 'firefox-extension'
+          dest: firefoxDest
         }
       ]

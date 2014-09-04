@@ -3,3 +3,4 @@ module.exports = ->
 
   @config 'clean',
     'chrome-extension': ['chrome-extension/dist']
+    'firefox-extension': ['firefox-extension/dist']

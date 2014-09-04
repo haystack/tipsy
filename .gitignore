@@ -1,3 +1,5 @@
+/build/tools
 /bower_components
 /node_modules
 /chrome-extension/dist
+/firefox-extension/dist

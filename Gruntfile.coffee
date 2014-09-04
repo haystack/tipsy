@@ -4,12 +4,12 @@ module.exports = ->
   @registerTask 'default', [
     'jshint'
     'chrome-extension'
+    'firefox-extension'
   ]
 
   @registerTask 'test', [
     'default'
-    'simplemocha:shared'
-    'simplemocha:chrome-extension'
+    'simplemocha'
   ]
 
   @registerTask 'chrome-extension', [
@@ -17,6 +17,15 @@ module.exports = ->
     'compress:chrome-extension'
     'copy:chrome-extension'
     'stylus:chrome-extension'
-    'es6'
+    'es6-chrome'
     'shell:chrome-extension'
+  ]
+
+  @registerTask 'firefox-extension', [
+    'clean:firefox-extension'
+    'copy:firefox-extension'
+    'stylus:firefox-extension'
+    'processhtml:firefox-extension'
+    'es6-firefox'
+    'mozilla-cfx-xpi'
   ]
