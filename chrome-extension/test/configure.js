@@ -1,17 +1,15 @@
 'use strict';
 
-var assert = require('assert');
-var path = require('path');
-
-var webdriver = require('selenium-webdriver');
 var chrome = require('selenium-webdriver/chrome');
 var chromeDriver = require('selenium-chromedriver');
 
-var ExtensionDriver = require('./extension-driver');
+ExtensionDriver.prototype.navigate = function(url) {
+  return this._driver.get('chrome-extension://' + this._id + '/' + url);
+};
 
 var id = 'bpngoepojmffegnjicpfjcakgajpmenk';
 
-beforeEach(function() {
+before(function() {
   this.timeout(20000);
 
   chrome.setDefaultService(
@@ -23,19 +21,7 @@ beforeEach(function() {
 
   var driver = chrome.createDriver(options);
 
-  driver.manage().timeouts().implicitlyWait(1000);
+  driver.manage().timeouts().implicitlyWait(10000);
   this.extensionDriver = new ExtensionDriver(driver, id);
   return this.extensionDriver.navigate('html/index.html');
-});
-
-afterEach(function() {
-  return this.extensionDriver.quit();
-});
-
-describe('extension', function() {
-  it('loads', function() {
-    return this.extensionDriver.getTitle().then(function(title) {
-      assert.equal(title, 'Tipsy');
-    });
-  });
 });
