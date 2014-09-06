@@ -1,16 +1,8 @@
-var path = require('path');
-var assert = require('assert');
-var loader = require('es6-module-loader');
+'use strict';
 
-// Globally expose common objects to simplify authoring tests.
-global.assert = assert;
-global.System = loader.System;
+global.path = require('path');
+global.assert = require('assert');
+global.loader = require('es6-module-loader');
 
-// Save a copy of the original normalize method.
-var systemNormalize = System.normalize;
-
-// Load modules from the shared/scripts directory.
-loader.System.normalize = function(name, parentName, parentAddress) {
-  name = path.join('shared/scripts/', name);
-  return systemNormalize.call(this, name, parentName, parentAddress);
-};
+// Scope the ES6 module paths to the shared/scripts directory.
+require('../normalizePaths');

@@ -26,7 +26,7 @@ storage.engine = function() {
  * @return
  */
 storage.get = function(keyPath) {
-
+  var engine = this.engine();
 };
 
 /**

@@ -1,7 +1,7 @@
 module.exports = ->
-  @loadNpmTasks 'grunt-simple-mocha'
+  @loadNpmTasks 'grunt-mocha-test'
 
-  @config 'simplemocha',
+  @config 'mochaTest',
     'chrome-extension':
       src: [
         'test/integration/setup.js'
