@@ -1,6 +1,6 @@
 'use strict';
 
-import './environment';
+import environment from './environment';
 
 var storage = {};
 
@@ -20,7 +20,11 @@ storage.setSync = function(sync) {
  * @return
  */
 storage.engine = function() {
-  return this.sync ? chrome.storage : window.localStorage;
+  if (this.sync && environment === 'chrome') {
+    return chrome.storage;
+  }
+  
+  return window.localStorage;
 };
 
 /**
