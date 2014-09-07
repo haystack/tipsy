@@ -8,7 +8,7 @@ var systemNormalize = loader.System.normalize;
 if (!loader.System.normalize.__patched__) {
   // Load modules from the shared/scripts directory.
   loader.System.normalize = function(name, parentName, parentAddress) {
-    name = path.join('shared/scripts/', name);
+    name = path.join('shared/scripts/lib/', name);
     return systemNormalize.call(this, name, parentName, parentAddress);
   };
 
