@@ -1,4 +1,5 @@
 import { select, selectAll } from './utils/dom';
+import './utils/environment';
 
 /**
  * Sets the current tab in the extension.

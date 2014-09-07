@@ -1,15 +1,11 @@
 'use strict';
 
-//describe('Environment', function() {
-//  var environment;
-//
-//  before(function() {
-//    return System.import('./utils/environment').then(function(module) {
-//      environment = module.default;
-//    });
-//  });
-//
-//  it('can correctly identify', function() {
-//    //assert.equal(environment, this.environment);
-//  });
-//});
+describe('Environment', function() {
+  it('can correctly identify', function() {
+    var expectedEnvironment = this.environment;
+
+    return this.extensionDriver.getEnvironment().then(function(environment) {
+      assert.equal(environment, expectedEnvironment);
+    });
+  });
+});

@@ -6,7 +6,7 @@
     "build-chrome": "grunt chrome-extension",
     "build-firefox": "grunt firefox-extension",
     "selenium": "start-selenium",
-    "test": "2>/dev/null 1>&2 npm run selenium & npm test-all",
+    "test": "npm run selenium & npm run test-all",
     "test-chrome": "grunt mochaTest:chrome-extension",
     "test-firefox": "grunt mochaTest:firefox-extension",
     "test-shared": "grunt mochaTest:shared",

@@ -24,5 +24,6 @@ before(function() {
 
   driver.manage().timeouts().implicitlyWait(10000);
   this.extensionDriver = new ExtensionDriver(driver, id);
+
   return this.extensionDriver.navigate('html/index.html');
 });

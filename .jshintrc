@@ -4,6 +4,7 @@
   "esnext": true,
   "proto": true,
   "globals": {
+    "navigator": true,
     "chrome": true
   }
 }
