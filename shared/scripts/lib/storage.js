@@ -45,9 +45,10 @@ storage._findValue = function(keyPath) {
 };
 
 /**
- * engine
+ * Inspects the environment and synchronization settings to determine which
+ * object to return for client side storage.
  *
- * @return
+ * @return {Object} storage engine.
  */
 storage._engine = function() {
   if (this.sync && environment === 'chrome') {
