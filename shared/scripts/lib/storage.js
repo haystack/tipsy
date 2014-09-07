@@ -1,3 +1,7 @@
+'use strict';
+
+import './environment';
+
 var storage = {};
 
 /**

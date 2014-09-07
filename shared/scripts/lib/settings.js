@@ -1,3 +1,5 @@
+'use strict';
+
 import storage from './storage';
 
 var defaults = {

@@ -1,3 +1,5 @@
+'use strict';
+
 import { select, selectAll } from './dom';
 import './environment';
 

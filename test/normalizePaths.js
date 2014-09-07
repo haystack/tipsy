@@ -1,3 +1,5 @@
+'use strict';
+
 // Save a copy of the original normalize method.
 var systemNormalize = loader.System.normalize;
 

@@ -1,3 +1,5 @@
+'use strict';
+
 function toArray() {
   return Array.prototype.slice.call(arguments[0]);
 }
