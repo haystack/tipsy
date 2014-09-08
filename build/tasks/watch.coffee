@@ -15,7 +15,7 @@ module.exports = ->
         'jshint'
         'clean:chrome-extension'
         'copy:chrome-extension'
-        'es6-chrome'
+        'es6'
         'stylus:chrome-extension'
         'firefox-extension'
       ]

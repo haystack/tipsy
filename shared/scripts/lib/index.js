@@ -9,7 +9,7 @@ import './environment';
 function setTab() {
   // Default to the log page if none was specified.
   if (!location.hash) {
-    location.href = '#log';
+    location.href = '#getting-started';
   }
 
   // Remove all existing active classes.

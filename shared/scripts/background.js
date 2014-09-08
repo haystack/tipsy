@@ -1,10 +1,21 @@
-(function(window) {
-  'use strict';
+'use strict';
 
-  // Open the extension in a new tab instead of a new window or popup.
-  chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.tabs.create({
-      url: chrome.extension.getURL('html/index.html')
-    });
-  });
-})(this);
+import Extension from './lib/extension';
+
+// Create a new extension instance.
+var extension = new Extension({
+  indexUrl: 'html/index.html'
+});
+
+// Ensure the tray icon is displayed and will open the extension upon being
+// clicked.
+extension.addTrayIcon({
+  id: 'tipsy-icon',
+  label: 'Launch Tipsy',
+  url: 'html/index.html',
+  icon: {
+    '19': './img/logo19.png',
+    '48': './img/logo48.png',
+    '64': './img/logo64.png'
+  }
+});

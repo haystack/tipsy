@@ -18,7 +18,7 @@ module.exports = ->
     'compress:chrome-extension'
     'copy:chrome-extension'
     'stylus:chrome-extension'
-    'es6-chrome'
+    'es6'
     'shell:chrome-extension'
   ]
 
@@ -27,6 +27,6 @@ module.exports = ->
     'copy:firefox-extension'
     'stylus:firefox-extension'
     'processhtml:firefox-extension'
-    'es6-firefox'
+    'es6'
     'mozilla-cfx-xpi'
   ]
