@@ -1,6 +1,9 @@
 transpiler = require 'es6-module-transpiler'
 
 buildES6 = (options) ->
+  # Containers can't have multiple write calls, so instead create two
+  # different containers to output.
+
   container = new transpiler.Container(
     resolvers: [new transpiler.FileResolver([options.path])]
     formatter: new transpiler.formatters.bundle
@@ -8,6 +11,13 @@ buildES6 = (options) ->
 
   container.getModule options.module
   container.write 'chrome-extension/dist/tipsy/' + options.chrome
+
+  container = new transpiler.Container(
+    resolvers: [new transpiler.FileResolver([options.path])]
+    formatter: new transpiler.formatters.bundle
+  )
+
+  container.getModule options.module
   container.write 'firefox-extension/dist/tipsy/data/' + options.firefox
 
 module.exports = ->

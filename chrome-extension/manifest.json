@@ -26,7 +26,7 @@
         "http://*/*"
       ],
       "js": [
-        "scripts/contentscript.js"
+        "js/contentscript.js"
       ]
     }
   ],

@@ -3,31 +3,17 @@
 import { environment } from './environment';
 
 /**
- * Initializes the library to handle the extension abstraction.
- *
- * @param {Object} options - The options to configure the extension with.
- */
-function Extension(options) {
-  this.options = options;
-  this.options.__proto__ = {
-    indexUrl: 'about:blank'
-  };
-}
-
-/**
  * Opens the extension in a new tab window.
  */
-Extension.prototype.addTrayIcon = function(iconOptions) {
-  var options = this.options;
-
+export function addTrayIcon(options) {
   if (environment === 'chrome') {
     chrome.browserAction.onClicked.addListener(function(tab) {
       chrome.tabs.create({
         url: chrome.extension.getURL(options.indexUrl)
       });
 
-      if (iconOptions.onClick) {
-        iconOptions.onClick(tab);
+      if (options.onClick) {
+        options.onClick(tab);
       }
     });
   }
@@ -37,28 +23,48 @@ Extension.prototype.addTrayIcon = function(iconOptions) {
     var tabs = require('sdk/tabs');
     var data = require("sdk/self").data;
 
-    this.mozTrayIcon = buttons.ActionButton({
-      id: iconOptions.id,
-      label: iconOptions.label,
-      icon: iconOptions.icon,
+    buttons.ActionButton({
+      id: options.id,
+      label: options.label,
+      icon: options.icon,
       onClick: function(state) {
         tabs.open(data.url(options.indexUrl));
 
-        if (iconOptions.onClick) {
-          iconOptions.onClick(state);
+        if (options.onClick) {
+          options.onClick(state);
         }
       }
     });
   }
-};
+}
 
+/**
+ * Initializes the library to handle the extension abstraction.
+ *
+ * @param {Object} options - The options to configure the extension with.
+ */
+function Extension(options) {
+  this.options = options || {};
+  this.options.__proto__ = {
+    indexUrl: 'about:blank'
+  };
+}
+
+/**
+ * postMessage
+ *
+ * @param body
+ * @return
+ */
 Extension.prototype.postMessage = function(body) {
+  body = JSON.stringify(body);
+
   if (environment === 'chrome') {
     chrome.runtime.sendMessage(body);
   }
 
   else if (environment === 'firefox') {
-
+    self.port.emit('contentScript', body);
   }
 };
 

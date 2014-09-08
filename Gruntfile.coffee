@@ -5,6 +5,9 @@ module.exports = ->
     'jshint'
     'chrome-extension'
     'firefox-extension'
+    'es6'
+    'shell:chrome-extension'
+    'mozilla-cfx-xpi'
   ]
 
   @registerTask 'test', [
@@ -18,8 +21,6 @@ module.exports = ->
     'compress:chrome-extension'
     'copy:chrome-extension'
     'stylus:chrome-extension'
-    'es6'
-    'shell:chrome-extension'
   ]
 
   @registerTask 'firefox-extension', [
@@ -27,6 +28,4 @@ module.exports = ->
     'copy:firefox-extension'
     'stylus:firefox-extension'
     'processhtml:firefox-extension'
-    'es6'
-    'mozilla-cfx-xpi'
   ]

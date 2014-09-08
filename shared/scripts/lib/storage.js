@@ -96,7 +96,7 @@ storage._engine = function() {
   // LocalStorage does not handle object values, so we need a value to
   // determine whether or not to stringify later.
   this._serialize = true;
-  
+
   return window.localStorage;
 };
 
@@ -131,7 +131,7 @@ storage.set = function(keyPath, value) {
     throw new Error('Missing a valid keypath.');
   }
 
-  // Get the current state of the object. 
+  // Get the current state of the object.
   var state = this._findValue(keyPath);
   // Need to modify the second-to-last key in order to make the assignment.
   var secondToLast = state.secondToLast;

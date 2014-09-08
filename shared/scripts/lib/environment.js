@@ -6,6 +6,9 @@ export var environment = null;
 if (typeof chrome === 'object') {
   environment = 'chrome';
 }
+else {
+  environment = 'firefox';
+}
 
 if (typeof navigator !== 'undefined') {
   if (navigator.userAgent.indexOf('Firefox') > -1) {
