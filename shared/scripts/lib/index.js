@@ -12,13 +12,24 @@ function setTab() {
     location.href = '#getting-started';
   }
 
-  // Remove all existing active classes.
-  selectAll('nav a').forEach(function(link) {
-    link.classList.remove('active');
-  });
+  // If we're on the getting started page, disable the links and don't worry
+  // about active classes.
+  if (location.hash === '#getting-started') {
+    selectAll('nav a').forEach(function(link) {
+      link.removeAttribute('href');
+      link.classList.add('disabled');
+    });
+  }
 
-  // Add the new class to the tab link.
-  select('nav a[href="' + location.hash + '"]').classList.add('active');
+  else {
+    // Remove all existing active classes.
+    selectAll('nav a').forEach(function(link) {
+      link.classList.remove('active');
+    });
+
+    // Add the new class to the tab link.
+    select('nav a[href="' + location.hash + '"]').classList.add('active');
+  }
 }
 
 // Set the correct active tab.
