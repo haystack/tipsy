@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "description": "A prototype",
   "icons": {
-    "16": "img/logo16.png",
+    "19": "img/logo19.png",
     "48": "img/logo48.png",
-    "128": "img/logo128.png"
+    "64": "img/logo64.png"
   },
   "default_locale": "en",
   "background": {
@@ -15,7 +15,8 @@
   "browser_action": {
     "default_icon": {
       "19": "img/logo19.png",
-      "38": "img/logo38.png"
+      "48": "img/logo48.png",
+      "64": "img/logo48.png"
     },
     "default_title": "Tipsy"
   },
