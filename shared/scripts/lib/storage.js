@@ -1,6 +1,6 @@
 'use strict';
 
-import environment from './environment';
+import { environment } from './environment';
 
 var storage = {
   sync: false

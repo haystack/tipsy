@@ -1,15 +1,17 @@
 'use strict';
 
+import { environment } from './environment';
 import { select, selectAll } from './dom';
-import './environment';
+import settings from './settings';
 
 /**
  * Sets the current tab in the extension.
  */
 function setTab() {
-  // Default to the log page if none was specified.
+  // When opening the extension without a hash determine where to route based
+  // on if the end user has already configured the getting started page or not.
   if (!location.hash) {
-    location.href = '#getting-started';
+    location.href = settings.showGettingStarted ? '#getting-started' : '#log';
   }
 
   // If we're on the getting started page, disable the links and don't worry
