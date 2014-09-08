@@ -11,6 +11,7 @@ var id = 'bpngoepojmffegnjicpfjcakgajpmenk';
 
 before(function() {
   this.timeout(20000);
+  this.environment = 'chrome';
 
   chrome.setDefaultService(
     new chrome.ServiceBuilder(chromeDriver.path).build()
@@ -23,5 +24,6 @@ before(function() {
 
   driver.manage().timeouts().implicitlyWait(10000);
   this.extensionDriver = new ExtensionDriver(driver, id);
+
   return this.extensionDriver.navigate('html/index.html');
 });

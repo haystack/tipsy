@@ -11,6 +11,7 @@ var id = 'jid1-onbkbcx9o5ylwa-at-jetpack';
 
 before(function(done) {
   this.timeout(20000);
+  this.environment = 'firefox';
 
   var test = this;
 

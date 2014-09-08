@@ -4,7 +4,7 @@ module.exports = ->
   @registerTask 'es6-chrome', 'Compiles ES6 modules.', ->
 
     container = new transpiler.Container
-      resolvers: [new transpiler.FileResolver(['shared/scripts'])]
+      resolvers: [new transpiler.FileResolver(['shared/scripts/lib'])]
       formatter: new transpiler.formatters.bundle
 
     container.getModule 'index'
@@ -13,7 +13,7 @@ module.exports = ->
   @registerTask 'es6-firefox', 'Compiles ES6 modules.', ->
 
     container = new transpiler.Container
-      resolvers: [new transpiler.FileResolver(['shared/scripts'])]
+      resolvers: [new transpiler.FileResolver(['shared/scripts/lib'])]
       formatter: new transpiler.formatters.bundle
 
     container.getModule 'index'

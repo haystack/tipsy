@@ -5,6 +5,6 @@ global.path = require('path');
 global.webdriver = require('selenium-webdriver');
 global.ExtensionDriver = require('./extension-driver');
 
-afterEach(function() {
+after(function() {
   return this.extensionDriver.quit();
 });
