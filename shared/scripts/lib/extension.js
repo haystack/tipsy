@@ -52,4 +52,14 @@ Extension.prototype.addTrayIcon = function(iconOptions) {
   }
 };
 
+Extension.prototype.postMessage = function(body) {
+  if (environment === 'chrome') {
+    chrome.runtime.sendMessage(body);
+  }
+
+  else if (environment === 'firefox') {
+
+  }
+};
+
 export default Extension;
