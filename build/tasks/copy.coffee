@@ -3,6 +3,7 @@ module.exports = ->
 
   chromeDest = 'chrome-extension/dist/tipsy'
   firefoxDest = 'firefox-extension/dist/tipsy'
+  firefoxDestData = firefoxDest + '/data'
 
   @config 'copy',
     'chrome-extension':
@@ -30,7 +31,9 @@ module.exports = ->
 
     'firefox-extension':
       files: [
-        { src: ['node_modules/purecss/*'], expand: true, dest: firefoxDest }
+        {
+          src: ['node_modules/purecss/*'], expand: true, dest: firefoxDestData
+        }
         {
           src: [
             '**/*'
@@ -38,7 +41,7 @@ module.exports = ->
           ]
           expand: true
           cwd: 'shared'
-          dest: firefoxDest + '/data'
+          dest: firefoxDestData
         }
         {
           src: [
