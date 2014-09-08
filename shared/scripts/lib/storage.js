@@ -66,7 +66,7 @@ storage._findValue = function(keyPath) {
   return {
     // Grab the last value used for parsing, either the second to last or the
     // root value.
-    finalValue: parts.length > 1 ? secondToLast[lastKey] : root,
+    finalValue: parts[1] && secondToLast ? secondToLast[lastKey] : root,
 
     // Send this back as the reference necessary to top level serialize.
     root: root,

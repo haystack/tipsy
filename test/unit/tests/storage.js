@@ -20,7 +20,7 @@ describe('Storage', function() {
 
   describe('Synchronization', function() {
     after(function() {
-      delete storage.sync; 
+      delete storage.sync;
     });
 
     it('defaults to false', function() {
@@ -69,6 +69,10 @@ describe('Storage', function() {
 
     it('will return null on invalid top level keypath', function() {
       assert.equal(storage.get('failure'), null);
+    });
+
+    it('will not error when accessing with invalid dot notation', function() {
+      assert.equal(storage.get('failure.extrafailure'), null);
     });
   });
 
