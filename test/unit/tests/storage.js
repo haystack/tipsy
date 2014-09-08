@@ -8,7 +8,6 @@ describe('Storage', function() {
     return System.import('./storage').then(function(module) {
       storage = module.default;
 
-      // Stub out the engine to use a plain object.
       storage._engine = function() {
         return localStorage;
       };
@@ -17,6 +16,34 @@ describe('Storage', function() {
 
   it('is an object', function() {
     assert.equal(typeof storage, 'object');
+  });
+
+  describe('Synchronization', function() {
+    after(function() {
+      delete storage.sync; 
+    });
+
+    it('defaults to false', function() {
+      assert.equal(storage.sync, false);
+    });
+
+    it('can enable synchronization', function() {
+      storage.setSync(true);
+      assert.equal(storage.sync, true);
+    });
+
+    it('can disable synchronization', function() {
+      storage.setSync(false);
+      assert.equal(storage.sync, false);
+    });
+
+    it('can coerce non-boolean values', function() {
+      storage.setSync(undefined);
+      assert.equal(storage.sync, false);
+
+      storage.setSync(1);
+      assert.equal(storage.sync, true);
+    });
   });
 
   describe('Accessor', function() {
@@ -46,6 +73,24 @@ describe('Storage', function() {
   });
 
   describe('Mutator', function() {
+    after(function() {
+      delete localStorage.nested;
+    });
 
+    it('can save a simple top level value', function() {
+      var testVal = {
+        value: {
+          lookup: true
+        }
+      };
+
+      storage.set('nested', testVal);
+      assert.equal(storage.get('nested'), testVal);
+    });
+
+    it('can modify a nested sub value', function() {
+      storage.set('nested.value.lookup', false);
+      assert.equal(storage.get('nested.value.lookup'), false);
+    });
   });
 });
