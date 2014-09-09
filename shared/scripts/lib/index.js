@@ -26,6 +26,7 @@ function setTab() {
   else {
     // Remove all existing active classes.
     selectAll('nav a').forEach(function(link) {
+      link.classList.remove('disabled');
       link.classList.remove('active');
     });
 
