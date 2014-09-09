@@ -27,5 +27,4 @@ module.exports = ->
     'clean:firefox-extension'
     'copy:firefox-extension'
     'stylus:firefox-extension'
-    'processhtml:firefox-extension'
   ]
