@@ -19,25 +19,26 @@ function setTab() {
     location.href = settings.showGettingStarted ? '#getting-started' : '#log';
   }
 
-  // If we're on the getting started page, disable the links and don't worry
-  // about active classes.
-  if (location.hash === '#getting-started') {
-    selectAll('nav a').forEach(function(link) {
+  selectAll('nav a').forEach(function(link) {
+    link.classList.remove('active', 'disabled');
+
+    // If we're on the getting started page, disable the links.
+    if (location.hash === '#getting-started') {
       link.classList.add('disabled');
       link.addEventListener('click', disabledEvent, true);
-    });
-  }
+    }
 
-  else {
-    // Remove all existing active classes.
-    selectAll('nav a').forEach(function(link) {
-      link.classList.remove('active', 'disabled');
+    // Otherwise, remove all previous bound event listeners and ensure that the
+    // active class is correctly applied.
+    else {
       link.removeEventListener('click', disabledEvent, true);
-    });
 
-    // Add the new class to the tab link.
-    select('nav a[href="' + location.hash + '"]').classList.add('active');
-  }
+      // Add the new class to the tab link.
+      if (link.hash === location.hash) {
+        link.classList.add('active');
+      }
+    }
+  });
 }
 
 // Set the correct active tab.
