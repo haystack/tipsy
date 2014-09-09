@@ -4,6 +4,11 @@ import { environment } from './environment';
 import { select, selectAll } from './dom';
 import settings from './settings';
 
+// Stop the links from being active.
+var disabledEvent = function(ev) {
+  ev.preventDefault();
+};
+
 /**
  * Sets the current tab in the extension.
  */
@@ -18,16 +23,16 @@ function setTab() {
   // about active classes.
   if (location.hash === '#getting-started') {
     selectAll('nav a').forEach(function(link) {
-      link.removeAttribute('href');
       link.classList.add('disabled');
+      link.addEventListener('click', disabledEvent, true);
     });
   }
 
   else {
     // Remove all existing active classes.
     selectAll('nav a').forEach(function(link) {
-      link.classList.remove('disabled');
-      link.classList.remove('active');
+      link.classList.remove('active', 'disabled');
+      link.removeEventListener('click', disabledEvent, true);
     });
 
     // Add the new class to the tab link.
