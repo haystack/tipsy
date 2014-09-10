@@ -10,8 +10,8 @@
     "test-chrome": "grunt mochaTest:chrome-extension",
     "test-firefox": "grunt mochaTest:firefox-extension",
     "test-shared": "grunt mochaTest:shared",
-    "test-all": "npm run test-chrome && npm run test-firefox && npm run test-shared",
-    "postinstall": "npm dedupe ; grunt mozilla-addon-sdk ; npm run python2 ; npm run build",
+    "test-all": "npm run build ; npm run test-chrome && npm run test-firefox && npm run test-shared",
+    "postinstall": "npm dedupe ; grunt mozilla-addon-sdk ; npm run python2",
     "python2": "(cd build/tools ; grep -Rl python . | xargs sed -ri 's/([^!]|^)python(\\s|$)/\\1python2\\2/g')"
   },
   "devDependencies": {
