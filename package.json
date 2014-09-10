@@ -17,7 +17,7 @@
   "devDependencies": {
     "bower": "^1.3.9",
     "es6-module-loader": "^0.8.2",
-    "es6-module-transpiler": "^0.6.2",
+    "es6-module-transpiler": "~0.6.2",
     "firefox-profile": "^0.3.3",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
@@ -29,7 +29,6 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-test": "^0.11.0",
     "grunt-mozilla-addon-sdk": "^0.3.2",
-    "grunt-processhtml": "^0.3.3",
     "grunt-shell": "^0.7.0",
     "mocha": "^1.21.4",
     "selenium-chromedriver": "^0.0.2",

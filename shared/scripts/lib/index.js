@@ -1,24 +1,44 @@
 'use strict';
 
+import { environment } from './environment';
 import { select, selectAll } from './dom';
-import './environment';
+import settings from './settings';
+
+// Stop the links from being active.
+var disabledEvent = function(ev) {
+  ev.preventDefault();
+};
 
 /**
  * Sets the current tab in the extension.
  */
 function setTab() {
-  // Default to the log page if none was specified.
+  // When opening the extension without a hash determine where to route based
+  // on if the end user has already configured the getting started page or not.
   if (!location.hash) {
-    location.href = '#log';
+    location.href = settings.showGettingStarted ? '#getting-started' : '#log';
   }
 
-  // Remove all existing active classes.
   selectAll('nav a').forEach(function(link) {
-    link.classList.remove('active');
-  });
+    link.classList.remove('active', 'disabled');
 
-  // Add the new class to the tab link.
-  select('nav a[href="' + location.hash + '"]').classList.add('active');
+    // If we're on the getting started page, disable the links.
+    if (location.hash === '#getting-started') {
+      link.classList.add('disabled');
+      link.addEventListener('click', disabledEvent, true);
+    }
+
+    // Otherwise, remove all previous bound event listeners and ensure that the
+    // active class is correctly applied.
+    else {
+      link.removeEventListener('click', disabledEvent, true);
+
+      // Add the new class to the tab link.
+      if (link.hash === location.hash) {
+        link.classList.add('active');
+      }
+    }
+  });
 }
 
 // Set the correct active tab.

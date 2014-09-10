@@ -3,6 +3,7 @@
 import storage from './storage';
 
 var defaults = {
+  showGettingStarted: true,
   method: null,
   threshold: null,
   maxPayment: null,

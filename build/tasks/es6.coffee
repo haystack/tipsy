@@ -1,20 +1,45 @@
 transpiler = require 'es6-module-transpiler'
 
+buildES6 = (options) ->
+  # Containers can't have multiple write calls, so instead create two
+  # different containers to output.
+
+  container = new transpiler.Container(
+    resolvers: [new transpiler.FileResolver([options.path])]
+    formatter: new transpiler.formatters.bundle
+  )
+
+  container.getModule options.module
+  container.write 'chrome-extension/dist/tipsy/' + options.chrome
+
+  container = new transpiler.Container(
+    resolvers: [new transpiler.FileResolver([options.path])]
+    formatter: new transpiler.formatters.bundle
+  )
+
+  container.getModule options.module
+  container.write 'firefox-extension/dist/tipsy/data/' + options.firefox
+
 module.exports = ->
-  @registerTask 'es6-chrome', 'Compiles ES6 modules.', ->
+  @registerTask 'es6', 'Compiles ES6 modules.', ->
 
-    container = new transpiler.Container
-      resolvers: [new transpiler.FileResolver(['shared/scripts/lib'])]
-      formatter: new transpiler.formatters.bundle
+    # Extension.
+    buildES6
+      path: 'shared/scripts/lib'
+      module: 'index'
+      chrome: 'js/tipsy.js'
+      firefox: 'js/tipsy.js'
 
-    container.getModule 'index'
-    container.write 'chrome-extension/dist/tipsy/js/tipsy.js'
+    # Background.
+    buildES6
+      path: 'shared/scripts'
+      module: 'background'
+      chrome: 'js/background.js'
+      firefox: '../lib/main.js'
 
-  @registerTask 'es6-firefox', 'Compiles ES6 modules.', ->
-
-    container = new transpiler.Container
-      resolvers: [new transpiler.FileResolver(['shared/scripts/lib'])]
-      formatter: new transpiler.formatters.bundle
-
-    container.getModule 'index'
-    container.write 'firefox-extension/dist/tipsy/data/js/tipsy.js'
+    # ContentScript.
+    buildES6
+      path: 'shared/scripts'
+      module: 'contentscript'
+      chrome: 'js/contentscript.js'
+      firefox: '../lib/contentscript.js'
