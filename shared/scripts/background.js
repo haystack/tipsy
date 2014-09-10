@@ -1,6 +1,8 @@
 'use strict';
 
 import { addTrayIcon } from './lib/extension';
+import activity from './lib/activity';
+import idle from './lib/idle';
 
 // Ensure the tray icon is displayed and will open the extension upon being
 // clicked.

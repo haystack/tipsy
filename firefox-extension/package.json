@@ -6,5 +6,7 @@
   "author": "MIT Haystack",
   "license": "MIT",
   "version": "0.1.0",
-  "main": "main.js"
+  "main": "main.js",
+  "icon": "data/img/logo48.png",
+  "icon64": "data/img/logo64.png"
 }
