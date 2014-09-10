@@ -2,6 +2,7 @@
   "name": "tipsy",
   "private": true,
   "scripts": {
+    "watch": "grunt default watch",
     "build": "grunt",
     "build-chrome": "grunt chrome-extension",
     "build-firefox": "grunt firefox-extension",

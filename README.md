@@ -9,6 +9,8 @@ Tipsy
 If you wish to work on Tipsy, you can find instructions on getting started
 below.  It uses [Node](http://nodejs.org) to install and run the extension.
 
+At the moment the build process and tests only work flawlessly in Linux.
+
 #### Installing Node and dependencies ####
 
 Go to the [Node](http://nodejs.org) homepage and install for your platform.
@@ -51,10 +53,10 @@ Once it is installed and configured you can build the extension with:
 npm run build
 ```
 
-or more specifically:
+or more specifically (if you only want to build the Chrome extension):
 
 ``` bash
-grunt chrome-extension
+npm run chrome-extension
 ```
 
 #### Loading the unpacked extension ####
@@ -63,14 +65,33 @@ The source code necessary to run the extension as unpacked lives in the
 *dist/tipsy* directory and can be dragged into the Extensions tab within
 Chrome.
 
-#### Automatically reload the extension ####
+### Working on Firefox extension ###
 
-During development it is advantageous to automatically reload the extension
-window while developing.
+To build the FireFox extension you don't need to do anything special.  The sdk
+is automatically downloaded and installed when you `npm install`.  If you have
+already run:
 
-Once you have launched Chrome, ensure that you have loaded the unpacked
-extension and open the main entry point:
+``` shell
+npm run build
+```
+
+you already have the extension built in the *firefox-extension/dist* directory.
+If you do not have this built you can specifically build the *.crx* file with:
+
+``` shell
+npm run build-firefox
+```
+
+### URLs for testing ###
+
+Chrome:
 
 chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html
 
-Finally run `grunt watch:chrome-extension` to monitor the filesystem.
+FireFox:
+
+resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html
+
+### Watch during development ###
+
+Run `npm run watch` to monitor the filesystem.
