@@ -1,11 +1,10 @@
 'use strict';
 
-import { addTrayIcon } from './lib/extension';
+import { addTrayIcon, addContentScript } from './lib/extension';
+import storage from './lib/storage';
 import activity from './lib/activity';
-import idle from './lib/idle';
 
-// Ensure the tray icon is displayed and will open the extension upon being
-// clicked.
+// Display the tray icon and open the extension upon being clicked.
 addTrayIcon({
   id: 'tipsy-icon',
   label: 'Launch Tipsy',
@@ -17,3 +16,6 @@ addTrayIcon({
     '64': './img/logo64.png'
   }
 });
+
+// Inject a script into all pages when loaded.
+addContentScript('js/contentscript.js');

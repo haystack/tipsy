@@ -12,6 +12,7 @@ var id = 'bpngoepojmffegnjicpfjcakgajpmenk';
 before(function() {
   this.timeout(20000);
   this.environment = 'chrome';
+  this.backgroundPage = '_generated_background_page.html';
 
   chrome.setDefaultService(
     new chrome.ServiceBuilder(chromeDriver.path).build()

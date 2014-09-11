@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Storage', function() {
-  var storage;
+  var storage = null;
   var localStorage = {};
 
   before(function() {
@@ -77,24 +77,36 @@ describe('Storage', function() {
   });
 
   describe('Mutator', function() {
-    after(function() {
-      delete localStorage.nested;
-    });
+    var testVal = null;
 
-    it('can save a simple top level value', function() {
-      var testVal = {
+    before(function() {
+      testVal = {
         value: {
           lookup: true
         }
       };
 
       storage.set('nested', testVal);
+    });
+
+    after(function() {
+      delete localStorage.nested;
+    });
+
+    it('can save a simple top level value', function() {
       assert.equal(storage.get('nested'), testVal);
     });
 
     it('can modify a nested sub value', function() {
       storage.set('nested.value.lookup', false);
       assert.equal(storage.get('nested.value.lookup'), false);
+    });
+
+    // TODO This should be patched in the future.
+    it('cannot create nested values without invalid parents', function() {
+      assert.throws(function() {
+        storage.set('wrong.new.value', true);
+      });
     });
   });
 });

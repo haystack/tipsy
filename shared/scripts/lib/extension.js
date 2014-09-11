@@ -1,6 +1,7 @@
 'use strict';
 
 import { environment } from './environment';
+import { monitorState } from './idle';
 
 /**
  * Opens the extension in a new tab window.
@@ -21,7 +22,7 @@ export function addTrayIcon(options) {
   else if (environment === 'firefox') {
     var buttons = require('sdk/ui/button/action');
     var tabs = require('sdk/tabs');
-    var data = require("sdk/self").data;
+    var data = require('sdk/self').data;
 
     buttons.ActionButton({
       id: options.id,
@@ -34,6 +35,24 @@ export function addTrayIcon(options) {
           options.onClick(state);
         }
       }
+    });
+  }
+}
+
+/**
+ * addContentScript
+ *
+ * @param {string} path - ...
+ */
+export function addContentScript(path) {
+  // Chrome handles the contentscript via the manifest.  In FireFox you
+  // programmatically instrument the page to load the script.
+  if (environment === 'firefox') {
+    var data = require('sdk/self').data;
+    var tabs = require('sdk/tabs');
+
+    tabs.activeTab.attach({
+      contentScriptFile: data.url(path)
     });
   }
 }
@@ -66,6 +85,12 @@ Extension.prototype.postMessage = function(body) {
   else if (environment === 'firefox') {
     self.port.emit('contentScript', body);
   }
+};
+
+Extension.prototype.watchState = function() {
+  monitorState(function(isIdle) {
+    console.log(isIdle ? 'Currently idle' : 'Not idle');
+  });
 };
 
 export default Extension;

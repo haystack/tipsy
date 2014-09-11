@@ -23,7 +23,8 @@
   "content_scripts": [
     {
       "matches": [
-        "http://*/*"
+        "http://*/*",
+        "https://*/*"
       ],
       "js": [
         "js/contentscript.js"
@@ -39,7 +40,7 @@
     "idle"
   ],
   "web_accessible_resources": [
-    "js/modules/*",
+    "js/**/**",
     "bower_components/**/*"
   ]
 }

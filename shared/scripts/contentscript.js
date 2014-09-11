@@ -9,7 +9,7 @@ var extension = new Extension();
 var links = document.getElementsByTagName('link');
 
 // Ensure we're working with a NodeList that inherits Array.prototype.
-links.__proto__ = Array.prototype;
+links = Array.prototype.slice.call(links);
 
 // Build up an object with page and author details for the extension.
 var messageBody = {
@@ -26,4 +26,10 @@ links.filter(function(link) {
 });
 
 // Send this message body back to the extension.
-extension.postMessage(messageBody);
+extension.postMessage({
+  name: 'author',
+  data: messageBody
+});
+
+extension.watchState(function(isIdle) {
+});

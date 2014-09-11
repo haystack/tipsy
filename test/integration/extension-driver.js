@@ -38,7 +38,11 @@ ExtensionDriver.prototype.getTitle = function() {
 };
 
 ExtensionDriver.prototype.getEnvironment = function() {
-  return this._driver.executeScript(function() {
-    return navigator.environment; 
+  return this.execute(function() {
+    return navigator.environment;
   });
+};
+
+ExtensionDriver.prototype.execute = function(fn) {
+  return this._driver.executeScript(fn);
 };
