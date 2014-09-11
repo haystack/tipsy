@@ -32,6 +32,7 @@
     "grunt-mozilla-addon-sdk": "^0.3.2",
     "grunt-shell": "^0.7.0",
     "mocha": "^1.21.4",
+    "promise": "^6.0.0",
     "selenium-chromedriver": "^0.0.2",
     "selenium-standalone": "^2.42.2-2.9.0-1",
     "selenium-webdriver": "^2.42.1"

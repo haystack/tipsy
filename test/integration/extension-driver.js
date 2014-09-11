@@ -1,6 +1,7 @@
 'use strict';
 
 var webdriver = require('selenium-webdriver');
+var Promise = require('promise');
 
 function ExtensionDriver(driver, id) {
   this._driver = driver;
@@ -45,4 +46,16 @@ ExtensionDriver.prototype.getEnvironment = function() {
 
 ExtensionDriver.prototype.execute = function(fn) {
   return this._driver.executeScript(fn);
+};
+
+ExtensionDriver.prototype.navigateExternal = function() {
+  var extension = this;
+
+  return this._driver.get('https://google.com/').then(function() {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function() {
+        extension._driver.navigate().back().then(resolve, reject);
+      }, 5000);
+    });
+  });
 };
