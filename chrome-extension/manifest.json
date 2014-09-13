@@ -37,7 +37,8 @@
     "https://accounts.google.com/o/oauth2/token",
     "https://www.googleapis.com/",
     "history",
-    "idle"
+    "idle",
+    "storage"
   ],
   "web_accessible_resources": [
     "js/**/**",

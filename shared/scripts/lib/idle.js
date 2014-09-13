@@ -2,15 +2,14 @@
 
 import { environment } from './environment';
 import storage from './storage';
-import { start, stop, pause } from './activity';
+import { start, stop } from './activity';
 
 // Tracks the current pages open in tabs.  Whenever a tab is closed, remove
 // from the list.
 var idle = {
   seconds: 20,
 
-  // Idle is a global concept.  Regardless of the tab or page if the user has
-  // gone idle, we must pause
+  // Idle is a global concept.
   isIdle: false
 };
 
@@ -26,7 +25,7 @@ function updateIdle(state) {
     return;
   }
 
-  return idle.isIdle ? pause() : start();
+  return idle.isIdle ? stop() : start();
 }
 
 // Chrome extension have access to the `idle` API which determines if users

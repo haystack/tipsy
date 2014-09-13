@@ -2,6 +2,7 @@
 
 import { environment } from './environment';
 import { select, selectAll } from './dom';
+import storage from './storage';
 
 var settings = {};
 
@@ -47,3 +48,7 @@ setTab();
 
 // Ensure that the tab is changed whenever the hash value is updated.
 window.addEventListener('hashchange', setTab, true);
+
+storage.get('test', function(val) {
+  console.log(val);
+});

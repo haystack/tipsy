@@ -1,8 +1,6 @@
 'use strict';
 
 import { addTrayIcon, addContentScript } from './lib/extension';
-import storage from './lib/storage';
-import activity from './lib/activity';
 import './lib/idle';
 
 // Display the tray icon and open the extension upon being clicked.
