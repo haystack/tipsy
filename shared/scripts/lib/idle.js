@@ -1,32 +1,66 @@
 'use strict';
 
-import { selectAll } from './dom';
 import { environment } from './environment';
-import settings from './settings';
+import storage from './storage';
+import { start, stop, pause } from './activity';
+
+// Tracks the current pages open in tabs.  Whenever a tab is closed, remove
+// from the list.
+var idle = {
+  seconds: 20,
+
+  // Idle is a global concept.  Regardless of the tab or page if the user has
+  // gone idle, we must pause
+  isIdle: false
+};
 
 /**
- * Monitors the idle state and triggers a callback whenever it changes.
+ * Updates the idle state and triggers appropriate actions depending on that
+ * state.
  *
- * @param {Function} isIdle - A callback function to trigger with the state.
+ * @param state
  */
-export function monitorState(isIdle) {
-  var currentState = true;
+function updateIdle(state) {
+  // If the state is unchanged, don't bother doing anything.
+  if (idle.isIdle === state) {
+    return;
+  }
 
-  var addEvent = function(element, event, state) {
-    element.addEventListener(event, function() {
-      if (state !== currentState) {
-        isIdle(state);
-        currentState = state;
-      }
-    }, true);
-  };
+  return idle.isIdle ? pause() : start();
+}
 
-  selectAll('audio, video').forEach(function(media) {
-    addEvent(media, 'abort', true);
-    addEvent(media, 'pause', true);
-    addEvent(media, 'playing', false);
+// Chrome extension have access to the `idle` API which determines if users
+// are interacting with the page or not.
+if (environment === 'chrome') {
+  chrome.idle.setDetectionInterval(idle.seconds);
+
+  // Monitor whether or not the page is considered idle.
+  chrome.idle.onStateChanged.addListener(function(newState) {
+    updateIdle(newState === 'locked' || newState === 'idle');
   });
 
-  addEvent(document.body, 'scroll', false);
-  addEvent(document.body, 'mousemove', false);
+  // Monitor whether or not the content script has detected media idle.
+  chrome.runtime.onMessage.addListener(function(req, sender, resp) {
+    if (req.name === 'isIdle') {
+      updateIdle(req.data);
+    }
+  });
 }
+else if (environment === 'firefox') {
+  var queryService = require('chrome').Cc['@mozilla.org/widget/idleservice;1'];
+  var idleService = queryService.getService(chrome.Ci.nsIIdleService);
+
+  // Doesn't have any decent way to detect idle other than this.
+  idle.timeout = setInterval(function() {
+    // Wait for the idle time to reach the designatd threshold before changing
+    // the state.
+    if (idleService.idleTime >= (idle.seconds * 1000)) {
+      updateIdle(true);
+    }
+    else {
+      updateIdle(false);
+    }
+  }, 1000);
+}
+
+export default idle;

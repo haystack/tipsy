@@ -2,7 +2,8 @@
 
 import { environment } from './environment';
 import { select, selectAll } from './dom';
-import settings from './settings';
+
+var settings = {};
 
 // Stop the links from being active.
 var disabledEvent = function(ev) {

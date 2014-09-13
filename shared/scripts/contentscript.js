@@ -1,15 +1,10 @@
 'use strict';
 
-import Extension from './lib/extension';
-
-// Create a new extension instance.
-var extension = new Extension();
+import { selectAll } from './lib/dom';
+import { postMessage } from './lib/extension';
 
 // Find all links on the page.
-var links = document.getElementsByTagName('link');
-
-// Ensure we're working with a NodeList that inherits Array.prototype.
-links = Array.prototype.slice.call(links);
+var links = selectAll('link');
 
 // Build up an object with page and author details for the extension.
 var messageBody = {
@@ -26,10 +21,28 @@ links.filter(function(link) {
 });
 
 // Send this message body back to the extension.
-extension.postMessage({
+postMessage({
   name: 'author',
   data: messageBody
 });
 
-extension.watchState(function(isIdle) {
+var addEvent = function(elements, event, state) {
+  // Allow multiple events to be bound.
+  elements.split(' ').forEach(function(element) {
+    element.addEventListener(event, function() {
+      postMessage({
+        name: 'isIdle',
+        data: state
+      });
+    }, true);
+  });
+};
+
+// Loop through all media types and bind to their respective state events to
+// update the idle state.
+selectAll('audio, video').forEach(function(media) {
+  addEvent(media, 'abort pause', true);
+  addEvent(media, 'playing', false);
 });
+
+addEvent(document.body, 'scroll mousemove', false);

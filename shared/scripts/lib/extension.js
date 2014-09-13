@@ -5,6 +5,8 @@ import { monitorState } from './idle';
 
 /**
  * Opens the extension in a new tab window.
+ *
+ * @param {Object} options
  */
 export function addTrayIcon(options) {
   if (environment === 'chrome') {
@@ -58,24 +60,11 @@ export function addContentScript(path) {
 }
 
 /**
- * Initializes the library to handle the extension abstraction.
- *
- * @param {Object} options - The options to configure the extension with.
- */
-function Extension(options) {
-  this.options = options || {};
-  this.options.__proto__ = {
-    indexUrl: 'about:blank'
-  };
-}
-
-/**
  * postMessage
  *
  * @param body
- * @return
  */
-Extension.prototype.postMessage = function(body) {
+export function postMessage(body) {
   body = JSON.stringify(body);
 
   if (environment === 'chrome') {
@@ -85,12 +74,4 @@ Extension.prototype.postMessage = function(body) {
   else if (environment === 'firefox') {
     self.port.emit('contentScript', body);
   }
-};
-
-Extension.prototype.watchState = function() {
-  monitorState(function(isIdle) {
-    console.log(isIdle ? 'Currently idle' : 'Not idle');
-  });
-};
-
-export default Extension;
+}

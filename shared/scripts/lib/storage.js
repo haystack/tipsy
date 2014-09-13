@@ -92,6 +92,9 @@ storage._engine = function() {
   if (this.sync && environment === 'chrome') {
     return chrome.storage;
   }
+  else if (environment === 'firefox') {
+    return require('sdk/simple-storage').storage;
+  }
 
   // LocalStorage does not handle object values, so we need a value to
   // determine whether or not to stringify later.
