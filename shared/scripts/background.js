@@ -1,6 +1,7 @@
 'use strict';
 
 import { addTrayIcon, addContentScript } from './lib/extension';
+import { initialize } from './lib/activity';
 import './lib/idle';
 
 // Display the tray icon and open the extension upon being clicked.
@@ -16,5 +17,9 @@ addTrayIcon({
   }
 });
 
-// Inject a script into all pages when loaded.
-addContentScript('js/contentscript.js');
+// Ensure that the activity logger has been initialized before trying to load
+// the content script.
+initialize.then(function() {
+  // Inject a script into all pages when loaded.
+  addContentScript('js/contentscript.js');
+});

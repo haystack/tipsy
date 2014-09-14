@@ -9,6 +9,17 @@ import storage from './storage';
 var currentUrl;
 
 /**
+ * Ensures that the log key exists for querying and saving.
+ */
+export function initialize() {
+  return storage.get('log').then(function(log) {
+    log = log || {};
+
+    return storage.set('log', log);
+  });
+}
+
+/**
  * start
  */
 export function start(url) {
