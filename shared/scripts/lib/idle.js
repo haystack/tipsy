@@ -1,8 +1,8 @@
 'use strict';
 
 import { environment } from './environment';
-import storage from './storage';
 import { start, stop } from './activity';
+import storage from './storage';
 
 // Tracks the current pages open in tabs.  Whenever a tab is closed, remove
 // from the list.
