@@ -4,8 +4,6 @@ import { environment } from './environment';
 import { select, selectAll } from './dom';
 import storage from './storage';
 
-var settings = {};
-
 // Stop the links from being active.
 var disabledEvent = function(ev) {
   ev.preventDefault();
@@ -18,7 +16,9 @@ function setTab() {
   // When opening the extension without a hash determine where to route based
   // on if the end user has already configured the getting started page or not.
   if (!location.hash) {
-    location.href = settings.showGettingStarted ? '#getting-started' : '#log';
+    storage.get('settings').then(function(settings) {
+      location.href = settings.gettingStarted ? '#getting-started' : '#log';
+    });
   }
 
   selectAll('nav a').forEach(function(link) {
@@ -48,7 +48,3 @@ setTab();
 
 // Ensure that the tab is changed whenever the hash value is updated.
 window.addEventListener('hashchange', setTab, true);
-
-storage.get('test', function(val) {
-  console.log(val);
-});
