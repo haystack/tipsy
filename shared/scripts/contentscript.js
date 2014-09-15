@@ -26,9 +26,9 @@ postMessage({
   data: messageBody
 });
 
-var addEvent = function(elements, event, state) {
+var addEvent = function(element, events, state) {
   // Allow multiple events to be bound.
-  elements.split(' ').forEach(function(element) {
+  events.split(' ').forEach(function(event) {
     element.addEventListener(event, function() {
       postMessage({
         name: 'isIdle',

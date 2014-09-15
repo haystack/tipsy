@@ -6,6 +6,7 @@
   "proto": true,
   "globals": {
     "chrome": true,
-    "self": true
+    "self": true,
+    "combyne": true
   }
 }

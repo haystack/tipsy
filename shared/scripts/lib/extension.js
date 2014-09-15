@@ -1,7 +1,6 @@
 'use strict';
 
 import { environment } from './environment';
-import { monitorState } from './idle';
 
 /**
  * Opens the extension in a new tab window.

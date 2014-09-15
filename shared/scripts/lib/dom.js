@@ -15,8 +15,9 @@ function toArray() {
  * @param selector
  * @return
  */
-export function select(selector) {
-  return document.querySelector(selector);
+export function select(selector, ctx) {
+  ctx = ctx || document;
+  return ctx.querySelector(selector);
 }
 
 /**
@@ -25,6 +26,7 @@ export function select(selector) {
  * @param selector
  * @return
  */
-export function selectAll(selector) {
-  return toArray(document.querySelectorAll(selector));
+export function selectAll(selector, ctx) {
+  ctx = ctx || document;
+  return toArray(ctx.querySelectorAll(selector));
 }

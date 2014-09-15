@@ -32,16 +32,17 @@
     }
   ],
   "permissions": [
-    "notifications",
     "tabs",
-    "https://accounts.google.com/o/oauth2/token",
-    "https://www.googleapis.com/",
     "history",
     "idle",
-    "storage"
+    "storage",
+    "https://accounts.google.com/o/oauth2/token",
+    "https://www.googleapis.com/"
   ],
   "web_accessible_resources": [
-    "js/**/**",
+    "js/**/*",
+    "js/contentscript.js.map",
     "bower_components/**/*"
-  ]
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

@@ -8,7 +8,14 @@ module.exports = ->
   @config 'copy',
     'chrome-extension':
       files: [
-        { src: ['node_modules/purecss/*'], expand: true, dest: chromeDest }
+        {
+          src: [
+            'node_modules/purecss/*',
+            'node_modules/combyne/dist/*'
+          ]
+          expand: true
+          dest: chromeDest
+        }
         {
           src: [
             '**/*'
@@ -32,7 +39,12 @@ module.exports = ->
     'firefox-extension':
       files: [
         {
-          src: ['node_modules/purecss/*'], expand: true, dest: firefoxDestData
+          src: [
+            'node_modules/purecss/*',
+            'node_modules/combyne/dist/*'
+          ]
+          expand: true
+          dest: firefoxDestData
         }
         {
           src: [

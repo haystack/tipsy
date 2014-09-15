@@ -19,7 +19,7 @@ addTrayIcon({
 
 // Ensure that the activity logger has been initialized before trying to load
 // the content script.
-initialize.then(function() {
+initialize().then(function() {
   // Inject a script into all pages when loaded.
   addContentScript('js/contentscript.js');
 });

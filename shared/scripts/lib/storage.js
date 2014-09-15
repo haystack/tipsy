@@ -88,7 +88,7 @@ storage.get = function(key, callback) {
  * @param value
  * @return
  */
-storage.set = function(key, val, callback) {
+storage.set = function(key, val) {
   var engine = this.engine();
   var store = {};
 

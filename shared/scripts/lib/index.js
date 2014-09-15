@@ -3,6 +3,19 @@
 import { environment } from './environment';
 import { select, selectAll } from './dom';
 import storage from './storage';
+import Component from './component';
+
+// Pages.
+import GettingStartedPage from './components/pages/getting-started/getting-started';
+import LogPage from './components/pages/log/log';
+import SettingsPage from './components/pages/settings/settings';
+import BillingPage from './components/pages/billing/billing';
+
+// Register all pages.
+Component.register('#getting-started', GettingStartedPage);
+Component.register('#log', LogPage);
+Component.register('#settings', SettingsPage);
+Component.register('#billing', BillingPage);
 
 // Stop the links from being active.
 var disabledEvent = function(ev) {
@@ -19,6 +32,13 @@ function setTab() {
     storage.get('settings').then(function(settings) {
       settings = settings || {};
       location.href = settings.showLog ? '#log' : '#getting-started';
+    });
+  }
+
+  if (location.hash === '#log') {
+    storage.get('log').then(function(log) {
+      var table = select('table');
+
     });
   }
 
@@ -51,15 +71,14 @@ setTab();
 window.addEventListener('hashchange', setTab, true);
 
 // Test code to ensure parity between client and background scripts.
-select('button').addEventListener('click', function(ev) {
-  ev.stopPropagation();
-  ev.preventDefault();
-
-  storage.get('settings').then(function(settings) {
-    settings = settings || {};
-
-    settings.showLog = !settings.showLog;
-    storage.set('settings', settings);
-    console.log('changed', settings);
-  });
-}, true);
+//select('button').addEventListener('click', function(ev) {
+//  ev.stopPropagation();
+//  ev.preventDefault();
+//
+//  storage.get('settings').then(function(settings) {
+//    settings = settings || {};
+//
+//    settings.showLog = !settings.showLog;
+//    storage.set('settings', settings);
+//  });
+//}, true);

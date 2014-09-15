@@ -2,6 +2,7 @@
 
 import { environment } from './environment';
 import { start, stop } from './activity';
+import { getCurrentTab, tabs } from './tabs';
 import storage from './storage';
 
 // Tracks the current pages open in tabs.  Whenever a tab is closed, remove
@@ -19,13 +20,13 @@ var idle = {
  *
  * @param state
  */
-function updateIdle(state) {
+function updateIdle(state, tab) {
   // If the state is unchanged, don't bother doing anything.
   if (idle.isIdle === state) {
     return;
   }
 
-  return idle.isIdle ? stop() : start();
+  return idle.isIdle ? stop(tab) : start(tab);
 }
 
 // Chrome extension have access to the `idle` API which determines if users
@@ -35,14 +36,40 @@ if (environment === 'chrome') {
 
   // Monitor whether or not the page is considered idle.
   chrome.idle.onStateChanged.addListener(function(newState) {
-    updateIdle(newState === 'locked' || newState === 'idle');
+    getCurrentTab().then(function(tab) {
+      updateIdle(newState === 'locked' || newState === 'idle', tab );
+    });
+  });
+
+  // Monitor whenever the tab is updated to detect for url changes.
+  chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
+    if (tabs[tabId] && tabs[tabId].tab.url !== changeInfo.url) {
+      stop(tabs[tabId].tab);
+    }
   });
 
   // Monitor whether or not the content script has detected media idle.
   chrome.runtime.onMessage.addListener(function(req, sender, resp) {
-    if (req.name === 'isIdle') {
-      updateIdle(req.data);
-    }
+    req = typeof req === 'string' ? JSON.parse(req) : req;
+
+    // Find the current tab, the extension abstraction provides a normalized
+    // `tab` object that can be used as the source of truth about the current
+    // page.
+    getCurrentTab().then(function(tab) {
+      if (req.name === 'isIdle') {
+        updateIdle(req.data, tab);
+      }
+
+      if (req.name === 'author') {
+        tabs[tab.id] = {
+          author: req.data,
+          tab: tab
+        };
+
+        // Start the activity when the author information has been discovered.
+        start(tab);
+      }
+    });
   });
 }
 else if (environment === 'firefox') {
