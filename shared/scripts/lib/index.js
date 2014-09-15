@@ -69,16 +69,3 @@ setTab();
 
 // Ensure that the tab is changed whenever the hash value is updated.
 window.addEventListener('hashchange', setTab, true);
-
-// Test code to ensure parity between client and background scripts.
-//select('button').addEventListener('click', function(ev) {
-//  ev.stopPropagation();
-//  ev.preventDefault();
-//
-//  storage.get('settings').then(function(settings) {
-//    settings = settings || {};
-//
-//    settings.showLog = !settings.showLog;
-//    storage.set('settings', settings);
-//  });
-//}, true);

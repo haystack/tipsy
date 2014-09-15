@@ -40,15 +40,15 @@ storage.engine = function() {
     };
   }
   else if (environment === 'firefox') {
-    engine = require('sdk/simple-storage').storage;
- 
     return {
       get: function(key, callback) {
-        callback(engine[key]);
+        self.port.emit('storage.get', key);
+        self.port.once('storage.get', callback);
       },
 
       set: function(key, value, callback) {
-        callback(engine[key] = value);
+        self.port.emit('storage.set', { key: key, value: value });
+        self.port.once('storage.set', callback);
       }
     };
   }

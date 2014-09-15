@@ -1,11 +1,9 @@
 'use strict';
 
-var webdriver = require('selenium-webdriver');
-var Promise = require('promise');
-
 function ExtensionDriver(driver, id) {
   this._driver = driver;
-  this._id = id; }
+  this._id = id;
+}
 
 module.exports = ExtensionDriver;
 
@@ -47,10 +45,10 @@ ExtensionDriver.prototype.execute = function(fn) {
   return this._driver.executeScript(fn);
 };
 
-ExtensionDriver.prototype.execute = function(fn) {
+ExtensionDriver.prototype.back = function() {
   return this._driver.navigate().back();
 };
 
 ExtensionDriver.prototype.get = function(url) {
   return this._driver.get(url);
-});
+};

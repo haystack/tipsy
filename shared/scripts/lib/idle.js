@@ -73,6 +73,14 @@ if (environment === 'chrome') {
   });
 }
 else if (environment === 'firefox') {
+  require('sdk/tabs').on('open', function(tab) {
+    tab.on('ready', function(tab) {
+      if (tabs[tab.id] && tabs[tab.id].tab.url !== tab.url) {
+        stop(tabs[tab.id].tab);
+      }
+    });
+  });
+
   var queryService = require('chrome').Cc['@mozilla.org/widget/idleservice;1'];
   var idleService = queryService.getService(require('chrome').Ci.nsIIdleService);
 

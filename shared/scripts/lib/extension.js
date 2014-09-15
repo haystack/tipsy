@@ -1,6 +1,7 @@
 'use strict';
 
 import { environment } from './environment';
+import storage from './storage';
 
 /**
  * Opens the extension in a new tab window.
@@ -9,17 +10,12 @@ import { environment } from './environment';
  */
 export function addTrayIcon(options) {
   if (environment === 'chrome') {
-    chrome.browserAction.onClicked.addListener(function(tab) {
+    chrome.browserAction.onClicked.addListener(function() {
       chrome.tabs.create({
         url: chrome.extension.getURL(options.indexUrl)
       });
-
-      if (options.onClick) {
-        options.onClick(tab);
-      }
     });
   }
-
   else if (environment === 'firefox') {
     var buttons = require('sdk/ui/button/action');
     var tabs = require('sdk/tabs');
@@ -31,11 +27,26 @@ export function addTrayIcon(options) {
       icon: options.icon,
 
       onClick: function(state) {
-        tabs.open(data.url(options.indexUrl));
+        tabs.open({
+          url: data.url(options.indexUrl),
+        });
 
-        if (options.onClick) {
-          options.onClick(state);
-        }
+        var engine = require('sdk/simple-storage');
+
+        tabs.activeTab.on('ready', function(tab) {
+          var worker = tab.attach({
+            contentScriptFile: data.url('js/tipsy.js')
+          });
+
+          worker.port.on('storage.get', function(key) {
+            worker.port.emit('storage.get', engine.storage[key]);
+          });
+
+          worker.port.on('storage.set', function(result) {
+            engine.storage[result.key] = result.value;
+            worker.port.emit('storage.set');
+          });
+        });
       }
     });
   }
@@ -70,7 +81,6 @@ export function postMessage(body) {
   if (environment === 'chrome') {
     chrome.runtime.sendMessage(body);
   }
-
   else if (environment === 'firefox') {
     self.port.emit('contentScript', body);
   }
