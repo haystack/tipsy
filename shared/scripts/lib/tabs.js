@@ -5,8 +5,6 @@ import { environment } from './environment';
 // A global cache of all tabs that are currently being monitored.
 export var tabs = {};
 
-window.tabs = tabs;
-
 /**
  * Finds and normalizes the current active tab into a consumable object.
  *

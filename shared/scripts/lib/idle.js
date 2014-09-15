@@ -74,10 +74,10 @@ if (environment === 'chrome') {
 }
 else if (environment === 'firefox') {
   var queryService = require('chrome').Cc['@mozilla.org/widget/idleservice;1'];
-  var idleService = queryService.getService(chrome.Ci.nsIIdleService);
+  var idleService = queryService.getService(require('chrome').Ci.nsIIdleService);
 
   // Doesn't have any decent way to detect idle other than this.
-  idle.timeout = setInterval(function() {
+  idle.timeout = require('timer').setInterval(function() {
     // Wait for the idle time to reach the designatd threshold before changing
     // the state.
     if (idleService.idleTime >= (idle.seconds * 1000)) {

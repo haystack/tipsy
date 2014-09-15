@@ -46,6 +46,7 @@ storage.engine = function() {
       get: function(key, callback) {
         callback(engine[key]);
       },
+
       set: function(key, value, callback) {
         callback(engine[key] = value);
       }

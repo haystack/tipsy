@@ -5,8 +5,7 @@ var Promise = require('promise');
 
 function ExtensionDriver(driver, id) {
   this._driver = driver;
-  this._id = id;
-}
+  this._id = id; }
 
 module.exports = ExtensionDriver;
 
@@ -48,14 +47,10 @@ ExtensionDriver.prototype.execute = function(fn) {
   return this._driver.executeScript(fn);
 };
 
-ExtensionDriver.prototype.navigateExternal = function() {
-  var extension = this;
-
-  return this._driver.get('https://google.com/').then(function() {
-    return new Promise(function(resolve, reject) {
-      setTimeout(function() {
-        extension._driver.navigate().back().then(resolve, reject);
-      }, 5000);
-    });
-  });
+ExtensionDriver.prototype.execute = function(fn) {
+  return this._driver.navigate().back();
 };
+
+ExtensionDriver.prototype.get = function(url) {
+  return this._driver.get(url);
+});

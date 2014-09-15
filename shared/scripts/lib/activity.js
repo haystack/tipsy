@@ -42,12 +42,15 @@ export function stop(tab) {
   // Open access to the current log so that we can append the latest tab entry
   // into it.
   return storage.get('log').then(function(log) {
+    console.log('here');
     var a = document.createElement('a');
     a.href = tab.url;
 
     var host = a.hostname;
+    var protocol = a.protocol;
 
-    if (!tabs[tab.id]) {
+    if (!tabs[tab.id] || (protocol !== 'https:' && protocol !== 'http:')) {
+      console.log('returned here!', protocol);
       return;
     }
 

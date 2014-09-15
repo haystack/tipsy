@@ -29,6 +29,7 @@ export function addTrayIcon(options) {
       id: options.id,
       label: options.label,
       icon: options.icon,
+
       onClick: function(state) {
         tabs.open(data.url(options.indexUrl));
 
