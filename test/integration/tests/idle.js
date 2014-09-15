@@ -9,14 +9,14 @@ describe('idle', function() {
     return driver.get('https://google.com/').then(function() {
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
-          driver.back().then(function() {
+          driver.navigate('html/index.html#log').then(function() {
             return driver.execute(function() {
-              return document.querySelector('table').querySelectorAll('td').length;
+              return document.querySelector('table').querySelectorAll('tr').length;
             }).then(function(length) {
               assert.equal(length, 1);
             });
           }).then(resolve, reject);
-        }, 4000);
+        }, 1000);
       });
     })
   });
