@@ -1,8 +1,8 @@
 'use strict';
 
-import Component from '../../../component';
-import storage from '../../../storage';
-import { select } from '../../../dom';
+import Component from '../../component';
+import storage from '../../storage';
+import { select } from '../../dom';
 
 function GettingStartedPage() {
   Component.prototype.constructor.apply(this, arguments);

@@ -1,9 +1,9 @@
 'use strict';
 
-import Component from '../../../component';
-import { select } from '../../../dom';
-import storage from '../../../storage';
-import TableComponent from '../../table/table';
+import Component from '../../component';
+import { select } from '../../dom';
+import storage from '../../storage';
+import TableComponent from '../../components/table/table';
 
 function LogPage() {
   var log = this;
@@ -18,13 +18,15 @@ function LogPage() {
     // Add filters.
     log.table.compiled.then(function(template) {
       template.registerFilter('timeSpent', function(val) {
-        return (val.reduce(function(prev, current) {
+        return moment.duration(val.reduce(function(prev, current) {
           return prev + current.timeSpent;
-        }, 0) / 1000) + ' seconds';
+        }, 0), 'milliseconds').humanize();
       });
 
       template.registerFilter('lastAccess', function(val) {
-        return new Date(val[val.length - 1].accessTime).toString();
+        var date = new Date(val[val.length - 1].accessTime).toString();
+
+        return moment(date).format("hA - ddd, MMM Do, YYYY");
       });
     });
 

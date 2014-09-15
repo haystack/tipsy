@@ -6,10 +6,10 @@ import storage from './storage';
 import Component from './component';
 
 // Pages.
-import GettingStartedPage from './components/pages/getting-started/getting-started';
-import LogPage from './components/pages/log/log';
-import SettingsPage from './components/pages/settings/settings';
-import BillingPage from './components/pages/billing/billing';
+import GettingStartedPage from './pages/getting-started/getting-started';
+import LogPage from './pages/log/log';
+import SettingsPage from './pages/settings/settings';
+import BillingPage from './pages/billing/billing';
 
 // Register all pages.
 Component.register('#getting-started', GettingStartedPage);

@@ -25,7 +25,7 @@ Component.prototype.fetch = function(template) {
 
     xhr.addEventListener('error', reject, true);
 
-    xhr.open('GET', '../scripts/lib/components/' + template, true);
+    xhr.open('GET', '../scripts/lib/' + template, true);
     xhr.send();
   });
 };

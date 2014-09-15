@@ -1,6 +1,6 @@
 'use strict';
 
-import Component from '../../../component';
+import Component from '../../component';
 
 function SettingsPage() {
   Component.prototype.constructor.apply(this, arguments);

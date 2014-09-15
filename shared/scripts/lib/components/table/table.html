@@ -10,7 +10,7 @@
 <tbody>
   {%each log as item host%}
   <tr> 
-    <td>{{host}}</td>
+    <td><a target="_blank" href='{{item.0.tab.url}}'>{{host}}</a></td>
     <td>{{item.length}}</td>
     <td>{{item|timeSpent}}</td>
     <td>{{item|lastAccess}}</td>

@@ -12,6 +12,7 @@ module.exports = ->
           src: [
             'node_modules/purecss/*',
             'node_modules/combyne/dist/*'
+            'node_modules/moment/min/*'
           ]
           expand: true
           dest: chromeDest
@@ -42,6 +43,7 @@ module.exports = ->
           src: [
             'node_modules/purecss/*',
             'node_modules/combyne/dist/*'
+            'node_modules/moment/min/*'
           ]
           expand: true
           dest: firefoxDestData

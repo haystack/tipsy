@@ -7,7 +7,7 @@ function TableComponent() {
 }
 
 TableComponent.prototype = {
-  template: 'table/table.html'
+  template: 'components/table/table.html'
 };
 
 TableComponent.prototype.__proto__ = Component.prototype;
