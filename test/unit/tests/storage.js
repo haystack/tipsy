@@ -1,15 +1,25 @@
 'use strict';
 
 describe('Storage', function() {
-  var storage;
+  var storage = null;
   var localStorage = {};
 
   before(function() {
     return System.import('./storage').then(function(module) {
       storage = module.default;
 
-      storage._engine = function() {
-        return localStorage;
+      storage.engine = function() {
+        return {
+          get: function(key, callback) {
+            callback(localStorage[key]);
+          },
+
+          set: function(object, callback) {
+            var key = Object.keys(object)[0]; 
+            localStorage[key] = object[key];
+            callback();
+          }
+        };
       };
     });
   });
@@ -53,48 +63,67 @@ describe('Storage', function() {
           lookup: true
         }
       };
+
+      localStorage.primative = 'test';
     });
 
     after(function() {
       delete localStorage.nested;
+      delete localStorage.primative;
     });
 
-    it('can find nested values', function() {
-      assert.ok(storage.get('nested.value.lookup'));
+    it('can get an object value', function() {
+      return storage.get('nested').then(function(nested) {
+        assert.ok(nested.value.lookup);
+      });
     });
 
-    it('will return null on invalid keypath', function() {
-      assert.equal(storage.get('nested.value.failure'), null);
+    it('can get a primative value', function() {
+      return storage.get('primative').then(function(primative) {
+        assert.equal(primative, 'test');
+      });
     });
 
-    it('will return null on invalid top level keypath', function() {
-      assert.equal(storage.get('failure'), null);
-    });
-
-    it('will not error when accessing with invalid dot notation', function() {
-      assert.equal(storage.get('failure.extrafailure'), null);
+    it('will not error when accessing an invalid value', function() {
+      return storage.get('invalid').then(function(invalid) {
+        assert.equal(invalid, undefined);
+      });
     });
   });
 
   describe('Mutator', function() {
-    after(function() {
-      delete localStorage.nested;
-    });
+    var testVal = null;
 
-    it('can save a simple top level value', function() {
-      var testVal = {
+    before(function() {
+      testVal = {
         value: {
           lookup: true
         }
       };
 
-      storage.set('nested', testVal);
-      assert.equal(storage.get('nested'), testVal);
+      return storage.set('nested', testVal);
+    });
+
+    after(function() {
+      delete localStorage.nested;
+    });
+
+    it('can save a simple top level value', function() {
+      return storage.get('nested').then(function(nested) {
+        assert.deepEqual(nested, testVal);
+      });
     });
 
     it('can modify a nested sub value', function() {
-      storage.set('nested.value.lookup', false);
-      assert.equal(storage.get('nested.value.lookup'), false);
+      return storage.set('nested', {
+        value: {
+          lookup: false
+        }
+      }).then(function() {
+        return storage.get('nested').then(function(nested) {
+          assert.equal(nested.value.lookup, false);
+        });
+      });
     });
   });
 });

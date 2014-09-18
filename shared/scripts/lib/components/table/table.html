@@ -1,0 +1,19 @@
+<thead>
+  <tr>
+    <th>Domain</th>
+    <th>Visit Count</th>
+    <th>Time Spent</th>
+    <th>Last Time Visited</th>
+  </tr>
+</thead>
+
+<tbody>
+  {%each log as item host%}
+  <tr> 
+    <td><a target="_blank" href='{{item.0.tab.url}}'>{{host}}</a></td>
+    <td>{{item.length}}</td>
+    <td>{{item|timeSpent}}</td>
+    <td>{{item|lastAccess}}</td>
+  </tr>
+  {%endeach%}
+</tbody>

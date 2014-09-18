@@ -1,7 +1,5 @@
 'use strict';
 
-var webdriver = require('selenium-webdriver');
-
 function ExtensionDriver(driver, id) {
   this._driver = driver;
   this._id = id;
@@ -38,7 +36,19 @@ ExtensionDriver.prototype.getTitle = function() {
 };
 
 ExtensionDriver.prototype.getEnvironment = function() {
-  return this._driver.executeScript(function() {
-    return navigator.environment; 
+  return this.execute(function() {
+    return navigator.environment;
   });
+};
+
+ExtensionDriver.prototype.execute = function(fn) {
+  return this._driver.executeScript(fn);
+};
+
+ExtensionDriver.prototype.back = function() {
+  return this._driver.navigate().back();
+};
+
+ExtensionDriver.prototype.get = function(url) {
+  return this._driver.get(url);
 };

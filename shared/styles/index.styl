@@ -2,17 +2,21 @@
 @import url(../node_modules/purecss/tables.css)
 @import url(../node_modules/purecss/forms.css)
 
-// Tabs.
+// Pages.
 #getting-started
-  @import "tabs/getting-started.styl"
-
+  @import '../scripts/lib/pages/getting-started/getting-started.styl'
 #log
-  @import "tabs/log.styl"
+  @import '../scripts/lib/pages/log/log.styl'
+#settings
+  @import '../scripts/lib/pages/settings/settings.styl'
+#billing
+  @import '../scripts/lib/pages/billing/billing.styl'
 
 html, body
   box-sizing border-box
   padding 0
   margin 0
+  padding-bottom 40px
   font-family Helvetica, Arial, sans-serif
 
 nav 
@@ -49,10 +53,9 @@ nav
     font-size 80%
 
     &.disabled
-      color #D5C551
-      cursor not-allowed
+      display none
 
-    &.active, &:hover:not(.disabled)
+    &.active, &:hover
       color #000
       background #FFF
 

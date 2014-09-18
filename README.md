@@ -86,11 +86,11 @@ npm run build-firefox
 
 Chrome:
 
-chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html
+- [chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html](chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html)
 
 FireFox:
 
-resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html
+- [resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html](resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html)
 
 ### Watch during development ###
 

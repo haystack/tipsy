@@ -42,4 +42,4 @@ module.exports = ->
       path: 'shared/scripts'
       module: 'contentscript'
       chrome: 'js/contentscript.js'
-      firefox: '../lib/contentscript.js'
+      firefox: 'js/contentscript.js'
