@@ -1,6 +1,6 @@
 'use strict';
 
-describe('idle', function() {
+describe.skip('idle', function() {
   it('can get basic page activity', function() {
     this.timeout(20000);
 
@@ -11,7 +11,8 @@ describe('idle', function() {
         setTimeout(function() {
           driver.navigate('html/index.html#log').then(function() {
             return driver.execute(function() {
-              return document.querySelector('table').querySelectorAll('tr').length;
+              var table = document.querySelector('table');
+              return table.querySelectorAll('tr').length;
             }).then(function(length) {
               assert.equal(length, 1);
             });

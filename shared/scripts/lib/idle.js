@@ -78,6 +78,12 @@ else if (environment === 'firefox') {
       if (tabs[tab.id] && tabs[tab.id].tab.url !== tab.url) {
         stop(tabs[tab.id].tab);
       }
+
+      start(tabs[tab.id].tab);
+
+      tab.on('locationChange', function() {
+        stop(tabs[tab.id].tab);
+      });
     });
   });
 
@@ -85,15 +91,17 @@ else if (environment === 'firefox') {
   var idleService = queryService.getService(require('chrome').Ci.nsIIdleService);
 
   // Doesn't have any decent way to detect idle other than this.
-  idle.timeout = require('timer').setInterval(function() {
-    // Wait for the idle time to reach the designatd threshold before changing
-    // the state.
-    if (idleService.idleTime >= (idle.seconds * 1000)) {
-      updateIdle(true);
-    }
-    else {
-      updateIdle(false);
-    }
+  idle.timeout = require('sdk/timers').setInterval(function() {
+    getCurrentTab().then(function(tab) {
+      // Wait for the idle time to reach the designatd threshold before
+      // changing the state.
+      if (idleService.idleTime >= (idle.seconds * 1000)) {
+        updateIdle(true, tab);
+      }
+      else {
+        updateIdle(false, tab);
+      }
+    });
   }, 1000);
 }
 

@@ -8,11 +8,15 @@ import storage from './storage';
  *
  * @param {Object} options
  */
-export function addTrayIcon(options) {
+export function createExtension(options) {
   if (environment === 'chrome') {
     chrome.browserAction.onClicked.addListener(function() {
       chrome.tabs.create({
         url: chrome.extension.getURL(options.indexUrl)
+      }, function(tab) {
+        options.scripts.forEach(function(url) {
+          chrome.tabs.executeScript(tab.id, { file: url });
+        });
       });
     });
   }
@@ -20,6 +24,7 @@ export function addTrayIcon(options) {
     var buttons = require('sdk/ui/button/action');
     var tabs = require('sdk/tabs');
     var data = require('sdk/self').data;
+    var engine = require('sdk/simple-storage');
 
     buttons.ActionButton({
       id: options.id,
@@ -29,23 +34,24 @@ export function addTrayIcon(options) {
       onClick: function(state) {
         tabs.open({
           url: data.url(options.indexUrl),
-        });
 
-        var engine = require('sdk/simple-storage');
+          onReady: function(tab) {
+            var worker = tab.attach({
+              contentScriptFile: options.scripts.map(function(url) {
+                console.log(url);
+                return data.url(url);
+              })
+            });
 
-        tabs.activeTab.on('ready', function(tab) {
-          var worker = tab.attach({
-            contentScriptFile: data.url('js/tipsy.js')
-          });
+            worker.port.on('storage.get', function(key) {
+              worker.port.emit('storage.get', engine.storage[key]);
+            });
 
-          worker.port.on('storage.get', function(key) {
-            worker.port.emit('storage.get', engine.storage[key]);
-          });
-
-          worker.port.on('storage.set', function(result) {
-            engine.storage[result.key] = result.value;
-            worker.port.emit('storage.set');
-          });
+            worker.port.on('storage.set', function(result) {
+              engine.storage[result.key] = result.value;
+              worker.port.emit('storage.set');
+            });
+          }
         });
       }
     });

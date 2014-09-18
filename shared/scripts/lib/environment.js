@@ -9,12 +9,3 @@ if (typeof chrome === 'object') {
 else {
   environment = 'firefox';
 }
-
-if (typeof navigator !== 'undefined') {
-  if (navigator.userAgent.indexOf('Firefox') > -1) {
-    environment = 'firefox';
-  }
-
-  // Expose onto the navigator object for easier testing and lookups.
-  navigator.environment = environment;
-}
