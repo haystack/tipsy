@@ -16,7 +16,12 @@
   {%else%}
     {%each entries as entry%}
     <tr class="{{entry.author|hasName}}-author"> 
-      <td><a target="_blank" href='{{entry.entries.0.tab.url}}'>{{entry.host}}</a></td>
+      <td>
+        <object class="favicon" data="http://{{entry.host}}/favicon.ico">
+          <i class="fallback-icon"></i>
+          <!-- <img fallback> --> 
+        </object>
+        <a target="_blank" href='http://{{entry.host}}'>{{entry.host}}</a></td>
       <td>{{entry.entries.length}}</td>
       <td>{{entry.entries|timeSpent}}</td>
       <td>{{entry.entries|lastAccess}}</td>

@@ -1,7 +1,7 @@
 'use strict';
 
 import Component from '../../component';
-import { select } from '../../dom';
+import { select, selectAll } from '../../dom';
 import storage from '../../storage';
 import TableComponent from '../../components/table/table';
 
@@ -17,16 +17,6 @@ function LogPage() {
 
   // Initially render and then bind the table component.
   this.render().then(function() {
-    log.el.querySelector('input[type=checkbox]').addEventListener('click', function() {
-      log.hideNoAuthor = !this.checked;
-      log.renderTable();
-    });
-
-    log.el.querySelector('input[type=search]').addEventListener('keyup', function() {
-      log.searchTerm = this.value;
-      log.renderTable();
-    });
-
     // Create a scoped table component to show the activity.
     log.table = new TableComponent(select('table', log.el));
 
@@ -65,11 +55,26 @@ function LogPage() {
 LogPage.prototype = {
   template: 'pages/log/log.html',
 
+  events: {
+    'click input[type=checkbox]': 'toggleNoAuthor',
+    'keyup input[type=search]': 'search'
+  },
+
   // Toggles for log table.
   hideNoAuthor: false,
 
   // Search term.
   searchTerm: null,
+
+  toggleNoAuthor: function(ev) {
+    this.hideNoAuthor = !ev.target.checked;
+    this.renderTable();
+  },
+
+  search: function(ev) {
+    this.searchTerm = ev.target.value;
+    this.renderTable();
+  },
 
   /**
    * toArray
@@ -93,12 +98,15 @@ LogPage.prototype = {
    * @return
    */
   filter: function(entry) {
-    var hasAuthor = entry.entries.filter(function(entry) {
+    var authorCount = entry.entries.filter(function(entry) {
       return entry.author && entry.author.name;
     }).length;
 
+    // Attach the number of authors to the entry, now that it's calculated.
+    entry.authorCount = authorCount;
+
     // Hide or show entries without any author information.
-    if (this.hideNoAuthor && !hasAuthor) {
+    if (this.hideNoAuthor && !authorCount) {
       return false;
     }
 
@@ -153,7 +161,7 @@ LogPage.prototype = {
     }).then(function(entries) {
       log.table.render({ entries: entries });
     });
-  }
+  },
 
   // TODO Toggle the no-author rows.
   //events: {
