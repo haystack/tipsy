@@ -15,7 +15,7 @@ TableComponent.prototype = {
 
   render: function(context) {
     context = context || {};
-    context.columns = this.columns;
+    context.columns = this.columns || [];
 
     return Component.prototype.render.apply(this, arguments);
   }

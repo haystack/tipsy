@@ -16,7 +16,9 @@ function LogPage() {
   Component.prototype.constructor.apply(log, arguments);
 
   // Initially render and then bind the table component.
+  console.log('here');
   this.render().then(function() {
+    console.log(select('table', log.el));
     // Create a scoped table component to show the activity.
     log.table = new TableComponent(select('table', log.el));
 
@@ -49,6 +51,8 @@ function LogPage() {
       // Render out the table.
       log.renderTable();
     });
+  }, function(ex) {
+    console.log('here', ex);
   });
 }
 
