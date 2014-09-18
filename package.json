@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "combyne": "^0.5.1",
+    "fuse.js": "^1.2.0",
     "moment": "^2.8.3",
     "purecss": "^0.5.0"
   }

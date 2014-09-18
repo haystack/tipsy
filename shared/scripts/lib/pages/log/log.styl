@@ -1,11 +1,58 @@
-input[type=search]
-  width 100%
-  padding 10px
-  border 1px solid #EFEFEF
-
 table
-  margin-top 10px
+  margin-top 55px
   width 100%
 
   th
     font-size 80%
+
+  td
+    a
+      color #333333
+
+      &:hover
+        color #6B6B6B
+
+  tr.no-author
+    &:hover
+      td
+        background-color #FCE6D2
+
+    td
+      background-color #FFF7F0
+
+input.hide-no-author
+  -webkit-appearance none
+  -moz-appearance none
+
+  background-color #FFF7F0
+  border none
+  width 37px
+  height 37px
+  padding 10px
+  float left
+  position relative
+  top -1px
+  left -4px
+  cursor pointer
+  outline none
+  font-size 20px
+  color #EFEFEF
+
+  &:checked
+    background-color #EFEFEF
+    border 9px solid #FFF7F0
+
+    &:after
+      top -13px
+      bottom 0
+      left 0
+      right 0
+      text-align center
+      outline none
+
+
+input[type=search]
+  padding 10px
+  border 1px solid #EFEFEF
+  width calc(100% - 54px)
+  float right
