@@ -3,7 +3,6 @@
 import Component from '../../component';
 import { select, selectAll } from '../../dom';
 import storage from '../../storage';
-import TableComponent from '../../components/table/table';
 
 /**
  * LogPage
@@ -11,70 +10,93 @@ import TableComponent from '../../components/table/table';
  * @return
  */
 function LogPage() {
-  var log = this;
+  Component.prototype.constructor.apply(this, arguments);
 
-  Component.prototype.constructor.apply(log, arguments);
+  // Set the columns.
+  this.columns = ['Domain', 'Visit count', 'Time spent', 'Last time visited'];
 
-  // Initially render and then bind the table component.
-  console.log('here');
-  this.render().then(function() {
-    console.log(select('table', log.el));
-    // Create a scoped table component to show the activity.
-    log.table = new TableComponent(select('table', log.el));
-
-    // Set the columns.
-    log.table.columns([
-      'Domain', 'Visit count', 'Time spent', 'Last time visited'
-    ]);
-
-    // Add filters.
-    log.table.compiled.then(function(template) {
-      template.registerFilter('timeSpent', function(val) {
-        return moment.duration(val.reduce(function(prev, current) {
-          return prev + current.timeSpent;
-        }, 0), 'milliseconds').humanize();
-      });
-
-      template.registerFilter('keyLength', function(val) {
-        return Object.keys(val).length;
-      });
-
-      template.registerFilter('hasName', function(val) {
-        return val && val.name ? 'has' : 'no';
-      });
-
-      template.registerFilter('lastAccess', function(val) {
-        var date = new Date(val[val.length - 1].accessTime).toString();
-        return moment(date).format("hA - ddd, MMM Do, YYYY");
-      });
-
-      // Render out the table.
-      log.renderTable();
-    });
-  }, function(ex) {
-    console.log('here', ex);
-  });
+  // Initially render table.
+  this.renderTable();
 }
 
 LogPage.prototype = {
   template: 'pages/log/log.html',
+  hideNoAuthor: false,
+  searchTerm: null,
 
   events: {
     'click input[type=checkbox]': 'toggleNoAuthor',
     'keyup input[type=search]': 'search'
   },
 
-  // Toggles for log table.
-  hideNoAuthor: false,
+  // Register these functions as filters.
+  filters: [
+    'timeSpent',
+    'keyLength',
+    'hasName',
+    'lastAccess'
+  ],
 
-  // Search term.
-  searchTerm: null,
+  /**
+   * timeSpent
+   *
+   * @param val
+   * @return
+   */
+  timeSpent: function(val) {
+    return moment.duration(val.reduce(function(prev, current) {
+      return prev + current.timeSpent;
+    }, 0), 'milliseconds').humanize();
+  },
 
+  /**
+   * keyLength
+   *
+   * @param val
+   * @return
+   */
+  keyLength: function(val) {
+    return Object.keys(val).length;
+  },
+
+  /**
+   * hasName
+   *
+   * @param val
+   * @return
+   */
+  hasName: function(val) {
+    return val && val.name ? 'has' : 'no';
+  },
+
+  /**
+   * lastAccess
+   *
+   * @param val
+   * @return
+   */
+  lastAccess: function(val) {
+    var date = new Date(val[val.length - 1].accessTime).toString();
+    return moment(date).format("hA - ddd, MMM Do, YYYY");
+  },
+
+  /**
+   * toggleNoAuthor
+   *
+   * @param ev
+   * @return
+   */
   toggleNoAuthor: function(ev) {
     this.hideNoAuthor = !ev.target.checked;
     this.renderTable();
   },
 
+  /**
+   * search
+   *
+   * @param ev
+   * @return
+   */
   search: function(ev) {
     this.searchTerm = ev.target.value;
     this.renderTable();
@@ -140,9 +162,13 @@ LogPage.prototype = {
    */
   renderTable: function() {
     var log = this;
+    var data = {
+      columns: this.columns,
+      entries: []
+    };
 
     // Render the empty table initially, as `storage.get` can take some time.
-    this.table.render();
+    this.render(data);
 
     // Render with the data found from the log.
     storage.get('log').then(function(resp) {
@@ -163,14 +189,10 @@ LogPage.prototype = {
 
       return filteredAndSorted;
     }).then(function(entries) {
-      log.table.render({ entries: entries });
+      data.entries = entries;
+      log.render(data);
     });
-  },
-
-  // TODO Toggle the no-author rows.
-  //events: {
-  //  'click .hide-noauthor': 'j
-  //}
+  }
 };
 
 LogPage.prototype.__proto__ = Component.prototype;

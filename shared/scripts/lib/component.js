@@ -10,8 +10,17 @@ Component.prototype.constructor = function(element, template) {
   this.el = element;
   this.template = template || this.template;
 
+  var component = this;
+
   this.compiled = this.fetch(this.template).then(function(contents) {
-    return combyne(contents);
+    var template = combyne(contents);
+
+    // Register all filters to the template.
+    [].concat(component.filters).forEach(function(filter) {
+      template.registerFilter(filter, component[filter]);
+    });
+
+    return template;
   });
 
   this.bindEvents();

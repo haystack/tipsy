@@ -1,3 +1,33 @@
 <input checked="checked" type="checkbox" class="hide-no-author"> <input type="search" placeholder="Search">
 
-<table class="pure-table pure-table-bordered pure-table-striped"></table>
+<table class="pure-table pure-table-bordered pure-table-striped">
+  <thead>
+    <tr>
+    {%each columns%}
+      <th>{{.}}</th>
+    {%endeach%}
+    </tr>
+  </thead>
+
+  <tbody>
+  {%if not entries.length%}
+    <tr>
+      <td colspan="4">No log items to display.</td>
+    </tr>
+  {%else%}
+    {%each entries as entry%}
+    <tr class="{{entry.author|hasName}}-author"> 
+      <td>
+        <object class="favicon" data="http://{{entry.host}}/favicon.ico">
+          <i class="fallback-icon"></i>
+          <!-- <img fallback> --> 
+        </object>
+        <a target="_blank" href='http://{{entry.host}}'>{{entry.host}}</a></td>
+      <td>{{entry.entries.length}}</td>
+      <td>{{entry.entries|timeSpent}}</td>
+      <td>{{entry.entries|lastAccess}}</td>
+    </tr>
+    {%endeach%}
+  {%endif%}
+  </tbody>
+</table>
