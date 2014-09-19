@@ -12,9 +12,6 @@ import storage from '../../storage';
 function LogPage() {
   Component.prototype.constructor.apply(this, arguments);
 
-  // Set the columns.
-  this.columns = ['Domain', 'Visit count', 'Time spent', 'Last time visited'];
-
   // Initially render table.
   this.renderTable();
 }
@@ -33,8 +30,9 @@ LogPage.prototype = {
   filters: [
     'timeSpent',
     'keyLength',
-    'hasName',
-    'lastAccess'
+    'hasAuthor',
+    'lastAccess',
+    'authorInfo'
   ],
 
   /**
@@ -60,13 +58,13 @@ LogPage.prototype = {
   },
 
   /**
-   * hasName
+   * hasAuthor
    *
    * @param val
    * @return
    */
-  hasName: function(val) {
-    return val && val.name ? 'has' : 'no';
+  hasAuthor: function(val) {
+    return val.authorCount ? 'has' : 'no';
   },
 
   /**
@@ -76,8 +74,12 @@ LogPage.prototype = {
    * @return
    */
   lastAccess: function(val) {
-    var date = new Date(val[val.length - 1].accessTime).toString();
+    var date = new Date(val[val.length - 1].accessTime);
     return moment(date).format("hA - ddd, MMM Do, YYYY");
+  },
+
+  authorInfo: function(val) {
+    return val.authorCount;
   },
 
   /**
@@ -163,7 +165,6 @@ LogPage.prototype = {
   renderTable: function() {
     var log = this;
     var data = {
-      columns: this.columns,
       entries: []
     };
 

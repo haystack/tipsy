@@ -17,10 +17,10 @@ createExtension({
   },
 
   scripts: [
-    'node_modules/combyne/dist/combyne.js',
-    'node_modules/moment/min/moment.min.js',
-    'node_modules/fuse.js/src/fuse.js',
-    'js/tipsy.js'
+  //  'node_modules/combyne/dist/combyne.js',
+  //  'node_modules/moment/min/moment.min.js',
+  //  'node_modules/fuse.js/src/fuse.js',
+  //  'js/tipsy.js'
   ]
 });
 

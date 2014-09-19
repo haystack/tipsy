@@ -32,16 +32,30 @@ table
       &:hover
         color #6B6B6B
 
-  tr.no-author
-    &:hover
+  tr
+    cursor pointer
+
+    &.has-author
+      &:hover
+        td
+          background-color #DEFCD2
+
+        .favicon
+          opacity 1
+
       td
-        background-color #FCE6D2
+        background-color #F0FFF1
 
-      .favicon
-        opacity 1
+    &.no-author
+      &:hover
+        td
+          background-color #FCE6D2
 
-    td
-      background-color #FFF7F0
+        .favicon
+          opacity 1
+
+      td
+        background-color #FFF7F0
 
 input.hide-no-author
   -webkit-appearance none
