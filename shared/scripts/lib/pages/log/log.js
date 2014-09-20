@@ -3,6 +3,7 @@
 import Component from '../../component';
 import { select, selectAll } from '../../dom';
 import storage from '../../storage';
+import LogTableComponent from '../../components/log-table/log-table';
 
 /**
  * LogPage
@@ -12,8 +13,14 @@ import storage from '../../storage';
 function LogPage() {
   Component.prototype.constructor.apply(this, arguments);
 
-  // Initially render table.
-  this.renderTable();
+  // Render the page layout and then create a nested log table component.
+  this.render().then(function() {
+    // Create a scoped log-table component to show the activity.
+    this.table = new LogTableComponent(select('log-table', this.el));
+
+    // Render an empty table.
+    this.renderTable();
+  }.bind(this));
 }
 
 LogPage.prototype = {
@@ -23,63 +30,8 @@ LogPage.prototype = {
 
   events: {
     'click input[type=checkbox]': 'toggleNoAuthor',
-    'keyup input[type=search]': 'search'
-  },
-
-  // Register these functions as filters.
-  filters: [
-    'timeSpent',
-    'keyLength',
-    'hasAuthor',
-    'lastAccess',
-    'authorInfo'
-  ],
-
-  /**
-   * timeSpent
-   *
-   * @param val
-   * @return
-   */
-  timeSpent: function(val) {
-    return moment.duration(val.reduce(function(prev, current) {
-      return prev + current.timeSpent;
-    }, 0), 'milliseconds').humanize();
-  },
-
-  /**
-   * keyLength
-   *
-   * @param val
-   * @return
-   */
-  keyLength: function(val) {
-    return Object.keys(val).length;
-  },
-
-  /**
-   * hasAuthor
-   *
-   * @param val
-   * @return
-   */
-  hasAuthor: function(val) {
-    return val.authorCount ? 'has' : 'no';
-  },
-
-  /**
-   * lastAccess
-   *
-   * @param val
-   * @return
-   */
-  lastAccess: function(val) {
-    var date = new Date(val[val.length - 1].accessTime);
-    return moment(date).format("hA - ddd, MMM Do, YYYY");
-  },
-
-  authorInfo: function(val) {
-    return val.authorCount;
+    'keyup input[type=search]': 'search',
+    'click tr': 'toggleEntryHistory'
   },
 
   /**
@@ -91,6 +43,10 @@ LogPage.prototype = {
   toggleNoAuthor: function(ev) {
     this.hideNoAuthor = !ev.target.checked;
     this.renderTable();
+  },
+
+  toggleEntryHistory: function(ev) {
+    $(ev.currentTarget).toggleClass('active').next(".entry-history").toggle();
   },
 
   /**
@@ -168,9 +124,6 @@ LogPage.prototype = {
       entries: []
     };
 
-    // Render the empty table initially, as `storage.get` can take some time.
-    this.render(data);
-
     // Render with the data found from the log.
     storage.get('log').then(function(resp) {
       var filteredAndSorted = log
@@ -191,7 +144,7 @@ LogPage.prototype = {
       return filteredAndSorted;
     }).then(function(entries) {
       data.entries = entries;
-      log.render(data);
+      log.table.render(data);
     });
   }
 };

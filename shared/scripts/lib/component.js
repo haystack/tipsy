@@ -38,14 +38,8 @@ Component.prototype.bindEvents = function() {
     var el = component.el;
 
     // Bind the event and adding in the necessary code for event delegation.
-    el.addEventListener(event, function(ev) {
-      // Event delegation.
-      if (selector && selectAll(selector, el).indexOf(ev.target) > -1) {
-        return component[fn].call(component, ev);
-      }
-      else if (!selector) {
-        return component[fn].call(component, ev);
-      }
+    $(el).on(event, selector, function(ev) {
+      return component[fn].call(component, ev);
     });
   }, this);
 };
@@ -75,8 +69,8 @@ Component.prototype.render = function(context) {
   });
 };
 
-Component.register = function(selector, Component) {
-  selectAll(selector).forEach(function(element) {
+Component.register = function(selector, Component, context) {
+  selectAll(selector, context).forEach(function(element) {
     new Component(element).render();
   });
 };

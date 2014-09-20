@@ -5,6 +5,7 @@
   "esnext": true,
   "proto": true,
   "globals": {
+    "$": true,
     "chrome": true,
     "self": true,
     "combyne": true,

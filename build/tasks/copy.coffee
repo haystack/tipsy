@@ -6,6 +6,7 @@ module.exports = ->
   firefoxDestData = firefoxDest + '/data'
 
   npmDeps = [
+    'node_modules/jquery/dist/*',
     'node_modules/purecss/*',
     'node_modules/combyne/dist/*'
     'node_modules/moment/min/*'

@@ -42,11 +42,18 @@ export function stop(tab) {
   // Open access to the current log so that we can append the latest tab entry
   // into it.
   return storage.get('log').then(function(log) {
+    // Ensure we're working with a real tab object.
     if (!tab) {
       return;
     }
 
+    // Make sure we've started this tab, otherwise this is an invalid state.
     if (!tabs[tab.id] || !tabs[tab.id].author) {
+      return;
+    }
+
+    // Only work with HTTP links for now, omits weird `chrome://` urls.
+    if (tab.url.indexOf('http') !== 0) {
       return;
     }
 
