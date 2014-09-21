@@ -17,11 +17,6 @@ Component.register('#log', LogPage);
 Component.register('#settings', SettingsPage);
 Component.register('#billing', BillingPage);
 
-// Stop the links from being active.
-var disabledEvent = function(ev) {
-  ev.preventDefault();
-};
-
 /**
  * Sets the current tab in the extension.
  */
@@ -34,34 +29,20 @@ function setTab() {
       location.href = settings.showLog ? '#log' : '#getting-started';
     });
   }
+  else {
+    selectAll('nav a').forEach(function(link) {
+      link.classList.remove('active');
 
-  if (location.hash === '#log') {
-    storage.get('log').then(function(log) {
-      var table = select('table');
+      if (location.hash !== '#getting-started') {
+        select('body').classList.remove('intro');
 
+        // Add the new class to the tab link.
+        if (link.hash === location.hash) {
+          link.classList.add('active');
+        }
+      }
     });
   }
-
-  selectAll('nav a').forEach(function(link) {
-    link.classList.remove('active', 'disabled');
-
-    // If we're on the getting started page, disable the links.
-    if (location.hash === '#getting-started') {
-      link.classList.add('disabled');
-      link.addEventListener('click', disabledEvent, true);
-    }
-
-    // Otherwise, remove all previous bound event listeners and ensure that the
-    // active class is correctly applied.
-    else {
-      link.removeEventListener('click', disabledEvent, true);
-
-      // Add the new class to the tab link.
-      if (link.hash === location.hash) {
-        link.classList.add('active');
-      }
-    }
-  });
 
   // This is a fairly standard way of scrolling to the top of the page, fixes a
   // minor annoyance where clicking to the log page scrolled down slightly.

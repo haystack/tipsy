@@ -2,7 +2,24 @@
   width 60%
   font-size 17px
 
+h2
+  font-family 'Sansita One', sans-serif
+  color #FF5A5A
+  font-size 200%
+  font-weight normal
+
+p
+  font-style italic
+  color #757575
+
 form
+  opacity 0
+  transition opacity linear 2s
+  padding-top 30%
+
+  &.fade
+    opacity 1
+
   input[name='threshold']
     &:before
       content '$'
@@ -21,12 +38,27 @@ form
 
 ol
   list-style-type none
-  counter-reset li-counter
+  counter-reset li-counter -1;
 
   li
     position relative
     padding-left 20px
     margin-bottom 60px
+
+    &:first-child:before
+      content ''
+      background url(../img/logo64.png) no-repeat center
+      width 75px
+      height 75px
+      border-radius 70px
+      background-color #FFF
+      display block
+      position absolute
+      left auto
+      right 100px
+
+    &:not(:first-child)
+      display none
 
     &:before
       position absolute
