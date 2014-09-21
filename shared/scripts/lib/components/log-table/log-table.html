@@ -1,0 +1,69 @@
+<table class="pure-table pure-table-bordered pure-table-striped">
+  <thead>
+    <tr>
+      <th>Domain</th>
+      <th>Author</th>
+      <th>Visit count</th>
+      <th>Time spent</th>
+      <th>Last time visited</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {%if not entries.length%}
+    <tr>
+      <td colspan="5">No log items to display.</td>
+    </tr>
+  {%else%}
+    {%each entries as entry%}
+    <tr class="{{entry|hasAuthor}}-author"> 
+      <td>
+        <object class="favicon" data="http://{{entry.host}}/favicon.ico">
+          <i class="fallback-icon"></i>
+        </object>
+        {{entry.host}}
+      </td>
+      <td>
+        {%if entry.authorCount%}
+          Has {{entry.authorCount}} author(s)
+        {%else%}
+          No author information
+        {%endif%}
+      </td>
+      <td>{{entry.entries.length}}</td>
+      <td>{{entry.entries|timeSpent}}</td>
+      <td>{{entry.entries|findLast|formatAccessTime}}</td>
+    </tr>
+    <tr class="entry-history">
+      <td colspan="5">
+        <table class="pure-table pure-table-bordered pure-table-striped">
+          <thead>
+            <tr>
+              <th>Access time</th>
+              <th>URL</th>
+              <th>Author name</th>
+              <th>Paypal</th>
+              <th>Bitcoin</th>
+              <th>Stripe</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {%each entry.entries as visit%}
+              <tr>
+                <td>{{visit|formatAccessTime}}</td>
+                <td>{{visit.tab.url}}</td>
+                <td>{{visit.author.name}}</td>
+                <td>{{visit.author.paypal}}</td>
+                <td>{{visit.author.bitcoin}}</td>
+                <td>{{visit.author.stripe}}</td>
+              </tr>
+            {%endeach%}
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    {%endeach%}
+  {%endif%}
+  </tbody>
+</table>

@@ -5,9 +5,11 @@
   "esnext": true,
   "proto": true,
   "globals": {
+    "$": true,
     "chrome": true,
     "self": true,
     "combyne": true,
-    "moment": true
+    "moment": true,
+    "Fuse": true
   }
 }

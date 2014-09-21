@@ -38,7 +38,9 @@
     "selenium-webdriver": "^2.42.1"
   },
   "dependencies": {
-    "combyne": "^0.5.1",
+    "combyne": "^0.5.2",
+    "fuse.js": "^1.2.0",
+    "jquery": "^2.1.1",
     "moment": "^2.8.3",
     "purecss": "^0.5.0"
   }

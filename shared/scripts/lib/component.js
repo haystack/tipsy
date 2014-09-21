@@ -10,9 +10,38 @@ Component.prototype.constructor = function(element, template) {
   this.el = element;
   this.template = template || this.template;
 
+  var component = this;
+
   this.compiled = this.fetch(this.template).then(function(contents) {
-    return combyne(contents);
+    var template = combyne(contents);
+
+    // Register all filters to the template.
+    [].concat(component.filters).forEach(function(filter) {
+      template.registerFilter(filter, component[filter]);
+    });
+
+    return template;
   });
+
+  this.bindEvents();
+};
+
+Component.prototype.bindEvents = function() {
+  var events = this.events || {};
+
+  Object.keys(events).forEach(function(eventAndSelector) {
+    var fn = events[eventAndSelector];
+    var parts = eventAndSelector.split(' ');
+    var event = parts[0];
+    var selector = parts.slice(1).join(' ');
+    var component = this;
+    var el = component.el;
+
+    // Bind the event and adding in the necessary code for event delegation.
+    $(el).on(event, selector, function(ev) {
+      return component[fn].call(component, ev);
+    });
+  }, this);
 };
 
 Component.prototype.fetch = function(template) {
@@ -40,8 +69,8 @@ Component.prototype.render = function(context) {
   });
 };
 
-Component.register = function(selector, Component) {
-  selectAll(selector).forEach(function(element) {
+Component.register = function(selector, Component, context) {
+  selectAll(selector, context).forEach(function(element) {
     new Component(element).render();
   });
 };

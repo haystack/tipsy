@@ -5,15 +5,19 @@ module.exports = ->
   firefoxDest = 'firefox-extension/dist/tipsy'
   firefoxDestData = firefoxDest + '/data'
 
+  npmDeps = [
+    'node_modules/jquery/dist/*',
+    'node_modules/purecss/*',
+    'node_modules/combyne/dist/*'
+    'node_modules/moment/min/*'
+    'node_modules/fuse.js/src/*'
+  ]
+
   @config 'copy',
     'chrome-extension':
       files: [
         {
-          src: [
-            'node_modules/purecss/*',
-            'node_modules/combyne/dist/*'
-            'node_modules/moment/min/*'
-          ]
+          src: npmDeps
           expand: true
           dest: chromeDest
         }
@@ -40,11 +44,7 @@ module.exports = ->
     'firefox-extension':
       files: [
         {
-          src: [
-            'node_modules/purecss/*',
-            'node_modules/combyne/dist/*'
-            'node_modules/moment/min/*'
-          ]
+          src: npmDeps
           expand: true
           dest: firefoxDestData
         }

@@ -1,11 +1,117 @@
+.favicon
+  width 24px
+  height auto
+  position absolute
+  left -32px
+  top 5px
+  opacity 0.5
+
+  .fallback-icon
+    width 24px
+    height 24px
+    display block
+
+    background-size 24px 24px
+    background url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3gkSDTIVm5UJUwAAAUxJREFUSMfV1L9LHEEUwPGPsihioyD5C2wsTJPSSjT4o7UUwcpKTJneqE3AyjpdythopylE7BSx0UKLWN0ZBZEcEVHU5imLLNzo3RY+GPa7AzvfeW/2DSVHC8bxuUzJIh7KGq050Q9MYRffg//ga3Ct0Qxm4n0Vo8F76Au+eGMW1gJqscgNroJvcRl8/xZBhu7YYWcMaMtl2NXIAWdRhgEsRXmaFZvoyvAvJk5D1qy4g9ayGy0rmPuAyeBjrKMfwwnr/cTfeoIMPcFn8WzPzb1qw0WCSvTGcx2xj8MEwXWK4CN+B69jOkq2nCAYwkE9wRE+Bf/PdfdWgqCSkkEvfgVvYA5jmE8QTBSVcuHFXdSsOH+6KooyWAnewbfI4EvCorM4qVeiau4vusj9RYsJgmrKGdSwXfBhtdFOHsndrM2IjpeHXMpoiZ0Peq/xCLvSi/4y9MJXAAAAAElFTkSuQmCC")
+
+.entry-history
+  display none
+
+log-table
+  table
+    width 100%
+
+    td:not(:first-child)
+      max-width 150px
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+
+  > table
+    margin-top 55px
+
+    th
+      font-size 80%
+
+    td
+      position relative
+      text-overflow ellipsis
+      white-space nowrap
+
+      a
+        color #333333
+
+        &:hover
+          color #6B6B6B
+
+    tr
+      cursor pointer
+
+      &.has-author
+        &:hover, &.active
+          td
+            background-color #DEFCD2
+
+          .favicon
+            opacity 1
+
+        td
+          background-color #F0FFF1
+
+      &.no-author
+        &:hover, &.active
+          td
+            background-color #FCE6D2
+
+          .favicon
+            opacity 1
+
+        td
+          background-color #FFF7F0
+
+input.hide-no-author, input.hide-has-author
+  -webkit-appearance none
+  -moz-appearance none
+
+  border none
+  width 37px
+  height 37px
+  padding 10px
+  float left
+  position relative
+  cursor pointer
+  font-size 20px
+  color #EFEFEF
+  top -1px
+
+  &.hide-no-author
+    background-color #FFF7F0
+    left -4px
+
+    &:checked
+      border 9px solid #FFF7F0
+
+  &.hide-has-author
+    background-color #F0FFF1
+    left -6px
+
+    &:checked
+      border 9px solid #F0FFF1
+
+  &:checked
+    border 9px solid #FFF7F0
+    background-color #EFEFEF
+
+    &:after
+      top -13px
+      bottom 0
+      left 0
+      right 0
+      text-align center
+
+
 input[type=search]
-  width 100%
   padding 10px
   border 1px solid #EFEFEF
-
-table
-  margin-top 10px
-  width 100%
-
-  th
-    font-size 80%
+  width calc(100% - 100px)
+  float right

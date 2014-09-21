@@ -62,6 +62,10 @@ function setTab() {
       }
     }
   });
+
+  // This is a fairly standard way of scrolling to the top of the page, fixes a
+  // minor annoyance where clicking to the log page scrolled down slightly.
+  window.scrollTo(0, 0);
 }
 
 // Set the correct active tab.
