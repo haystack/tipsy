@@ -79,7 +79,9 @@ else if (environment === 'firefox') {
         stop(tabs[tab.id].tab);
       }
 
-      start(tabs[tab.id].tab);
+      if (tabs[tab.id]) {
+        start(tabs[tab.id].tab);
+      }
 
       tab.on('locationChange', function() {
         stop(tabs[tab.id].tab);
@@ -104,5 +106,3 @@ else if (environment === 'firefox') {
     });
   }, 1000);
 }
-
-export default idle;

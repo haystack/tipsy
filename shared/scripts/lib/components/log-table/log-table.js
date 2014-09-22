@@ -73,7 +73,12 @@ LogTableComponent.prototype = {
   },
 
   authorInfo: function(val) {
-    return val.authorCount;
+    if (val.author.list.length) {
+      return val.author.list[0].name;
+    }
+    else {
+      return 'No author information present on page';
+    }
   }
 };
 

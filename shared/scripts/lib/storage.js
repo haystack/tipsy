@@ -31,7 +31,12 @@ storage.engine = function() {
       // Override the default implementation of `chrome.storage.get`.
       get: function(key, callback) {
         engine.get(key, function(result) {
-          callback(result[key]);
+          if (!result[key]) {
+            callback({});
+          }
+          else {
+            callback(result[key]);
+          }
         });
       },
 
@@ -40,14 +45,33 @@ storage.engine = function() {
     };
   }
   else if (environment === 'firefox') {
+    try {
+      engine = require('sdk/simple-storage');
+    }
+    catch (unhandledException) {}
+
     return {
       get: function(key, callback) {
+        if (typeof self === 'undefined' || !self.port) {
+          return callback(engine.storage[key] || {});
+        }
+
         self.port.emit('storage.get', key);
-        self.port.once('storage.get', callback);
+        self.port.once('storage.get', function(result) {
+          callback(result || {});
+        });
       },
 
-      set: function(key, value, callback) {
-        self.port.emit('storage.set', { key: key, value: value });
+      set: function(object, callback) {
+        // The only key is the actual key name.
+        var key = Object.keys(object)[0];
+
+        if (typeof self === 'undefined' || !self.port) {
+          engine.storage[key] = object[key];
+          return callback();
+        }
+
+        self.port.emit('storage.set', { key: key, value: object[key] });
         self.port.once('storage.set', callback);
       }
     };
@@ -74,7 +98,7 @@ storage.stringify = function(value) {
  * @param {string} keyPath - Key to look up, can be dot-notation.
  * @return {*} value from storage engine.
  */
-storage.get = function(key, callback) {
+storage.get = function(key) {
   var engine = this.engine();
 
   return new Promise(function(callback) {

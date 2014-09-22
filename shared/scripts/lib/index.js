@@ -9,13 +9,13 @@ import Component from './component';
 import GettingStartedPage from './pages/getting-started/getting-started';
 import LogPage from './pages/log/log';
 import SettingsPage from './pages/settings/settings';
-import BillingPage from './pages/billing/billing';
+import DonationsPage from './pages/donations/donations';
 
 // Register all pages.
 Component.register('#getting-started', GettingStartedPage);
 Component.register('#log', LogPage);
 Component.register('#settings', SettingsPage);
-Component.register('#billing', BillingPage);
+Component.register('#donations', DonationsPage);
 
 /**
  * Sets the current tab in the extension.
@@ -25,7 +25,6 @@ function setTab() {
   // on if the end user has already configured the getting started page or not.
   if (!location.hash) {
     storage.get('settings').then(function(settings) {
-      settings = settings || {};
       location.href = settings.showLog ? '#log' : '#getting-started';
     });
   }
@@ -40,6 +39,9 @@ function setTab() {
         if (link.hash === location.hash) {
           link.classList.add('active');
         }
+      }
+      else {
+        select('body').classList.add('intro');
       }
     });
   }

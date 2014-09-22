@@ -12,23 +12,24 @@
   
 <body class="intro">
   <nav>
-    <h1>tipsy <sub>beta</sub></h1>
-    <a href="#log">Activity Log</a>
+    <a class="restart" href="#getting-started"><h1>tipsy <sub>beta</sub></h1></a>
+    <a href="#log">Visit Log</a>
     <a href="#settings">Settings</a>
-    <a href="#billing">Billing</a>
+    <a href="#donations">Donations</a>
   </nav>
 
   <!-- Tab page content is loaded from templates directory. -->
   <section id="getting-started"></section>
   <section id="log"></section>
   <section id="settings"></section>
-  <section id="billing"></section>
+  <section id="donations"></section>
 
-  <!-- Add scripts here for now until we can dynamically inject them. -->
+  <!--(if target !firefox)><!-->
   <script src="../node_modules/jquery/dist/jquery.js"></script>
   <script src="../node_modules/combyne/dist/combyne.js"></script>
   <script src="../node_modules/moment/min/moment.min.js"></script>
   <script src="../node_modules/fuse.js/src/fuse.js"></script>
   <script src="../js/tipsy.js"></script>
+  <!--<!(endif)-->
 </body>
 </html>

@@ -2,6 +2,8 @@
 
 import { environment } from './environment';
 import storage from './storage';
+import { start, stop } from './activity';
+import { getCurrentTab, tabs } from './tabs';
 
 /**
  * Opens the extension in a new tab window.
@@ -37,10 +39,7 @@ export function createExtension(options) {
 
           onReady: function(tab) {
             var worker = tab.attach({
-              contentScriptFile: options.scripts.map(function(url) {
-                console.log(url);
-                return data.url(url);
-              })
+              contentScriptFile: options.scripts.map(data.url)
             });
 
             worker.port.on('storage.get', function(key) {
@@ -68,10 +67,27 @@ export function addContentScript(path) {
   // programmatically instrument the page to load the script.
   if (environment === 'firefox') {
     var data = require('sdk/self').data;
-    var tabs = require('sdk/tabs');
 
-    tabs.activeTab.attach({
+    var worker = require('sdk/tabs').activeTab.attach({
       contentScriptFile: data.url(path)
+    });
+
+    // Listen to all events piped from the contentScript and mimic what
+    // happens in watcher.
+    //
+    // TODO Abstract so that the same code is used.
+    worker.port.on('contentScript', function(resp) {
+      getCurrentTab().then(function(tab) {
+        if (resp.name === 'author') {
+          tabs[tab.id] = {
+            author: resp.data,
+            tab: tab
+          };
+
+          // Start the activity when the author information has been discovered.
+          start(tab);
+        }
+      });
     });
   }
 }

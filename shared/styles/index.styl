@@ -9,8 +9,8 @@
   @import '../scripts/lib/pages/log/log.styl'
 #settings
   @import '../scripts/lib/pages/settings/settings.styl'
-#billing
-  @import '../scripts/lib/pages/billing/billing.styl'
+#donations
+  @import '../scripts/lib/pages/donations/donations.styl'
 
 html, body
   box-sizing border-box
@@ -28,6 +28,23 @@ html, body
 
     nav
       display none
+
+h2
+  color rgba(153, 153, 153, 0.6)
+  text-shadow 1px 4px 6px #F5F5F5,0 0 0 #F3F3F3,1px 4px 6px #FFF
+
+  &::selection
+    background #5af
+    color #fff
+    text-shadow none
+
+  &::-moz-selection
+    background #5af
+    color #fff
+    text-shadow none
+
+table
+  width 100%
 
 nav 
   border-bottom 1px solid #EFEFEF
@@ -65,9 +82,10 @@ nav
     &.disabled
       display none
 
-    &.active, &:hover
+    &.active, &:hover:not(.restart)
       color #000
       background #FFF
+      border-bottom 2px solid #CCC
 
 hr
   outline none

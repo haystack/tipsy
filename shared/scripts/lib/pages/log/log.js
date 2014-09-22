@@ -12,15 +12,6 @@ import LogTableComponent from '../../components/log-table/log-table';
  */
 function LogPage() {
   Component.prototype.constructor.apply(this, arguments);
-
-  // Render the page layout and then create a nested log table component.
-  this.render().then(function() {
-    // Create a scoped log-table component to show the activity.
-    this.table = new LogTableComponent(select('log-table', this.el));
-
-    // Render an empty table.
-    this.renderTable();
-  }.bind(this));
 }
 
 LogPage.prototype = {
@@ -32,6 +23,11 @@ LogPage.prototype = {
     'click input[type=checkbox]': 'toggleNoAuthor',
     'keyup input[type=search]': 'search',
     'click tr': 'toggleEntryHistory'
+  },
+
+  afterRender: function() {
+    this.table = new LogTableComponent(select('log-table', this.el));
+    this.renderTable();
   },
 
   /**
@@ -83,7 +79,7 @@ LogPage.prototype = {
    */
   filter: function(entry) {
     var authorCount = entry.entries.filter(function(entry) {
-      return entry.author && entry.author.name;
+      return entry.author && entry.author.list.length;
     }).length;
 
     // Attach the number of authors to the entry, now that it's calculated.
