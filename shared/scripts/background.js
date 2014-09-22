@@ -2,6 +2,7 @@
 
 import { createExtension, addContentScript } from './lib/extension';
 import { initialize } from './lib/activity';
+import './lib/watcher';
 
 // Display the tray icon and open the extension upon being clicked.
 createExtension({

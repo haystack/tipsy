@@ -1,7 +1,23 @@
 'use strict';
 
+import { environment } from './lib/environment';
 import { selectAll } from './lib/dom';
-import { postMessage } from './lib/extension';
+
+/**
+ * postMessage
+ *
+ * @param body
+ */
+function postMessage(body) {
+  body = JSON.stringify(body);
+
+  if (environment === 'chrome') {
+    chrome.runtime.sendMessage(body);
+  }
+  else if (environment === 'firefox') {
+    self.port.emit('contentScript', body);
+  }
+}
 
 /**
  * Find the current domain name.

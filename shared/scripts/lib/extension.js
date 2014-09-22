@@ -67,43 +67,35 @@ export function addContentScript(path) {
   // programmatically instrument the page to load the script.
   if (environment === 'firefox') {
     var data = require('sdk/self').data;
+    var pageMod = require('sdk/page-mod');
 
-    var worker = require('sdk/tabs').activeTab.attach({
-      contentScriptFile: data.url(path)
+    pageMod.PageMod({
+      include: ['*'],
+      contentScriptFile: data.url(path),
+
+      // Send the content script a message inside onAttach
+      onAttach: function(worker) {
+        // Listen to all events piped from the contentScript and mimic what
+        // happens in watcher.
+        //
+        // TODO Abstract so that the same code is used.
+        worker.port.on('contentScript', function(resp) {
+          resp = JSON.parse(resp);
+
+          getCurrentTab().then(function(tab) {
+            if (resp.name === 'author') {
+              tabs[tab.id] = {
+                author: resp.data,
+                tab: tab
+              };
+
+              // Start the activity when the author information has been
+              // discovered.
+              start(tab);
+            }
+          });
+        });
+      }
     });
-
-    // Listen to all events piped from the contentScript and mimic what
-    // happens in watcher.
-    //
-    // TODO Abstract so that the same code is used.
-    worker.port.on('contentScript', function(resp) {
-      getCurrentTab().then(function(tab) {
-        if (resp.name === 'author') {
-          tabs[tab.id] = {
-            author: resp.data,
-            tab: tab
-          };
-
-          // Start the activity when the author information has been discovered.
-          start(tab);
-        }
-      });
-    });
-  }
-}
-
-/**
- * postMessage
- *
- * @param body
- */
-export function postMessage(body) {
-  body = JSON.stringify(body);
-
-  if (environment === 'chrome') {
-    chrome.runtime.sendMessage(body);
-  }
-  else if (environment === 'firefox') {
-    self.port.emit('contentScript', body);
   }
 }

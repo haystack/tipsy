@@ -9,8 +9,6 @@ import { tabs } from './tabs';
  */
 export function initialize() {
   return storage.get('log').then(function(log) {
-    log = log || {};
-
     return storage.set('log', log);
   });
 }
