@@ -1,6 +1,6 @@
 'use strict';
 
-describe.skip('idle', function() {
+describe('idle', function() {
   it('can get basic page activity', function() {
     this.timeout(20000);
 
