@@ -3,31 +3,17 @@
     <li>
       <h2>welcome to tipsy,</h2>
       <p class="leader">Where you help support authors for their online content!</p>
+      <button type="submit">Skip configuration for now,</button><strong>or click anywhere to continue.</strong>
     </li>
     <li>
-      <h3>Providers</h3>
-      <p>Please link at least one payment provider:</p>
-      <input type="image" src="../img/paypal.png" title="PayPal">
-      <input type="image" src="../img/bitcoin.png" title="Bitcoin">
+      <set-providers></set-providers>
+
+      <p>
+        <a class="to-donation" href="#">Continue to donation threshold...</a>
+      </p>
     </li>
     <li>
-      <h3>Frequency</h3>
-      <p>How often do you want to tip?</p>
-
-      <select>
-        <option>Weekly</option>
-      </select>
-
-      <p>When would you like to make your first payment</p>
-
-      <input type="date">
-    </li>
-    <li>
-      <h3>Threshold</h3>
-
-      <input type="number" placeholder="0.00" name="threshold">
+      <set-donation-goal></set-donation-goal>
     </li>
   </ol>
-
-  <button type="submit">Skip configuration for now.</button>
 </form>

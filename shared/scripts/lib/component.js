@@ -75,6 +75,10 @@ Component.prototype.render = function(context) {
   });
 };
 
+Component.prototype.$ = function(selector) {
+  return $(selector, this.el);
+};
+
 Component.register = function(selector, Component, context) {
   selectAll(selector, context).forEach(function(element) {
     new Component(element).render();

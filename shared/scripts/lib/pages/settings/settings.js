@@ -14,7 +14,6 @@ SettingsPage.prototype = {
 
   afterRender: function() {
     new ProvidersComponent(select('set-providers', this.el)).render();
-
     new DonationGoalComponent(select('set-donation-goal', this.el)).render();
   }
 };
