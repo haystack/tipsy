@@ -4,8 +4,6 @@ import Component from '../../component';
 import storage from '../../storage';
 import { useProvider } from '../../oauth';
 import '../../providers/dwolla';
-import '../../providers/stripe';
-import '../../providers/paypal';
 
 function ProviderComponent() {
   Component.prototype.constructor.apply(this, arguments);
@@ -27,7 +25,7 @@ ProviderComponent.prototype = {
 
     return useProvider('dwolla').authorize().then(function() {
       element.addClass('verified');
-    }, function(err) {
+    }, function() {
       window.alert('Unable to link properly, please try again.');
       element.removeClass('verified');
     });
@@ -40,7 +38,7 @@ ProviderComponent.prototype = {
 
     return useProvider('paypal').authorize().then(function() {
       element.addClass('verified');
-    }, function(err) {
+    }, function() {
       window.alert('Unable to link properly, please try again.');
       element.removeClass('verified');
     });
@@ -51,11 +49,24 @@ ProviderComponent.prototype = {
 
     var element = ev.currentTarget;
 
-    return useProvider('stripe').authorize().then(function() {
-      element.addClass('verified');
-    }, function(err) {
-      window.alert('Unable to link properly, please try again.');
-      element.removeClass('verified');
+    chrome.identity.launchWebAuthFlow({
+      url: 'https://connect.stripe.com/oauth/authorize?client_id=ca_4p4SQSiq8XqZN9mOhoUTVgKoJ5SGJXQi&redirect_uri=https://ajcjbhihdfmefgbenbkpgalkjglcbmmp.chromiumapp.org/provider_cb&response_type=code&scope=read_write',
+      'interactive': true
+    }, function(redirect_url) {
+      storage.get('settings').then(function(settings) {
+        var providers = settings.providers || {};
+
+        providers.stripe = {
+          url: redirect_url
+        };
+
+        // Ensure that the providers object is set.
+        settings.providers = providers;
+
+        return storage.set('settings', settings);
+      }).then(function() {
+        element.classList.add('verified');
+      });
     });
   },
 

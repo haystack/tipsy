@@ -48,6 +48,13 @@ if (environment === 'chrome') {
     }
   });
 
+  // When the tab is removed, stop the timer.
+  chrome.tabs.onRemoved.addListener(function(tabId, changeInfo) {
+    if (tabs[tabId] && tabs[tabId].tab.url !== changeInfo.url) {
+      stop(tabs[tabId].tab);
+    }
+  });
+
   // Monitor whether or not the content script has detected media idle.
   chrome.runtime.onMessage.addListener(function(req, sender, resp) {
     req = typeof req === 'string' ? JSON.parse(req) : req;
@@ -84,6 +91,10 @@ else if (environment === 'firefox') {
       }
 
       tab.on('locationChange', function() {
+        stop(tabs[tab.id].tab);
+      });
+
+      tab.on('close', function() {
         stop(tabs[tab.id].tab);
       });
     });
