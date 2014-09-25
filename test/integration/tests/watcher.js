@@ -10,10 +10,9 @@ describe('watcher', function() {
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
           driver.navigate('html/index.html#log').then(function() {
-            console.log(driver.__proto__);
             return driver.execute(function() {
               var table = document.querySelector('table');
-              return table.querySelectorAll('tr').length;
+              return table.querySelectorAll('tr.no-author').length;
             }).then(function(length) {
               assert.equal(length, 1);
             });

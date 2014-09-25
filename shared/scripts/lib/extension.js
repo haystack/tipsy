@@ -28,6 +28,28 @@ export function createExtension(options) {
     var data = require('sdk/self').data;
     var engine = require('sdk/simple-storage');
 
+    var attachScripts = function(tab) {
+      var worker = tab.attach({
+        contentScriptFile: options.scripts.map(data.url)
+      });
+
+      worker.port.on('storage.get', function(key) {
+        worker.port.emit('storage.get', engine.storage[key]);
+      });
+
+      worker.port.on('storage.set', function(result) {
+        engine.storage[result.key] = result.value;
+        worker.port.emit('storage.set');
+      });
+    };
+
+    // Also inject whenever this extension is loaded.
+    tabs.on('ready', function(tab) {
+      if (tab.url.indexOf('resource://jid1-onbkbcx9o5ylwa-at-jetpack') === 0) {
+        attachScripts(tab);
+      }
+    });
+
     buttons.ActionButton({
       id: options.id,
       label: options.label,
@@ -36,20 +58,8 @@ export function createExtension(options) {
       onClick: function(state) {
         tabs.open({
           url: data.url(options.indexUrl),
-
           onReady: function(tab) {
-            var worker = tab.attach({
-              contentScriptFile: options.scripts.map(data.url)
-            });
-
-            worker.port.on('storage.get', function(key) {
-              worker.port.emit('storage.get', engine.storage[key]);
-            });
-
-            worker.port.on('storage.set', function(result) {
-              engine.storage[result.key] = result.value;
-              worker.port.emit('storage.set');
-            });
+            attachScripts(tab);
           }
         });
       }
