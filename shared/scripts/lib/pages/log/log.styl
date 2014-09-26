@@ -2,17 +2,9 @@
   width 24px
   height auto
   position absolute
-  left -32px
-  top 5px
+  left -48px
+  top -3px
   opacity 0.5
-
-  .fallback-icon
-    width 24px
-    height 24px
-    display block
-
-    background-size 24px 24px
-    background url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3gkSDTIVm5UJUwAAAUxJREFUSMfV1L9LHEEUwPGPsihioyD5C2wsTJPSSjT4o7UUwcpKTJneqE3AyjpdythopylE7BSx0UKLWN0ZBZEcEVHU5imLLNzo3RY+GPa7AzvfeW/2DSVHC8bxuUzJIh7KGq050Q9MYRffg//ga3Ct0Qxm4n0Vo8F76Au+eGMW1gJqscgNroJvcRl8/xZBhu7YYWcMaMtl2NXIAWdRhgEsRXmaFZvoyvAvJk5D1qy4g9ayGy0rmPuAyeBjrKMfwwnr/cTfeoIMPcFn8WzPzb1qw0WCSvTGcx2xj8MEwXWK4CN+B69jOkq2nCAYwkE9wRE+Bf/PdfdWgqCSkkEvfgVvYA5jmE8QTBSVcuHFXdSsOH+6KooyWAnewbfI4EvCorM4qVeiau4vusj9RYsJgmrKGdSwXfBhtdFOHsndrM2IjpeHXMpoiZ0Peq/xCLvSi/4y9MJXAAAAAElFTkSuQmCC")
 
 .entry-history
   display none
@@ -32,9 +24,11 @@ log-table
       font-size 80%
 
     td
-      position relative
       text-overflow ellipsis
       white-space nowrap
+
+      .relative
+        position relative
 
       a
         color #333333
