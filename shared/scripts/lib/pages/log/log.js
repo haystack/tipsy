@@ -68,7 +68,8 @@ LogPage.prototype = {
     return Object.keys(resp).map(function(key) {
       return {
         host: key,
-        entries: resp[key]
+        entries: resp[key],
+        favicon: resp[key][0].favicon
       };
     });
   },

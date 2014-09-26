@@ -18,10 +18,14 @@
     {%each entries as entry%}
     <tr class="{{entry|hasAuthor}}-author"> 
       <td>
-        <object class="favicon" data="http://{{entry.host}}/favicon.ico">
-          <i class="fallback-icon"></i>
-        </object>
-        {{entry.host}}
+        <div class="relative">
+          {%if entry.favicon%}
+          <img data-host="{{entry.host}}" class="favicon" src="{{entry.favicon}}">
+          {%else%}
+          <img data-host="{{entry.host}}" class="favicon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3gkSDTIVm5UJUwAAAUxJREFUSMfV1L9LHEEUwPGPsihioyD5C2wsTJPSSjT4o7UUwcpKTJneqE3AyjpdythopylE7BSx0UKLWN0ZBZEcEVHU5imLLNzo3RY+GPa7AzvfeW/2DSVHC8bxuUzJIh7KGq050Q9MYRffg//ga3Ct0Qxm4n0Vo8F76Au+eGMW1gJqscgNroJvcRl8/xZBhu7YYWcMaMtl2NXIAWdRhgEsRXmaFZvoyvAvJk5D1qy4g9ayGy0rmPuAyeBjrKMfwwnr/cTfeoIMPcFn8WzPzb1qw0WCSvTGcx2xj8MEwXWK4CN+B69jOkq2nCAYwkE9wRE+Bf/PdfdWgqCSkkEvfgVvYA5jmE8QTBSVcuHFXdSsOH+6KooyWAnewbfI4EvCorM4qVeiau4vusj9RYsJgmrKGdSwXfBhtdFOHsndrM2IjpeHXMpoiZ0Peq/xCLvSi/4y9MJXAAAAAElFTkSuQmCC">
+          {%endif%}
+          {{entry.host}}
+        </div>
       </td>
       <td>
         {%if entry.authorCount%}

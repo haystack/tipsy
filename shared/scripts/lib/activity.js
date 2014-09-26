@@ -27,6 +27,14 @@ export function start(tab) {
   currentTab.accessTime = Date.now();
   currentTab.tab = currentTab.tab || tab;
 
+  // We can extract the favicon from firefox here.
+  if (environment === 'firefox') {
+    var getFavicon = require('sdk/places/favicon');
+    getFavicon(tab).then(function(url) {
+      currentTab.favicon = url;
+    });
+  }
+
   tabs[tab.id] = currentTab;
 }
 
