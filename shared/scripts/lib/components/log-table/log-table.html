@@ -25,7 +25,7 @@
       </td>
       <td>
         {%if entry.authorCount%}
-          Has {{entry.authorCount}} author(s)
+          Has author information
         {%else%}
           No author information
         {%endif%}
@@ -41,10 +41,7 @@
             <tr>
               <th>Access time</th>
               <th>URL</th>
-              <th>Author name</th>
-              <th>Paypal</th>
-              <th>Bitcoin</th>
-              <th>Stripe</th>
+              <th>Author information</th>
             </tr>
           </thead>
 
@@ -53,10 +50,7 @@
               <tr>
                 <td>{{visit|formatAccessTime}}</td>
                 <td>{{visit.tab.url}}</td>
-                <td>{{visit.author.name}}</td>
-                <td>{{visit.author.paypal}}</td>
-                <td>{{visit.author.bitcoin}}</td>
-                <td>{{visit.author.stripe}}</td>
+                <td>{{visit|authorInfo}}</td>
               </tr>
             {%endeach%}
           </tbody>

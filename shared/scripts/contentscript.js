@@ -1,7 +1,23 @@
 'use strict';
 
+import { environment } from './lib/environment';
 import { selectAll } from './lib/dom';
-import { postMessage } from './lib/extension';
+
+/**
+ * postMessage
+ *
+ * @param body
+ */
+function postMessage(body) {
+  body = JSON.stringify(body);
+
+  if (environment === 'chrome') {
+    chrome.runtime.sendMessage(body);
+  }
+  else if (environment === 'firefox') {
+    self.port.emit('contentScript', body);
+  }
+}
 
 /**
  * Find the current domain name.
@@ -42,25 +58,28 @@ var links = selectAll('link');
 
 // Build up an object with page and author details for the extension.
 var messageBody = {
-  hostname: findDomain()
+  hostname: findDomain(),
+  list: []
 };
 
 // Iterate over all links and filter down to the last link that contains the
 // correct metadata.
-links.filter(function(link) {
+messageBody.list = links.filter(function(link) {
   return link.rel === 'author';
-}).slice(-1).forEach(function(link) {
+}).map(function(link) {
+  var author = {};
+
   // Personal identification.
-  messageBody.name = link.getAttribute('name');
-  messageBody.gravatar = link.getAttribute('gravatar');
+  author.name = link.getAttribute('name');
+  author.gravatar = link.getAttribute('gravatar');
 
   // Payment information.
-  messageBody.bitcoin = link.getAttribute('bitcoin');
-  messageBody.paypal = link.getAttribute('paypal');
-  messageBody.stripe = link.getAttribute('stripe');
+  author.dwolla = link.getAttribute('dwolla');
+  author.bitcoin = link.getAttribute('bitcoin');
+  author.paypal = link.getAttribute('paypal');
+  author.stripe = link.getAttribute('stripe');
 
-  // TODO Allow an organization link author to be referenced.
-  //messageBody.organization = link.getAttribute('organization');
+  return author;
 });
 
 // Send this message body back to the extension.

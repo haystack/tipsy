@@ -2,7 +2,30 @@
   width 60%
   font-size 17px
 
+strong
+  font-size 14px
+  color #333
+
+h2
+  font-family 'Sansita One', sans-serif
+  color #FF5A5A
+  font-size 200%
+  font-weight normal
+
+p
+  font-style italic
+  color #757575
+
 form
+  opacity 0
+  transition opacity linear 2s
+  padding-top 30%
+  overflow hidden
+  height 400px
+
+  &.fade
+    opacity 1
+
   input[name='threshold']
     &:before
       content '$'
@@ -11,34 +34,58 @@ form
     margin-right 20px
 
   button[type=submit]
-    background #74C175
-    border 3px solid #F0F0F0
+    background #FFF
+    border none
     outline none
-    color #FDF8B0
+    color #CCC
     padding 14px
-    border-radius 10px
     font-weight bold
+    padding-left 0
 
 ol
   list-style-type none
-  counter-reset li-counter
+  counter-reset li-counter -1;
+  position relative
+  width 100%
 
   li
-    position relative
+    position absolute
     padding-left 20px
     margin-bottom 60px
+    width 100%
+
+    &:first-child:before
+      content ''
+      background url(../img/logo64.png) no-repeat center
+      width 75px
+      height 75px
+      border-radius 70px
+      background-color #FFF
+      display block
+      position absolute
+      left auto
+      right 100px
+
+    &:not(:first-child)
+      display none
+      top auto
+      left 12%
+      padding-left 100px
 
     &:before
+      top 35px
       position absolute
-      top -10px
       left -42px
-      width 20px
+      width 75px
       content counter(li-counter)
       counter-increment li-counter
       background #74C175
       padding 10px
       text-align center
-      border-radius 30px
+      border-radius 70px
       color #FDF8B0
       font-weight bold
       border 3px solid #F0F0F0
+      height 75px
+      line-height 72px
+      font-size 35px

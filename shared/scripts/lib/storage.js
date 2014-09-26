@@ -31,24 +31,60 @@ storage.engine = function() {
       // Override the default implementation of `chrome.storage.get`.
       get: function(key, callback) {
         engine.get(key, function(result) {
-          callback(result[key]);
+          if (!result[key]) {
+            callback({});
+          }
+          else {
+            callback(result[key]);
+          }
         });
       },
 
       // Use the default implementation of `chrome.storage.set`.
-      set: engine.set.bind(engine)
+      set: engine.set.bind(engine),
+
+      // Whenever the engine has data updated trigger the callback.
+      onChange: chrome.storage.onChanged.addListener.bind(chrome.storage)
     };
   }
   else if (environment === 'firefox') {
+    try {
+      engine = require('sdk/simple-storage');
+    }
+    catch (unhandledException) {}
+
     return {
       get: function(key, callback) {
+        if (typeof self === 'undefined' || !self.port) {
+          return callback(engine.storage[key] || {});
+        }
+
         self.port.emit('storage.get', key);
-        self.port.once('storage.get', callback);
+        self.port.once('storage.get', function(result) {
+          callback(result || {});
+        });
       },
 
-      set: function(key, value, callback) {
-        self.port.emit('storage.set', { key: key, value: value });
+      set: function(object, callback) {
+        // The only key is the actual key name.
+        var key = Object.keys(object)[0];
+
+        if (typeof self === 'undefined' || !self.port) {
+          engine.storage[key] = object[key];
+          return callback();
+        }
+
+        self.port.emit('storage.set', { key: key, value: object[key] });
         self.port.once('storage.set', callback);
+
+        if (this.onChangeCallback) {
+          this.onChangeCallback();
+        }
+      },
+
+      // At the moment we can know if data is updated when set is called.
+      onChange: function(callback) {
+        this.onChangeCallback = callback;
       }
     };
   }
@@ -74,7 +110,7 @@ storage.stringify = function(value) {
  * @param {string} keyPath - Key to look up, can be dot-notation.
  * @return {*} value from storage engine.
  */
-storage.get = function(key, callback) {
+storage.get = function(key) {
   var engine = this.engine();
 
   return new Promise(function(callback) {
@@ -98,6 +134,21 @@ storage.set = function(key, val) {
   return new Promise(function(callback) {
     engine.set(store, callback);
   });
+};
+
+/**
+ * Trigger a callback when the storage changes.
+ *
+ * @param callback
+ * @return
+ */
+storage.onChange = function(callback) {
+  if (environment === 'chrome') {
+
+  }
+  else {
+
+  }
 };
 
 export default storage;

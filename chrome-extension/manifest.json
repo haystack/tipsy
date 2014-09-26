@@ -36,6 +36,7 @@
     "history",
     "idle",
     "storage",
+    "identity",
     "https://accounts.google.com/o/oauth2/token",
     "https://www.googleapis.com/"
   ],

@@ -43,6 +43,13 @@ if (environment === 'chrome') {
 
   // Monitor whenever the tab is updated to detect for url changes.
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
+    if (tabs[tabId] && changeInfo.url) {
+      stop(tabs[tabId].tab);
+    }
+  });
+
+  // When the tab is removed, stop the timer.
+  chrome.tabs.onRemoved.addListener(function(tabId, changeInfo) {
     if (tabs[tabId] && tabs[tabId].tab.url !== changeInfo.url) {
       stop(tabs[tabId].tab);
     }
@@ -73,17 +80,23 @@ if (environment === 'chrome') {
   });
 }
 else if (environment === 'firefox') {
-  require('sdk/tabs').on('open', function(tab) {
-    tab.on('ready', function(tab) {
-      if (tabs[tab.id] && tabs[tab.id].tab.url !== tab.url) {
-        stop(tabs[tab.id].tab);
-      }
+  require('sdk/tabs').on('ready', function(tab) {
+    var id = tab.id;
 
-      start(tabs[tab.id].tab);
+    if (tabs[id] && tabs[id].tab.url !== tab.url) {
+      stop(tabs[id].tab);
+    }
 
-      tab.on('locationChange', function() {
-        stop(tabs[tab.id].tab);
-      });
+    if (tabs[tab.id]) {
+      start(tabs[id].tab);
+    }
+
+    tab.on('locationChange', function() {
+      stop(tabs[id].tab);
+    });
+
+    tab.on('close', function() {
+      stop(tabs[id].tab);
     });
   });
 
@@ -104,5 +117,3 @@ else if (environment === 'firefox') {
     });
   }, 1000);
 }
-
-export default idle;

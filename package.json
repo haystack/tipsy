@@ -16,7 +16,6 @@
     "python2": "(cd build/tools ; grep -Rl python . | xargs sed -ri 's/([^!]|^)python(\\s|$)/\\1python2\\2/g')"
   },
   "devDependencies": {
-    "bower": "^1.3.9",
     "es6-module-loader": "^0.8.2",
     "es6-module-transpiler": "~0.6.2",
     "firefox-profile": "^0.3.3",
@@ -31,6 +30,7 @@
     "grunt-mocha-test": "^0.11.0",
     "grunt-mozilla-addon-sdk": "^0.3.2",
     "grunt-shell": "^0.7.0",
+    "grunt-targethtml": "^0.2.6",
     "mocha": "^1.21.4",
     "promise": "^6.0.0",
     "selenium-chromedriver": "^0.0.2",
@@ -38,10 +38,12 @@
     "selenium-webdriver": "^2.42.1"
   },
   "dependencies": {
+    "bitcoinjs-lib": "^1.1.0",
     "combyne": "^0.5.2",
     "fuse.js": "^1.2.0",
     "jquery": "^2.1.1",
     "moment": "^2.8.3",
+    "oauthorize": "^0.1.0",
     "purecss": "^0.5.0"
   }
 }

@@ -2,6 +2,8 @@
 
 import { environment } from './environment';
 import storage from './storage';
+import { start, stop } from './activity';
+import { getCurrentTab, tabs } from './tabs';
 
 /**
  * Opens the extension in a new tab window.
@@ -13,10 +15,6 @@ export function createExtension(options) {
     chrome.browserAction.onClicked.addListener(function() {
       chrome.tabs.create({
         url: chrome.extension.getURL(options.indexUrl)
-      }, function(tab) {
-        options.scripts.forEach(function(url) {
-          chrome.tabs.executeScript(tab.id, { file: url });
-        });
       });
     });
   }
@@ -26,6 +24,28 @@ export function createExtension(options) {
     var data = require('sdk/self').data;
     var engine = require('sdk/simple-storage');
 
+    var attachScripts = function(tab) {
+      var worker = tab.attach({
+        contentScriptFile: options.scripts.map(data.url)
+      });
+
+      worker.port.on('storage.get', function(key) {
+        worker.port.emit('storage.get', engine.storage[key]);
+      });
+
+      worker.port.on('storage.set', function(result) {
+        engine.storage[result.key] = result.value;
+        worker.port.emit('storage.set');
+      });
+    };
+
+    // Also inject whenever this extension is loaded.
+    tabs.on('ready', function(tab) {
+      if (tab.url.indexOf('resource://jid1-onbkbcx9o5ylwa-at-jetpack') === 0) {
+        attachScripts(tab);
+      }
+    });
+
     buttons.ActionButton({
       id: options.id,
       label: options.label,
@@ -34,23 +54,8 @@ export function createExtension(options) {
       onClick: function(state) {
         tabs.open({
           url: data.url(options.indexUrl),
-
           onReady: function(tab) {
-            var worker = tab.attach({
-              contentScriptFile: options.scripts.map(function(url) {
-                console.log(url);
-                return data.url(url);
-              })
-            });
-
-            worker.port.on('storage.get', function(key) {
-              worker.port.emit('storage.get', engine.storage[key]);
-            });
-
-            worker.port.on('storage.set', function(result) {
-              engine.storage[result.key] = result.value;
-              worker.port.emit('storage.set');
-            });
+            attachScripts(tab);
           }
         });
       }
@@ -68,26 +73,35 @@ export function addContentScript(path) {
   // programmatically instrument the page to load the script.
   if (environment === 'firefox') {
     var data = require('sdk/self').data;
-    var tabs = require('sdk/tabs');
+    var pageMod = require('sdk/page-mod');
 
-    tabs.activeTab.attach({
-      contentScriptFile: data.url(path)
+    pageMod.PageMod({
+      include: ['*'],
+      contentScriptFile: data.url(path),
+
+      // Send the content script a message inside onAttach
+      onAttach: function(worker) {
+        // Listen to all events piped from the contentScript and mimic what
+        // happens in watcher.
+        //
+        // TODO Abstract so that the same code is used.
+        worker.port.on('contentScript', function(resp) {
+          resp = JSON.parse(resp);
+
+          getCurrentTab().then(function(tab) {
+            if (resp.name === 'author') {
+              tabs[tab.id] = {
+                author: resp.data,
+                tab: tab
+              };
+
+              // Start the activity when the author information has been
+              // discovered.
+              start(tab);
+            }
+          });
+        });
+      }
     });
-  }
-}
-
-/**
- * postMessage
- *
- * @param body
- */
-export function postMessage(body) {
-  body = JSON.stringify(body);
-
-  if (environment === 'chrome') {
-    chrome.runtime.sendMessage(body);
-  }
-  else if (environment === 'firefox') {
-    self.port.emit('contentScript', body);
   }
 }

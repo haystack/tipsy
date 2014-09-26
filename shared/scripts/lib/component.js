@@ -60,13 +60,23 @@ Component.prototype.fetch = function(template) {
 };
 
 Component.prototype.render = function(context) {
+  var component = this;
   var element = this.el;
 
   return this.compiled.then(function(template) {
     return template.render(context);
   }).then(function(contents) {
     element.innerHTML = contents;
+    return contents;
+  }, console.error.bind(console)).then(function() {
+    if (component.afterRender) {
+      component.afterRender();
+    }
   });
+};
+
+Component.prototype.$ = function(selector) {
+  return $(selector, this.el);
 };
 
 Component.register = function(selector, Component, context) {
