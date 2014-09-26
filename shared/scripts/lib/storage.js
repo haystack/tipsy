@@ -41,7 +41,10 @@ storage.engine = function() {
       },
 
       // Use the default implementation of `chrome.storage.set`.
-      set: engine.set.bind(engine)
+      set: engine.set.bind(engine),
+
+      // Whenever the engine has data updated trigger the callback.
+      onChange: chrome.storage.onChanged.addListener.bind(chrome.storage)
     };
   }
   else if (environment === 'firefox') {
@@ -73,6 +76,15 @@ storage.engine = function() {
 
         self.port.emit('storage.set', { key: key, value: object[key] });
         self.port.once('storage.set', callback);
+
+        if (this.onChangeCallback) {
+          this.onChangeCallback();
+        }
+      },
+
+      // At the moment we can know if data is updated when set is called.
+      onChange: function(callback) {
+        this.onChangeCallback = callback;
       }
     };
   }
@@ -122,6 +134,21 @@ storage.set = function(key, val) {
   return new Promise(function(callback) {
     engine.set(store, callback);
   });
+};
+
+/**
+ * Trigger a callback when the storage changes.
+ *
+ * @param callback
+ * @return
+ */
+storage.onChange = function(callback) {
+  if (environment === 'chrome') {
+
+  }
+  else {
+
+  }
 };
 
 export default storage;

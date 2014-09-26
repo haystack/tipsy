@@ -15,10 +15,6 @@ export function createExtension(options) {
     chrome.browserAction.onClicked.addListener(function() {
       chrome.tabs.create({
         url: chrome.extension.getURL(options.indexUrl)
-      }, function(tab) {
-        options.scripts.forEach(function(url) {
-          chrome.tabs.executeScript(tab.id, { file: url });
-        });
       });
     });
   }

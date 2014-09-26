@@ -15,10 +15,9 @@ module.exports = ExtensionDriver;
 ExtensionDriver.prototype.refresh = function() {
   var driver = this._driver;
 
-  return driver.getCurrentUrl()
-    .then(function(url) {
-      return driver.get(url);
-    });
+  return driver.getCurrentUrl().then(function(url) {
+    return driver.get(url);
+  });
 };
 
 /**
@@ -51,4 +50,10 @@ ExtensionDriver.prototype.back = function() {
 
 ExtensionDriver.prototype.get = function(url) {
   return this._driver.get(url);
+};
+
+ExtensionDriver.prototype.wait = function(fn) {
+  return this._driver.wait(function() {
+    return this.execute(fn);
+  }.bind(this));
 };

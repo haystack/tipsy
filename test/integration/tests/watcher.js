@@ -9,14 +9,15 @@ describe('watcher', function() {
     return driver.get('https://google.com/').then(function() {
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
-          driver.navigate('html/index.html#log').then(function() {
-            return driver.execute(function() {
-              var table = document.querySelector('table');
-              return table.querySelectorAll('tr.no-author').length;
+          driver.navigate('html/index.html#log')
+            .then(driver.refresh.bind(driver))
+            .then(function() {
+              return driver.execute(function() {
+                return document.querySelectorAll('table tr.no-author').length;
+              });
             }).then(function(length) {
               assert.equal(length, 1);
-            });
-          }).then(resolve, reject);
+            }).then(resolve, reject);
         }, 1000);
       });
     })

@@ -43,7 +43,7 @@ if (environment === 'chrome') {
 
   // Monitor whenever the tab is updated to detect for url changes.
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
-    if (tabs[tabId] && tabs[tabId].tab.url !== changeInfo.url) {
+    if (tabs[tabId] && changeInfo.url) {
       stop(tabs[tabId].tab);
     }
   });

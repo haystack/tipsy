@@ -7,5 +7,5 @@ global.ExtensionDriver = require('./extension-driver');
 global.Promise = require('promise');
 
 after(function() {
-  //return this.extensionDriver.quit();
+  return this.extensionDriver.quit();
 });

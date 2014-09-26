@@ -12,6 +12,8 @@ import LogTableComponent from '../../components/log-table/log-table';
  */
 function LogPage() {
   Component.prototype.constructor.apply(this, arguments);
+
+  storage.onChange(this.renderTable.bind(this));
 }
 
 LogPage.prototype = {
