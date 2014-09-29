@@ -21,6 +21,10 @@ Component.register('#donations', DonationsPage);
  * Sets the current tab in the extension.
  */
 function setTab() {
+  // This is a fairly standard way of scrolling to the top of the page, fixes a
+  // minor annoyance where clicking to the log page scrolled down slightly.
+  window.scrollTo(0, 0);
+
   // When opening the extension without a hash determine where to route based
   // on if the end user has already configured the getting started page or not.
   if (!location.hash) {
@@ -45,10 +49,6 @@ function setTab() {
       }
     });
   }
-
-  // This is a fairly standard way of scrolling to the top of the page, fixes a
-  // minor annoyance where clicking to the log page scrolled down slightly.
-  window.scrollTo(0, 0);
 }
 
 // Set the correct active tab.

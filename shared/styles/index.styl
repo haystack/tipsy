@@ -14,9 +14,14 @@
 
 // Components.
 set-providers
+  display block
   @import '../scripts/lib/components/providers/providers.styl'
 set-donation-goal
+  display block
   @import '../scripts/lib/components/donation-goal/donation-goal.styl'
+set-reminders
+  display block
+  @import '../scripts/lib/components/reminders/reminders.styl'
 
 html, body
   box-sizing border-box
@@ -29,25 +34,15 @@ html, body
   position relative
 
   &.intro
-    //background-color #ECFFF7
     background-color #FFF
+    cursor pointer
+    overflow hidden
 
     nav
       display none
 
 h2
   color rgba(153, 153, 153, 0.6)
-  text-shadow 1px 4px 6px #F5F5F5,0 0 0 #F3F3F3,1px 4px 6px #FFF
-
-  &::selection
-    background #5af
-    color #fff
-    text-shadow none
-
-  &::-moz-selection
-    background #5af
-    color #fff
-    text-shadow none
 
 table
   width 100%

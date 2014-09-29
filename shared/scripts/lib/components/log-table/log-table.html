@@ -53,7 +53,7 @@
             {%each entry.entries as visit%}
               <tr>
                 <td>{{visit|formatAccessTime}}</td>
-                <td>{{visit.tab.url}}</td>
+                <td><a href="{{visit.tab.url}}" target="_blank">{{visit.tab.url}}</a></td>
                 <td>{{visit|authorInfo}}</td>
               </tr>
             {%endeach%}

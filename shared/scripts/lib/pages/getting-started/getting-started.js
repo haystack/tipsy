@@ -5,6 +5,7 @@ import storage from '../../storage';
 import { select } from '../../dom';
 import ProvidersComponent from '../../components/providers/providers';
 import DonationGoalComponent from '../../components/donation-goal/donation-goal';
+import RemindersComponent from '../../components/reminders/reminders';
 
 function GettingStartedPage() {
   Component.prototype.constructor.apply(this, arguments);
@@ -28,8 +29,11 @@ GettingStartedPage.prototype = {
 
   toDonation: function(ev) {
     ev.preventDefault();
-    this.advanceTo(2);
+    this.advance();
   },
+
+  // Determines which direction to go into.
+  state: 0,
 
   // Test code to ensure parity between client and background scripts.
   skipConfiguration: function(ev) {
@@ -46,36 +50,35 @@ GettingStartedPage.prototype = {
   },
 
   start: function(ev) {
-    this.advanceTo(1);
+    this.advance();
   },
 
-  recedeTo: function(start) {
+  recede: function() {
+    var end = --this.state;
     var lis = this.$('ol li');
-    var startLi = lis.eq(start);
-    var endLi = lis.eq(start + 1);
 
-    startLi.animate({ left: '-90%' }).promise().then(function() {
-      return endLi.fadeIn(1000).promise().then(function() {
-        return startLi.animate({ opacity: 0.4, left: '-100%' }).promise();
-      });
-    });
+    lis.removeClass('collapse expand');
+
+    // Collapse the previous and expand to the end.
+    lis.slice(end).addClass('collapse');
+    lis.eq(end - 1).addClass('expand');
   },
 
-  advanceTo: function(end) {
+  advance: function() {
+    var end = ++this.state;
     var lis = this.$('ol li');
-    var startLi = lis.eq(end - 1);
-    var endLi = lis.eq(end);
 
-    startLi.animate({ left: '-77%' }).promise().then(function() {
-      return endLi.fadeIn(1000).promise().then(function() {
-        return startLi.animate({ opacity: 0.4, left: '-80%' }).promise();
-      });
-    });
+    lis.removeClass('collapse expand');
+
+    // Collapse the previous and expand to the end.
+    lis.slice(0, end).addClass('collapse');
+    lis.eq(end).addClass('expand');
   },
 
   afterRender: function() {
     new ProvidersComponent(select('set-providers', this.el)).render();
     new DonationGoalComponent(select('set-donation-goal', this.el)).render();
+    new RemindersComponent(select('set-reminders', this.el)).render();
 
     setTimeout(function() {
       select('form', this.el).classList.add('fade');
