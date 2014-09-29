@@ -3,20 +3,35 @@
     <li>
       <h2>welcome to tipsy,</h2>
       <p class="leader">Where you help support authors for their online content!</p>
-      <button type="submit">Skip configuration for now</button><strong>or click anywhere to continue.</strong>
+      <button class="skip">Skip configuration for now</button><strong>or click anywhere to continue.</strong>
     </li>
     <li>
       <set-providers></set-providers>
 
+      <hr>
       <p>
-        <a class="to-donation" href="#">Continue to donation threshold...</a>
+        <button class="skip">Skip</button>
+        <button class="next">Next</button>
       </p>
     </li>
     <li>
       <set-donation-goal></set-donation-goal>
+
+      <hr>
+      <p>
+        <button class="skip">Skip</button>
+        <button class="previous">Previous</button>
+        <button class="next">Next</button>
+      </p>
     </li>
     <li>
       <set-reminders></set-reminders>
+
+      <hr>
+      <p>
+        <button class="previous">Previous</button>
+        <button class="skip">Complete configuration!</button>
+      </p>
     </li>
   </ol>
 </form>

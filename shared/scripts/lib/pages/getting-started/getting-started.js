@@ -10,8 +10,8 @@ import RemindersComponent from '../../components/reminders/reminders';
 function GettingStartedPage() {
   Component.prototype.constructor.apply(this, arguments);
 
-  // Ensure that start is correctly bound.
-  this.start = this.start.bind(this);
+  // Ensure that next is correctly bound.
+  this.next = this.next.bind(this);
 }
 
 GettingStartedPage.prototype = {
@@ -23,13 +23,9 @@ GettingStartedPage.prototype = {
   },
 
   events: {
-    'click button': 'skipConfiguration',
-    'click .to-donation': 'toDonation'
-  },
-
-  toDonation: function(ev) {
-    ev.preventDefault();
-    this.advance();
+    'click .skip': 'skipConfiguration',
+    'click .next': 'next',
+    'click .previous': 'previous'
   },
 
   // Determines which direction to go into.
@@ -41,7 +37,7 @@ GettingStartedPage.prototype = {
     ev.preventDefault();
 
     storage.get('settings').then(function(settings) {
-      settings.showLog = !settings.showLog;
+      settings.showLog = true;
       storage.set('settings', settings);
 
       // Redirect the user to the log page after clicking skip.
@@ -49,23 +45,17 @@ GettingStartedPage.prototype = {
     });
   },
 
-  start: function(ev) {
-    this.advance();
+  previous: function(ev) {
+    ev.preventDefault();
+    this.move(--this.state);
   },
 
-  recede: function() {
-    var end = --this.state;
-    var lis = this.$('ol li');
-
-    lis.removeClass('collapse expand');
-
-    // Collapse the previous and expand to the end.
-    lis.slice(end).addClass('collapse');
-    lis.eq(end - 1).addClass('expand');
+  next: function(ev) {
+    ev.preventDefault();
+    this.move(++this.state);
   },
 
-  advance: function() {
-    var end = ++this.state;
+  move: function(end) {
     var lis = this.$('ol li');
 
     lis.removeClass('collapse expand');
@@ -86,7 +76,7 @@ GettingStartedPage.prototype = {
 
     // After each render, unbind the advance script that can handle a click
     // from anywhere on the page.
-    $('body').unbind(this.start).one('click', this.start);
+    $('body').unbind(this.next).one('click', this.next);
   }
 };
 
