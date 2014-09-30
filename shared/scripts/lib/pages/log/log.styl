@@ -1,3 +1,6 @@
+&
+  padding-top 40px
+
 .favicon
   width 24px
   height auto
@@ -5,6 +8,19 @@
   left -48px
   top -3px
   opacity 0.5
+
+.reset
+  cursor pointer
+  float right
+
+.author
+  cursor pointer
+
+  &.show:before
+    content 'Show'
+
+  &.hide:before
+    content 'Hide'
 
 .entry-history
   display none
@@ -18,7 +34,7 @@ log-table
       white-space nowrap
 
   > table
-    margin-top 55px
+    margin-top 14px
 
     th
       font-size 80%

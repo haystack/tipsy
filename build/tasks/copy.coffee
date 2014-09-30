@@ -10,7 +10,6 @@ module.exports = ->
     'node_modules/purecss/*',
     'node_modules/combyne/dist/*'
     'node_modules/moment/min/*'
-    'node_modules/fuse.js/src/*'
   ]
 
   @config 'copy',

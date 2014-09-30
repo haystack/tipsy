@@ -13,6 +13,14 @@ function SettingsPage() {
 SettingsPage.prototype = {
   template: 'pages/settings/settings.html',
 
+  events: {
+    'submit form': 'cancelForm'
+  },
+
+  cancelForm: function(ev) {
+    ev.preventDefault();
+  },
+
   afterRender: function() {
     new ProvidersComponent(select('set-providers', this.el)).render();
     new DonationGoalComponent(select('set-donation-goal', this.el)).render();
