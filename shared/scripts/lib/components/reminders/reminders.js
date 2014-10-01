@@ -10,14 +10,6 @@ function RemindersComponent() {
 RemindersComponent.prototype = {
   template: 'components/reminders/reminders.html',
 
-  map: [
-    'Hourly',
-    'Daily',
-    'Weekly',
-    'Monthly',
-    'Yearly'
-  ],
-
   events: {
     'input input[type=range]': 'updateOutputAndSave'
   },
@@ -26,9 +18,7 @@ RemindersComponent.prototype = {
     var output = this.$('output');
     var index = ev.target ? ev.target.value : ev;
 
-    // 18% is out baseline, 12% increments for each item
-    output.css('left', (16 + (index * 16)) + '%');
-    output.val(this.map[index]);
+    output.find('span').removeClass('active').eq(index).addClass('active');
 
     storage.get('settings').then(function(settings) {
       settings.reminderLevel = index;

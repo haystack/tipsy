@@ -78,7 +78,6 @@ LogTableComponent.prototype = {
       return val.author.list[0].name;
     }
     else {
-      console.log(val.author);
       return 'No author information present on page';
     }
   },

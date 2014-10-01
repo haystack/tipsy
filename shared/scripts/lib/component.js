@@ -81,7 +81,8 @@ Component.prototype.$ = function(selector) {
 
 Component.register = function(selector, Component, context) {
   selectAll(selector, context).forEach(function(element) {
-    new Component(element).render();
+    var component = new Component(element);
+    component.render(component.serialize ? component.serialize() : {});
   });
 };
 

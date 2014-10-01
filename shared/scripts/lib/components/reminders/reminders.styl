@@ -1,16 +1,67 @@
 position relative
 
+input[type=range]::-moz-range-track
+  background-color #74C175
+
+input[type=range]
+
 input[type=range]
   width calc(100% - 50px)
   display block
-  margin 0 auto
   margin-bottom 20px
   outline none
   cursor pointer
+  margin-top 33px
+  -webkit-appearance none
+
+  &::-moz-range-thumb
+    border none
+    height 16px
+    width 16px
+    border-radius 50%
+    background #FFF
+    margin-top -4px
+
+  &::-webkit-slider-thumb
+    -webkit-appearance none
+    border 2px solid #8F8F8F
+    height 16px
+    width 16px
+    background #FFF9B8
+    margin-top -4px
+    height 70px
+    border-radius 4px
+    position relative
+    top -18px
+
+  &::-webkit-slider-runnable-track
+    background-color #74C175
+    padding 10px
+    height 50px
+    transition background-color linear .1s
+    border 2px solid #8F8F8F
+    border-radius 5px
 
 output
   width 20%
   padding-left 10px
-  position absolute
-  // +12% increments for each item
-  left 18%
+  position relative
+
+  span
+    position relative
+    color #CCC
+
+    &.active
+      color #333
+
+  span:first-child
+    left -5px
+
+  span:nth-child(2)
+    left calc(26% - 4px)
+
+  span:nth-child(3)
+    left calc(50% + 6px)
+
+  span:nth-child(4)
+    left 76%

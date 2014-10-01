@@ -7,7 +7,11 @@ function DonationsPage() {
 }
 
 DonationsPage.prototype = {
-  template: 'pages/donations/donations.html'
+  template: 'pages/donations/donations.html',
+
+  serialize: function() {
+    return { entries: [] };
+  }
 };
 
 DonationsPage.prototype.__proto__ = Component.prototype;

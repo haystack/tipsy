@@ -12,6 +12,7 @@ DonationGoalComponent.prototype = {
 
   events: {
     'keyup input': 'filterInput',
+    'blur input': 'formatAndSave',
     'change input': 'formatAndSave'
   },
 
