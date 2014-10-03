@@ -23,39 +23,43 @@ input[type=range]
     margin-top -4px
 
   &::-webkit-slider-thumb
-    -webkit-appearance none
-    border 2px solid #8F8F8F
-    height 16px
-    width 16px
-    background #FFF9B8
-    margin-top -4px
-    height 70px
-    border-radius 4px
-    position relative
-    top -18px
+    -webkit-appearance: none;
+    border: 2px solid #D3D3D3;
+    width: 36px;
+    background: #FFF9B8;
+    margin-top: -4px;
+    height: 70px;
+    border-radius: 4px;
+    position: relative;
+    top: -18px;
+    opacity: .85;
+    box-shadow: 1px 1px rgba(224, 224, 224, 0.65);
 
   &::-webkit-slider-runnable-track
-    background-color #74C175
-    padding 10px
-    height 50px
-    transition background-color linear .1s
-    border 2px solid #8F8F8F
-    border-radius 5px
+    padding: 10px;
+    height: 50px;
+    transition: background-color linear .1s;
+    background-color: #74C175;
+    border: 2px solid #E0E0E0;
+    border-radius: 5px;
+    box-shadow: 4px 1px rgba(224, 224, 224, 0.25);
 
 output
-  width 20%
+  display block
+  width calc(100% - 16px)
   padding-left 10px
   position relative
+  height 20px
 
   span
-    position relative
-    color #CCC
+    position absolute
+    color #E0E0E0
 
     &.active
-      color #333
+      color #5F5F5F
 
   span:first-child
-    left -5px
+    left 4px
 
   span:nth-child(2)
     left calc(26% - 4px)
