@@ -103,7 +103,7 @@ LogTableComponent.prototype = {
    * @param el
    * @return
    */
-  showFavicon: function(el, host) {
+  showFavicon: function(log, el, host) {
     storage.get('log').then(function(log) {
       var URL = this.URL;
 
@@ -129,7 +129,6 @@ LogTableComponent.prototype = {
 
           // Update the log with the cached favicon.
           log[host][0].favicon = src;
-          storage.set('log', log);
         }
       };
 
@@ -144,9 +143,14 @@ LogTableComponent.prototype = {
   },
 
   afterRender: function() {
-    this.$('img.favicon').each(function(key, el) {
-      this.showFavicon(el, $(el).data('host'));
-    }.bind(this));
+    var component = this;
+
+    storage.get('log').then(function(log) {
+      component.$('img.favicon').each(function(key, el) {
+        this.showFavicon(log, el, $(el).data('host'));
+        storage.set('log', log);
+      });
+    });
   }
 };
 

@@ -53,6 +53,7 @@ nav
   background #FFF9B8
   position relative
   padding 0 15%
+  z-index 1
 
   h1
     display inline-block
@@ -101,3 +102,11 @@ section
 
 :target
   display block
+  position relative
+  top -111px
+  z-index 0
+
+  // There is always a single top level element per page to ensure proper
+  // padding.
+  > *
+    padding-top 96px

@@ -1,35 +1,37 @@
-<!-- Display the current list of pages to pay. -->
-<h2>Who to pay:</h2>
+<div>
+  <!-- Display the current list of pages to pay. -->
+  <h2>Who to pay:</h2>
 
-<table class="pure-table pure-table-bordered pure-table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Time spent</th>
-      <th>Estimated amount</th>
-      <th>Pay methods</th>
-    </tr>
-  </thead>
-  <tbody>
-  {%if not entries.length%}
-    <tr>
-      <td colspan="4">Nobody to pay yet, get browsing!</td>
-    </tr>
-  {%endif%}
-  </tbody>
-</table>
+  <table class="pure-table pure-table-bordered pure-table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Time spent</th>
+        <th>Estimated amount</th>
+        <th>Pay methods</th>
+      </tr>
+    </thead>
+    <tbody>
+    {%if not entries.length%}
+      <tr>
+        <td colspan="4">Nobody to pay yet, get browsing!</td>
+      </tr>
+    {%endif%}
+    </tbody>
+  </table>
 
-<!-- Display historical payment log.
-<h2>Payment history:</h2>
+  <!-- Display historical payment log.
+  <h2>Payment history:</h2>
 
-<table class="pure-table pure-table-bordered pure-table-striped">
-  <thead>
-    <tr>
-      <th>To</th>
-      <th>Amount</th>
-      <th>Provider used</th>
-      <th>Transaction date</th>
-    </tr>
-  </thead>
-</table>
--->
+  <table class="pure-table pure-table-bordered pure-table-striped">
+    <thead>
+      <tr>
+        <th>To</th>
+        <th>Amount</th>
+        <th>Provider used</th>
+        <th>Transaction date</th>
+      </tr>
+    </thead>
+  </table>
+  -->
+</div>
