@@ -74,8 +74,17 @@ LogTableComponent.prototype = {
   },
 
   authorInfo: function(val) {
+    var item = null;
+
     if (val.author.list.length) {
-      return val.author.list[0].name;
+      item = val.author.list[0];
+
+      if (item.name) {
+        return item.name;
+      }
+      else if (item.href) {
+        return '<a href="' + item.href + '">No payment information added.</a>';
+      }
     }
     else {
       return 'No author information present on page';

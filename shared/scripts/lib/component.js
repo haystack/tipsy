@@ -39,6 +39,7 @@ Component.prototype.bindEvents = function() {
 
     // Bind the event and adding in the necessary code for event delegation.
     $(el).on(event, selector, function(ev) {
+      ev.stopImmediatePropagation();
       return component[fn].call(component, ev);
     });
   }, this);
