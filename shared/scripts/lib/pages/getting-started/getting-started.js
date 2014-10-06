@@ -17,11 +17,6 @@ function GettingStartedPage() {
 GettingStartedPage.prototype = {
   template: 'pages/getting-started/getting-started.html',
 
-  render: function() {
-    return Component.prototype.render.apply(this, arguments)
-      .then(this.afterRender.bind(this));
-  },
-
   events: {
     'click .skip': 'skipConfiguration',
     'click .next': 'next',
@@ -73,10 +68,6 @@ GettingStartedPage.prototype = {
     setTimeout(function() {
       select('form', this.el).classList.add('fade');
     }.bind(this), 250);
-
-    // After each render, unbind the advance script that can handle a click
-    // from anywhere on the page.
-    $('body').unbind(this.next).one('click', this.next);
   }
 };
 

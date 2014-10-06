@@ -12,6 +12,7 @@
 strong
   font-size 14px
   color #333
+  padding-right 18px
 
 hr
   padding-top 60px
@@ -25,16 +26,15 @@ h2
 p
   display block
   width 100%
-  position absolute
-  top 32%
-  left 12%
-  height 50px
-  padding-left 100px
+  //position absolute
+  //top 32%
+  //left 12%
+  //height 50px
+  //padding-left 100px
 
 form
   opacity 0
   transition opacity linear 2s
-  //padding-top 30%
   display table
   width 100%
   height calc(75% - 0.5px)
@@ -61,6 +61,13 @@ form
     border-radius 30px
     margin-right 20px
 
+    &.next
+      background #75C276
+      color #FFF
+
+      &:hover
+        background #99DB9A
+
     &:hover
       background #FCFCFC
 
@@ -84,13 +91,21 @@ ol
 
     &.collapse
       opacity 0
-      left -50%
+      left -50% !important
 
     // Remove necessity for importants.
     &.expand
       opacity 1 !important
       visibility visible !important
-      left 12% !important
+      left 0% !important
+
+    &:not(:first-child)
+      visibility hidden
+      opacity 0
+      top auto
+      padding-left 100px
+      left 100%
+      width 60%
 
     &:first-child:before
       content ''
@@ -103,77 +118,3 @@ ol
       position absolute
       left auto
       right 100px
-
-    &:not(:first-child)
-      visibility hidden
-      opacity 0
-      top auto
-      padding-left 100px
-      left 100%
-      width 60%
-
-    &:before
-      top 35px
-      position absolute
-      left -42px
-      width 75px
-      content counter(li-counter)
-      counter-increment li-counter
-      background #74C175
-      padding 10px
-      text-align center
-      border-radius 70px
-      color #FDF8B0
-      font-weight bold
-      border 3px solid #F0F0F0
-      height 75px
-      line-height 72px
-      font-size 35px
-
-//ol
-//  list-style-type none
-//  counter-reset li-counter -1;
-//  position relative
-//  width 100%
-//
-//  li
-//    position absolute
-//    padding-left 20px
-//    margin-bottom 60px
-//    width 100%
-//
-//    &:first-child:before
-//      content ''
-//      background url(../img/logo64.png) no-repeat center
-//      width 75px
-//      height 75px
-//      border-radius 70px
-//      background-color #FFF
-//      display block
-//      position absolute
-//      left auto
-//      right 100px
-//
-//    &:not(:first-child)
-//      display none
-//      top auto
-//      left 12%
-//      padding-left 100px
-//
-//    &:before
-//      top 35px
-//      position absolute
-//      left -42px
-//      width 75px
-//      content counter(li-counter)
-//      counter-increment li-counter
-//      background #74C175
-//      padding 10px
-//      text-align center
-//      border-radius 70px
-//      color #FDF8B0
-//      font-weight bold
-//      border 3px solid #F0F0F0
-//      height 75px
-//      line-height 72px
-//      font-size 35px
