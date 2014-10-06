@@ -4,8 +4,6 @@ input[type=range]::-moz-range-track
   background-color #74C175
 
 input[type=range]
-
-input[type=range]
   width calc(100% - 50px)
   display block
   margin-bottom 20px
@@ -23,31 +21,31 @@ input[type=range]
     margin-top -4px
 
   &::-webkit-slider-thumb
-    -webkit-appearance: none;
-    border: 2px solid #D3D3D3;
-    width: 36px;
-    background: #FFF9B8;
-    margin-top: -4px;
-    height: 70px;
-    border-radius: 4px;
-    position: relative;
-    top: -18px;
-    opacity: .85;
-    box-shadow: 1px 1px rgba(224, 224, 224, 0.65);
+    -webkit-appearance none
+    border 2px solid #D3D3D3
+    width 36px
+    background #FFF9B8
+    margin-top -4px
+    height 70px
+    border-radius 4px
+    position relative
+    top -18px
+    opacity .85
+    box-shadow 1px 1px rgba(224, 224, 224, 0.65)
 
   &::-webkit-slider-runnable-track
-    padding: 10px;
-    height: 50px;
-    transition: background-color linear .1s;
-    background-color: #74C175;
-    border: 2px solid #E0E0E0;
-    border-radius: 5px;
-    box-shadow: 4px 1px rgba(224, 224, 224, 0.25);
+    padding 10px
+    height 50px
+    transition background-color linear .1s
+    background-color #74C175
+    border 2px solid #E0E0E0
+    border-radius 5px
+    box-shadow 4px 1px rgba(224, 224, 224, 0.25)
 
 output
   display block
-  width calc(100% - 16px)
-  padding-left 10px
+  width calc(100% - 80px)
+  padding 12px
   position relative
   height 20px
 
@@ -58,14 +56,14 @@ output
     &.active
       color #5F5F5F
 
-  span:first-child
-    left 4px
+    &:nth-child(1)
+      left 15px
 
-  span:nth-child(2)
-    left calc(26% - 4px)
+    &:nth-child(2)
+      left calc(33% - 9px)
 
-  span:nth-child(3)
-    left calc(50% + 6px)
+    &:nth-child(3)
+      left calc(66% - 27px)
 
-  span:nth-child(4)
-    left 76%
+    &:nth-child(4)
+      right 0px
