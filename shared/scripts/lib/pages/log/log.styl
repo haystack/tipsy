@@ -23,8 +23,11 @@
   &.show:before
     content 'Show'
 
-  &.hide:before
-    content 'Hide'
+  &.hide
+    box-shadow 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 0 6px rgba(0, 0, 0, 0.2) inset
+
+    &:before
+      content 'Hide'
 
 .entry-history
   display none
