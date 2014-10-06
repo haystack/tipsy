@@ -1,5 +1,7 @@
 'use strict';
 
+var webdriver = require('selenium-webdriver');
+
 function ExtensionDriver(driver, id) {
   this._driver = driver;
   this._id = id;
@@ -40,8 +42,8 @@ ExtensionDriver.prototype.getEnvironment = function() {
   });
 };
 
-ExtensionDriver.prototype.execute = function(fn) {
-  return this._driver.executeScript(fn);
+ExtensionDriver.prototype.execute = function(fn, arg1) {
+  return this._driver.executeScript(fn, arg1);
 };
 
 ExtensionDriver.prototype.back = function() {
@@ -52,8 +54,18 @@ ExtensionDriver.prototype.get = function(url) {
   return this._driver.get(url);
 };
 
-ExtensionDriver.prototype.wait = function(fn) {
+ExtensionDriver.prototype.click = function(selector) {
+  var driver = this._driver;
+
+  return this.wait(function(selector) {
+    return document.querySelectorAll(selector).length;
+  }, selector).then(function() {
+    return driver.findElement(webdriver.By.css(selector)).click();
+  });
+};
+
+ExtensionDriver.prototype.wait = function(fn, arg1) {
   return this._driver.wait(function() {
-    return this.execute(fn);
+    return this.execute(fn, arg1);
   }.bind(this));
 };
