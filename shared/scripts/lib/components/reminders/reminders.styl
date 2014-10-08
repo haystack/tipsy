@@ -1,8 +1,5 @@
 position relative
 
-input[type=range]::-moz-range-track
-  background-color #74C175
-
 input[type=range]
   width calc(100% - 50px)
   display block
@@ -12,13 +9,28 @@ input[type=range]
   margin-top 33px
   -webkit-appearance none
 
+  &::-moz-range-track
+    padding 10px
+    height 26px
+    transition background-color linear .1s
+    background-color #74C175
+    border 2px solid #E0E0E0
+    border-radius 5px
+    box-shadow 4px 1px rgba(224, 224, 224, 0.25)
+    width calc(100% - 8px)
+    margin-bottom 8px
+
   &::-moz-range-thumb
-    border none
-    height 16px
-    width 16px
-    border-radius 50%
-    background #FFF
+    border 2px solid #D3D3D3
+    width 32px
+    background #FFF9B8
     margin-top -4px
+    height 66px
+    border-radius 4px
+    position relative
+    top -18px
+    opacity .85
+    box-shadow 1px 1px rgba(224, 224, 224, 0.65)
 
   &::-webkit-slider-thumb
     -webkit-appearance none

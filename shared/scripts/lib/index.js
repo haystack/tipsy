@@ -45,7 +45,7 @@ function setTab() {
         }
       }
       else {
-        $('body').classList.add('intro');
+        $('body').addClass('intro');
       }
     });
   }

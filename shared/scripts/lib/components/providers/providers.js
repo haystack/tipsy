@@ -3,6 +3,7 @@
 import Component from '../../component';
 import storage from '../../storage';
 import { useProvider } from '../../oauth';
+import '../../providers/bitcoin';
 import '../../providers/dwolla';
 import '../../providers/paypal';
 import '../../providers/stripe';
@@ -15,9 +16,23 @@ ProviderComponent.prototype = {
   template: 'components/providers/providers.html',
 
   events: {
+    'click .bitcoin': 'enableBitcoin',
     'click .dwolla': 'enableDwolla',
     'click .paypal': 'enablePayPal',
     'click .stripe': 'enableStripe'
+  },
+
+  enableBitcoin: function(ev) {
+    ev.preventDefault();
+
+    var element = $(ev.currentTarget);
+
+    return useProvider('bitcoin').authorize().then(function() {
+      element.addClass('verified');
+    }, function() {
+      window.alert('Unable to link properly, please try again.');
+      element.removeClass('verified');
+    });
   },
 
   enableDwolla: function(ev) {

@@ -16,8 +16,7 @@ LogTableComponent.prototype = {
     'keyLength',
     'hasAuthor',
     'findLast',
-    'formatAccessTime',
-    'authorInfo'
+    'formatAccessTime'
   ],
 
   /**
@@ -73,24 +72,6 @@ LogTableComponent.prototype = {
     return moment(date).format("hA - ddd, MMM Do, YYYY");
   },
 
-  authorInfo: function(val) {
-    var item = null;
-
-    if (val.author.list.length) {
-      item = val.author.list[0];
-
-      if (item.name) {
-        return item.name;
-      }
-      else if (item.href) {
-        return '<a href="' + item.href + '">No payment information added.</a>';
-      }
-    }
-    else {
-      return 'No author information present on page';
-    }
-  },
-
   URL: window.URL || window.webkitURL,
 
   /**
@@ -124,12 +105,16 @@ LogTableComponent.prototype = {
           var base64 = window.btoa(binaryString.join(''));
           var src = 'data:image/x-icon;base64,' + base64;
 
-          // Add the favicon image.
-          $(el).attr('src', src);
+          // Swap for the favicon image.
+          $(el).replaceWith($('<img src="' + src + '"/>'));
 
           // Update the log with the cached favicon.
           log[host][0].favicon = src;
         }
+      };
+
+      xhr.onerror = function() {
+        log[host][0].favicon = 'errored';
       };
 
       // Either fetch and cache or use the previously cached favicon.
@@ -146,7 +131,7 @@ LogTableComponent.prototype = {
     var component = this;
 
     storage.get('log').then(function(log) {
-      component.$('img.favicon').each(function(key, el) {
+      component.$('i.missing.favicon').each(function(key, el) {
         this.showFavicon(log, el, $(el).data('host'));
         storage.set('log', log);
       });
