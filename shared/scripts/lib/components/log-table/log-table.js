@@ -85,46 +85,53 @@ LogTableComponent.prototype = {
    * @return
    */
   showFavicon: function(log, el, host) {
-    storage.get('log').then(function(log) {
-      var URL = this.URL;
+    var URL = this.URL;
+    var xhr = new XMLHttpRequest();
 
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://' + host + '/favicon.ico', true);
-      xhr.responseType = 'arraybuffer';
+    xhr.open('GET', 'http://' + host + '/favicon.ico', true);
+    xhr.responseType = 'arraybuffer';
 
-      xhr.onload = function(e) {
-        if (this.status == 200) {
-          var uInt8Array = new Uint8Array(this.response);
-          var length = uInt8Array.length;
-          var binaryString = new Array(length);
+    xhr.onload = function(e) {
+      if (this.status == 404 || this.status == 403) {
+        log[host][0].favicon = 'errored';
+        storage.set('log', log);
+      }
 
-          while (length--) {
-            binaryString[length] = String.fromCharCode(uInt8Array[length]);
-          }
+      if (this.status == 200) {
+        var uInt8Array = new Uint8Array(this.response);
+        var length = uInt8Array.length;
+        var binaryString = new Array(length);
 
-          var base64 = window.btoa(binaryString.join(''));
-          var src = 'data:image/x-icon;base64,' + base64;
+        while (length--) {
+          binaryString[length] = String.fromCharCode(uInt8Array[length]);
+        }
 
+        var base64 = window.btoa(binaryString.join(''));
+        var src = 'data:image/x-icon;base64,' + base64;
+
+        if (base64) {
           // Swap for the favicon image.
-          $(el).replaceWith($('<img src="' + src + '"/>'));
+          $(el).replaceWith($('<img class="favicon" src="' + src + '"/>'));
 
           // Update the log with the cached favicon.
           log[host][0].favicon = src;
+          storage.set('log', log);
         }
-      };
-
-      xhr.onerror = function() {
-        log[host][0].favicon = 'errored';
-      };
-
-      // Either fetch and cache or use the previously cached favicon.
-      if (!log[host][0].favicon) {
-        xhr.send();
       }
-      else {
-        $(el).attr('src', log[host].favicon);
-      }
-    }.bind(this)).catch(function(err) { console.log(err); });
+    };
+
+    xhr.onerror = function() {
+      log[host][0].favicon = 'errored';
+      storage.set('log', log);
+    };
+
+    // Either fetch and cache or use the previously cached favicon.
+    if (!log[host][0].favicon) {
+      xhr.send();
+    }
+    else {
+      $(el).attr('src', log[host].favicon);
+    }
   },
 
   afterRender: function() {
@@ -132,8 +139,7 @@ LogTableComponent.prototype = {
 
     storage.get('log').then(function(log) {
       component.$('i.missing.favicon').each(function(key, el) {
-        this.showFavicon(log, el, $(el).data('host'));
-        storage.set('log', log);
+        component.showFavicon(log, el, $(el).data('host'));
       });
     });
   }

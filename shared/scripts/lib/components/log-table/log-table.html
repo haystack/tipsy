@@ -19,7 +19,9 @@
     <tr class="{{entry|hasAuthor}}-author"> 
       <td>
         <div class="relative">
-          {%if entry.favicon%}
+          {%if entry.favicon == 'errored'%}
+          <i data-host="{{entry.host}}" class="missing favicon"></i>
+          {%elsif entry.favicon%}
           <img data-host="{{entry.host}}" class="favicon" src="{{entry.favicon}}">
           {%else%}
           <i data-host="{{entry.host}}" class="missing favicon"></i>
