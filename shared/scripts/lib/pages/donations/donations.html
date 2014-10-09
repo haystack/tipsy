@@ -1,4 +1,10 @@
 <div>
+  <!-- Monitor progress until next notification. -->
+  <h2>Your progress towards completing this donation threshold:</h2>
+  <progress value="0" max="1"></progress>
+
+  <h2 class="ratio">$0.00 / $20.00</h2>
+
   <!-- Display the current list of pages to pay. -->
   <h2>Who to pay:</h2>
 
@@ -16,6 +22,15 @@
       <tr>
         <td colspan="4">Nobody to pay yet, get browsing!</td>
       </tr>
+    {%else%}
+      {%each entries as entry%}
+      <tr>
+        <td>{{entry.name}}</td>
+        <td>{{entry.timeSpent}}</td>
+        <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
+        <td>{{entry.payMethods}}</td>
+      </tr>
+      {%endeach%}
     {%endif%}
     </tbody>
   </table>

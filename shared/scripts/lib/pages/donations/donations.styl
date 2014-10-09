@@ -1,0 +1,42 @@
+.ratio
+  float right
+  color #466C46
+
+.amount
+  font-size 16px
+  padding 8px
+  font-weight bold
+  transition background linear .1s
+  background rgba(255, 249, 184, 0.65)
+  color #5F5F5F
+  border 2px solid #E0E0E0
+  border-radius 5px
+  box-shadow 4px 1px rgba(224, 224, 224, 0.25)
+  width calc(100% - 68px)
+
+progress
+  width 100%
+  border 2px solid #CCC
+  background #FFFEE5
+  height 32px
+  border-radius 8px
+  overflow hidden
+
+  &::-moz-progress-bar
+    background #B0FFA1
+
+  &::-webkit-progress-bar
+    background #FFFEE5
+
+  &::-webkit-progress-value
+    background #B0FFA1
+    position relative
+
+    &:after
+      content ''
+      display block
+      position absolute
+      right 0
+      width 2px
+      height 100%
+      background #CCC

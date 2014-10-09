@@ -19,6 +19,7 @@ function LogPage() {
 LogPage.prototype = {
   template: 'pages/log/log.html',
   hideNoAuthor: true,
+  hidePaid: true,
 
   events: {
     'click .author': 'toggleNoAuthor',
@@ -81,6 +82,11 @@ LogPage.prototype = {
 
     // Hide or show entries without any author information.
     if (this.hideNoAuthor && !authorCount) {
+      return false;
+    }
+
+    // Hide or show entries based on paid status.
+    if (this.hidePaid && entry.isPaid) {
       return false;
     }
 
