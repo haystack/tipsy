@@ -1,9 +1,10 @@
 &
   height 100%
   padding-top 0px
+  text-align center
 
 .leader
-  width 60%
+  width 100%
   font-size 17px
   font-style italic
   color #757575
@@ -26,11 +27,6 @@ h2
 p
   display block
   width 100%
-  //position absolute
-  //top 32%
-  //left 12%
-  //height 50px
-  //padding-left 100px
 
 form
   opacity 0
@@ -42,9 +38,8 @@ form
   &.fade
     opacity 1
 
-  input[name='threshold']
-    &:before
-      content '$'
+  input
+    text-align center
 
   input[type=image]
     margin-right 20px
@@ -103,18 +98,22 @@ ol
       visibility hidden
       opacity 0
       top auto
-      padding-left 100px
       left 100%
-      width 60%
+      width 100%
 
-    &:first-child:before
-      content ''
-      background url(../img/logo64.png) no-repeat center
+    .logo
       width 75px
       height 75px
       border-radius 70px
+      border 3px solid #CCC
       background-color #FFF
       display block
-      position absolute
-      left auto
-      right 100px
+      padding 15px
+      margin 0 auto
+
+      &:before
+        content ''
+        background url(../img/logo64.png) no-repeat center
+        width 75px
+        height 75px
+        display block

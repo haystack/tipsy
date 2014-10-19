@@ -36,7 +36,7 @@ GettingStartedPage.prototype = {
       storage.set('settings', settings);
 
       // Redirect the user to the log page after clicking skip.
-      location.hash = '#log';
+      location.hash = '#donations';
     });
   },
 

@@ -6,6 +6,10 @@ import storage from '../../storage';
 function DonationsPage() {
   Component.prototype.constructor.apply(this, arguments);
 
+  var component = this;
+
+  this.render({ entries: [] });
+
   storage.get('log').then(function(log) {
 
   });
@@ -20,6 +24,14 @@ DonationsPage.prototype = {
     'change input': 'formatAndSave'
   },
 
+  payBitcoin: function() {
+
+  },
+
+  payDwolla: function() {
+
+  },
+
   filterInput: function(ev) {
     var val = ev.target.value.replace(/[^0-9.]/g, '');
     this.$('input').val('$' + val);
@@ -32,15 +44,47 @@ DonationsPage.prototype = {
     this.$('input').val(currency);
   },
 
-  serialize: function() {
-    return {
-      entries: [{
-        name: 'Tim Branyen',
-        timeSpent: moment.duration(1500, 'milliseconds').humanize(),
-        estimatedAmount: 15.00,
-        payMethods: 'Bitcoin'
-      }]
+  filter: function(entry) {
+    var authorCount = entry.entries.filter(function(entry) {
+      return entry.author && entry.author.list.length;
+    }).length;
+
+    // Attach the number of authors to the entry, now that it's calculated.
+    entry.authorCount = authorCount;
+
+    return true;
+  },
+
+  afterRender: function() {
+    var component = this;
+    var data = {
+      entries: []
     };
+
+    // Enable valid payment providers.
+    storage.get('settings').then(function(settings) {
+      if (settings.providers && settings.providers.bitcoin) {
+        component.$('.pay.bitcoin').removeAttr('disabled');
+      }
+
+      if (settings.providers && settings.providers.dwolla) {
+        component.$('.pay.dwolla').removeAttr('disabled');
+      }
+    });
+
+    // Render with the data found from the log.
+    storage.get('log').then(function(resp) {
+      var filteredAndSorted = component
+        // Convert the log Object to a filterable/sortable Array.
+        .toArray(resp)
+        // Sort and filter passing along the log component instance as context.
+        .filter(component.filter, component);
+
+      return filteredAndSorted;
+    }).then(function(entries) {
+      data.entries = entries;
+      component.render(data);
+    });
   }
 };
 

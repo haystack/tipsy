@@ -38,7 +38,9 @@
     "storage",
     "identity",
     "https://accounts.google.com/o/oauth2/token",
-    "https://www.googleapis.com/"
+    "https://www.googleapis.com/",
+    "https://api.coinbase.com/*",
+    "https://www.dwolla.com/*"
   ],
   "web_accessible_resources": [
     "js/**/*",

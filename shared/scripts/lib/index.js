@@ -27,7 +27,7 @@ function setTab() {
   if (!hash) {
     storage.get('settings').then(function(settings) {
       // Update the hash fragment to change pages.
-      location.href = settings.showLog ? '#log' : '#getting-started';
+      location.href = settings.showLog ? '#donations' : '#getting-started';
     });
   }
   else {

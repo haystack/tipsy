@@ -64,6 +64,8 @@ Component.prototype.render = function(context) {
   var component = this;
   var element = this.el;
 
+  context = context || (component.serialize ? component.serialize() : {});
+
   return this.compiled.then(function(template) {
     return template.render(context);
   }).then(function(contents) {
