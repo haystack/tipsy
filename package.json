@@ -13,7 +13,7 @@
     "test-shared": "grunt mochaTest:shared",
     "test-all": "npm run build ; npm run test-chrome && npm run test-firefox && npm run test-shared",
     "postinstall": "npm dedupe ; grunt mozilla-addon-sdk ; npm run python2",
-    "python2": "(cd build/tools ; grep -Rl python . | xargs sed -ri 's/([^!]|^)python(\\s|$)/\\1python2\\2/g')"
+    "python2": "grunt shell:python2"
   },
   "devDependencies": {
     "es6-module-loader": "^0.8.2",
@@ -39,8 +39,7 @@
   },
   "dependencies": {
     "bitcoinjs-lib": "^1.1.0",
-    "combyne": "^0.5.2",
-    "fuse.js": "^1.2.0",
+    "combyne": "^0.6.0",
     "jquery": "^2.1.1",
     "moment": "^2.8.3",
     "oauthorize": "^0.1.0",

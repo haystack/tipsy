@@ -1,65 +1,28 @@
-.favicon
-  width 24px
-  height auto
-  position absolute
-  left -48px
-  top -3px
-  opacity 0.5
+&
+  padding-top 40px
+
+.reset
+  cursor pointer
+  float right
+  -webkit-user-select none
+  -moz-user-select none
+
+.author, .paid
+  cursor pointer
+  -webkit-user-select none
+  -moz-user-select none
+
+  &.show:before
+    content 'Show'
+
+  &.hide
+    box-shadow 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 0 6px rgba(0, 0, 0, 0.2) inset
+
+    &:before
+      content 'Hide'
 
 .entry-history
   display none
-
-log-table
-  table
-    td:not(:first-child)
-      max-width 150px
-      overflow hidden
-      text-overflow ellipsis
-      white-space nowrap
-
-  > table
-    margin-top 55px
-
-    th
-      font-size 80%
-
-    td
-      text-overflow ellipsis
-      white-space nowrap
-
-      .relative
-        position relative
-
-      a
-        color #333333
-
-        &:hover
-          color #6B6B6B
-
-    tr
-      cursor pointer
-
-      &.has-author
-        &:hover, &.active
-          td
-            background-color #DEFCD2
-
-          .favicon
-            opacity 1
-
-        td
-          background-color #F0FFF1
-
-      &.no-author
-        &:hover, &.active
-          td
-            background-color #FCE6D2
-
-          .favicon
-            opacity 1
-
-        td
-          background-color #FFF7F0
 
 input.hide-no-author, input.hide-has-author
   -webkit-appearance none

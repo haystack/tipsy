@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Sansita\+One)
 @import url(../node_modules/purecss/tables.css)
+@import url(../node_modules/purecss/buttons.css)
 @import url(../node_modules/purecss/forms.css)
 
 // Pages.
@@ -13,10 +14,18 @@
   @import '../scripts/lib/pages/donations/donations.styl'
 
 // Components.
+log-table
+  display block
+  @import '../scripts/lib/components/log-table/log-table.styl'
 set-providers
+  display block
   @import '../scripts/lib/components/providers/providers.styl'
 set-donation-goal
+  display block
   @import '../scripts/lib/components/donation-goal/donation-goal.styl'
+set-reminders
+  display block
+  @import '../scripts/lib/components/reminders/reminders.styl'
 
 html, body
   box-sizing border-box
@@ -27,27 +36,17 @@ html, body
   width 100%
   height 100%
   position relative
+  overflow-x hidden
 
   &.intro
-    //background-color #ECFFF7
     background-color #FFF
+    overflow hidden
 
     nav
       display none
 
 h2
-  color rgba(153, 153, 153, 0.6)
-  text-shadow 1px 4px 6px #F5F5F5,0 0 0 #F3F3F3,1px 4px 6px #FFF
-
-  &::selection
-    background #5af
-    color #fff
-    text-shadow none
-
-  &::-moz-selection
-    background #5af
-    color #fff
-    text-shadow none
+  color #A9A89A
 
 table
   width 100%
@@ -57,6 +56,7 @@ nav
   background #FFF9B8
   position relative
   padding 0 15%
+  z-index 1
 
   h1
     display inline-block
@@ -88,7 +88,7 @@ nav
     &.disabled
       display none
 
-    &.active, &:hover:not(.restart)
+    &.active, &:hover
       color #000
       background #FFF
       border-bottom 2px solid #CCC
@@ -105,3 +105,19 @@ section
 
 :target
   display block
+  position relative
+  top -111px
+  z-index 0
+
+  // There is always a single top level element per page to ensure proper
+  // padding.
+  > *
+    padding-top 96px
+
+fieldset
+  border none
+  padding-top 2px
+  padding-bottom 30px
+
+  &:not(:last-child)
+    border-bottom 1px solid #CCC

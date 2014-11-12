@@ -18,12 +18,12 @@ function LogPage() {
 
 LogPage.prototype = {
   template: 'pages/log/log.html',
-  hideNoAuthor: false,
-  searchTerm: null,
+  hideNoAuthor: true,
+  hidePaid: true,
 
   events: {
-    'click input[type=checkbox]': 'toggleNoAuthor',
-    'keyup input[type=search]': 'search',
+    'click .author': 'toggleNoAuthor',
+    'click .reset': 'resetLog',
     'click tr': 'toggleEntryHistory'
   },
 
@@ -39,23 +39,15 @@ LogPage.prototype = {
    * @return
    */
   toggleNoAuthor: function(ev) {
-    this.hideNoAuthor = !ev.target.checked;
+    this.hideNoAuthor = !this.hideNoAuthor;
+    var showOrHide = this.hideNoAuthor ? 'show' : 'hide';
+
+    this.$('.author').removeClass('show hide').addClass(showOrHide);
     this.renderTable();
   },
 
   toggleEntryHistory: function(ev) {
     $(ev.currentTarget).toggleClass('active').next(".entry-history").toggle();
-  },
-
-  /**
-   * search
-   *
-   * @param ev
-   * @return
-   */
-  search: function(ev) {
-    this.searchTerm = ev.target.value;
-    this.renderTable();
   },
 
   /**
@@ -93,6 +85,11 @@ LogPage.prototype = {
       return false;
     }
 
+    // Hide or show entries based on paid status.
+    if (this.hidePaid && entry.isPaid) {
+      return false;
+    }
+
     return true;
   },
 
@@ -110,6 +107,12 @@ LogPage.prototype = {
     var bAccessTime = b && b.length ? b[b.length - 1].accessTime : 0;
 
     return bAccessTime - aAccessTime;
+  },
+
+  resetLog: function() {
+    if (window.confirm('Are you sure you want to wipe out your history?')) {
+      storage.set('log', {});
+    }
   },
 
   /**
@@ -131,14 +134,6 @@ LogPage.prototype = {
         // Sort and filter passing along the log component instance as context.
         .filter(log.filter, log)
         .sort(log.sort, log);
-
-      // If a search term is provided, search!
-      if (log.searchTerm) {
-        return new Fuse(filteredAndSorted, {
-          threshold: 0.3,
-          keys: ['host']
-        }).search(log.searchTerm);
-      }
 
       return filteredAndSorted;
     }).then(function(entries) {

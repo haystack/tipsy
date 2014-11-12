@@ -1,7 +1,6 @@
 'use strict';
 
 import { environment } from './environment';
-import { select, selectAll } from './dom';
 import storage from './storage';
 import Component from './component';
 
@@ -21,34 +20,35 @@ Component.register('#donations', DonationsPage);
  * Sets the current tab in the extension.
  */
 function setTab() {
+  var hash = location.hash;
+
   // When opening the extension without a hash determine where to route based
   // on if the end user has already configured the getting started page or not.
-  if (!location.hash) {
+  if (!hash) {
     storage.get('settings').then(function(settings) {
-      location.href = settings.showLog ? '#log' : '#getting-started';
+      // Update the hash fragment to change pages.
+      location.href = settings.showLog ? '#donations' : '#getting-started';
     });
   }
   else {
-    selectAll('nav a').forEach(function(link) {
-      link.classList.remove('active');
+    $('nav a').each(function() {
+      var link = $(this);
+      var body = $('body');
+      link.removeClass('active');
 
-      if (location.hash !== '#getting-started') {
-        select('body').classList.remove('intro');
+      if (hash.trim() !== '#getting-started') {
+        body.removeClass('intro');
 
         // Add the new class to the tab link.
-        if (link.hash === location.hash) {
-          link.classList.add('active');
+        if (link[0].hash === hash) {
+          link.addClass('active');
         }
       }
       else {
-        select('body').classList.add('intro');
+        $('body').addClass('intro');
       }
     });
   }
-
-  // This is a fairly standard way of scrolling to the top of the page, fixes a
-  // minor annoyance where clicking to the log page scrolled down slightly.
-  window.scrollTo(0, 0);
 }
 
 // Set the correct active tab.

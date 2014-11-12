@@ -8,7 +8,38 @@ function DonationGoalComponent() {
 }
 
 DonationGoalComponent.prototype = {
-  template: 'components/donation-goal/donation-goal.html'
+  template: 'components/donation-goal/donation-goal.html',
+
+  events: {
+    'keyup input': 'filterInput',
+    'blur input': 'formatAndSave',
+    'change input': 'formatAndSave'
+  },
+
+  filterInput: function(ev) {
+    var val = ev.target.value.replace(/[^0-9.]/g, '');
+    this.$('input').val('$' + val);
+  },
+
+  formatAndSave: function(ev) {
+    var val = ev.target.value.replace(/[^0-9.]/g, '');
+    var currency = '$' + parseFloat(val).toFixed(2);
+
+    this.$('input').val(currency);
+
+    storage.get('settings').then(function(settings) {
+      settings.donationGoal = currency;
+      return storage.set('settings', settings);
+    });
+  },
+
+  afterRender: function() {
+    var input = this.$('input');
+
+    storage.get('settings').then(function(settings) {
+      input.val(settings.donationGoal);
+    });
+  }
 };
 
 DonationGoalComponent.prototype.__proto__ = Component.prototype;

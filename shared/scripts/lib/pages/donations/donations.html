@@ -1,33 +1,47 @@
-<!-- Monitor progress until next notification. -->
-<h2>Your progress to the donation threshold:</h2>
-<progress value=".2" max="1"></progress>
+<div>
+  <!--
+  <fieldset>
+    <h2 class="ratio">$0.00 / $20.00</h2>
+    <h2>Progress towards completing this donation:</h2>
+    <progress value="0" max="1"></progress>
 
-<!-- Display the current list of pages to pay. -->
-<h2>Sites with payment providers:</h2>
+    <p>Donation goal ends: 10/31/2014</p>
+  </fieldset>
+  -->
 
-<table class="pure-table pure-table-bordered pure-table-striped">
-  <thead>
-    <tr>
-      <th>URL</th>
-      <th>Name</th>
-      <th>Time spent</th>
-      <th>Distributed amount</th>
-      <th>Providers available</th>
-    </tr>
-  </thead>
-</table>
+  <fieldset>
+    <!-- Display the current list of pages to pay. -->
+    <h2>Make donations:</h2>
 
-<!-- Display historical payment log.
-<h2>Payment history:</h2>
-
-<table class="pure-table pure-table-bordered pure-table-striped">
-  <thead>
-    <tr>
-      <th>To</th>
-      <th>Amount</th>
-      <th>Provider used</th>
-      <th>Transaction date</th>
-    </tr>
-  </thead>
-</table>
--->
+    <table class="pure-table pure-table-bordered pure-table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Time spent</th>
+          <th>Recommended donation</th>
+          <th>Payment options</th>
+        </tr>
+      </thead>
+      <tbody>
+      {%if not entries.length%}
+        <tr>
+          <td colspan="4">Nobody to pay yet, get browsing!</td>
+        </tr>
+      {%else%}
+        {%each entries as entry%}
+        <tr>
+          <td>{{entry.name}}</td>
+          <td>{{entry.timeSpent}}</td>
+          <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
+          <td>
+          
+          <input disabled type="image" class="pay bitcoin" src="../img/bitcoin_pay.png">
+          <input disabled type="image" class="pay dwolla" src="../img/dwolla_pay.png">
+          </td>
+        </tr>
+        {%endeach%}
+      {%endif%}
+      </tbody>
+    </table>
+  </fieldset>
+</div>

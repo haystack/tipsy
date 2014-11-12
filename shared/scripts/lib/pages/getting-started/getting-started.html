@@ -1,19 +1,42 @@
 <form>
   <ol>
     <li>
+      <div class="logo"></div>
       <h2>welcome to tipsy,</h2>
-      <p class="leader">Where you help support authors for their online content!</p>
-      <button type="submit">Skip configuration for now,</button><strong>or click anywhere to continue.</strong>
+      <div class="leader">Where you help support authors for their online content!</div>
+
+      <hr>
+      <p>
+        <button class="skip">Skip configuration</button> <strong>or</strong> <button class="next">Get started!</button>
+      </p>
     </li>
     <li>
       <set-providers></set-providers>
 
+      <hr>
       <p>
-        <a class="to-donation" href="#">Continue to donation threshold...</a>
+        <button class="skip">Skip remaining</button>
+        <button class="next">Next step</button>
       </p>
     </li>
     <li>
       <set-donation-goal></set-donation-goal>
+
+      <hr>
+      <p>
+        <button class="skip">Skip remaining</button>
+        <button class="previous">Previous step</button>
+        <button class="next">Next step</button>
+      </p>
+    </li>
+    <li>
+      <set-reminders></set-reminders>
+
+      <hr>
+      <p>
+        <button class="previous">Previous step</button>
+        <button class="skip next">Complete configuration!</button>
+      </p>
     </li>
   </ol>
 </form>

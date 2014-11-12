@@ -16,8 +16,7 @@ LogTableComponent.prototype = {
     'keyLength',
     'hasAuthor',
     'findLast',
-    'formatAccessTime',
-    'authorInfo'
+    'formatAccessTime'
   ],
 
   /**
@@ -73,15 +72,6 @@ LogTableComponent.prototype = {
     return moment(date).format("hA - ddd, MMM Do, YYYY");
   },
 
-  authorInfo: function(val) {
-    if (val.author.list.length) {
-      return val.author.list[0].name;
-    }
-    else {
-      return 'No author information present on page';
-    }
-  },
-
   URL: window.URL || window.webkitURL,
 
   /**
@@ -94,50 +84,64 @@ LogTableComponent.prototype = {
    * @param el
    * @return
    */
-  showFavicon: function(el, host) {
-    storage.get('log').then(function(log) {
-      var URL = this.URL;
+  showFavicon: function(log, el, host) {
+    var URL = this.URL;
+    var xhr = new XMLHttpRequest();
 
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://' + host + '/favicon.ico', true);
-      xhr.responseType = 'arraybuffer';
+    xhr.open('GET', 'http://' + host + '/favicon.ico', true);
+    xhr.responseType = 'arraybuffer';
 
-      xhr.onload = function(e) {
-        if (this.status == 200) {
-          var uInt8Array = new Uint8Array(this.response);
-          var length = uInt8Array.length;
-          var binaryString = new Array(length);
+    xhr.onload = function(e) {
+      if (this.status == 404 || this.status == 403) {
+        log[host][0].favicon = 'errored';
+        storage.set('log', log);
+      }
 
-          while (length--) {
-            binaryString[length] = String.fromCharCode(uInt8Array[length]);
-          }
+      if (this.status == 200) {
+        var uInt8Array = new Uint8Array(this.response);
+        var length = uInt8Array.length;
+        var binaryString = new Array(length);
 
-          var base64 = window.btoa(binaryString.join(''));
-          var src = 'data:image/x-icon;base64,' + base64;
+        while (length--) {
+          binaryString[length] = String.fromCharCode(uInt8Array[length]);
+        }
 
-          // Add the favicon image.
-          $(el).attr('src', src);
+        var base64 = window.btoa(binaryString.join(''));
+        var src = 'data:image/x-icon;base64,' + base64;
+
+        if (base64) {
+          // Swap for the favicon image.
+          $(el).replaceWith($('<img class="favicon" src="' + src + '"/>'));
 
           // Update the log with the cached favicon.
           log[host][0].favicon = src;
           storage.set('log', log);
         }
-      };
+      }
+    };
 
-      // Either fetch and cache or use the previously cached favicon.
-      if (!log[host][0].favicon) {
-        xhr.send();
-      }
-      else {
-        $(el).attr('src', log[host].favicon);
-      }
-    }.bind(this)).catch(function(err) { console.log(err); });
+    xhr.onerror = function() {
+      log[host][0].favicon = 'errored';
+      storage.set('log', log);
+    };
+
+    // Either fetch and cache or use the previously cached favicon.
+    if (!log[host][0].favicon) {
+      xhr.send();
+    }
+    else {
+      $(el).attr('src', log[host].favicon);
+    }
   },
 
   afterRender: function() {
-    this.$('img.favicon').each(function(key, el) {
-      this.showFavicon(el, $(el).data('host'));
-    }.bind(this));
+    var component = this;
+
+    storage.get('log').then(function(log) {
+      component.$('i.missing.favicon').each(function(key, el) {
+        component.showFavicon(log, el, $(el).data('host'));
+      });
+    });
   }
 };
 

@@ -71,6 +71,7 @@ messageBody.list = links.filter(function(link) {
 
   // Personal identification.
   author.name = link.getAttribute('name');
+  author.href = link.getAttribute('href');
   author.gravatar = link.getAttribute('gravatar');
 
   // Payment information.

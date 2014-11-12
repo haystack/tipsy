@@ -44,7 +44,9 @@ storage.engine = function() {
       set: engine.set.bind(engine),
 
       // Whenever the engine has data updated trigger the callback.
-      onChange: chrome.storage.onChanged.addListener.bind(chrome.storage)
+      onChange: function(callback) {
+        chrome.storage.onChanged.addListener(callback);
+      }
     };
   }
   else if (environment === 'firefox') {
@@ -143,12 +145,7 @@ storage.set = function(key, val) {
  * @return
  */
 storage.onChange = function(callback) {
-  if (environment === 'chrome') {
-
-  }
-  else {
-
-  }
+  this.engine().onChange(callback);
 };
 
 export default storage;

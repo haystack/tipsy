@@ -6,11 +6,22 @@ module.exports = ->
       files: [
         'chrome-extension/**/*'
         '!chrome-extension/dist/**/*'
+        'shared/**/*'
+      ]
+
+      tasks: [
+        'chrome-extension'
+        'es6'
+      ]
+
+    'firefox-extension':
+      files: [
         'firefox-extension/**/*'
         '!firefox-extension/dist/**/*'
         'shared/**/*'
       ]
 
       tasks: [
-        'default'
+        'firefox-extension'
+        'es6'
       ]

@@ -1,0 +1,62 @@
+table
+  td:not(:first-child)
+    max-width 150px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+
+> table
+  margin-top 14px
+
+  th
+    font-size 80%
+
+  td
+    text-overflow ellipsis
+    white-space nowrap
+
+    .relative
+      position relative
+
+    a
+      color #333333
+
+      &:hover
+        color #6B6B6B
+
+  tr
+    cursor pointer
+
+    &.has-author
+      td
+        background-color #F0FFF1 !important
+
+      &:hover, &.active
+        td
+          background-color #DEFCD2
+
+        .favicon
+          opacity 1
+
+    &.no-author
+      &:hover, &.active
+        td
+          background-color #FCE6D2
+
+        .favicon
+          opacity 1
+
+      td
+        background-color #FFF7F0
+
+
+.favicon
+  width 24px
+  height 24px
+  position absolute
+  left -48px
+  top -3px
+  opacity 0.5
+
+i.missing.favicon
+  background url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3gkSDTIVm5UJUwAAAUxJREFUSMfV1L9LHEEUwPGPsihioyD5C2wsTJPSSjT4o7UUwcpKTJneqE3AyjpdythopylE7BSx0UKLWN0ZBZEcEVHU5imLLNzo3RY+GPa7AzvfeW/2DSVHC8bxuUzJIh7KGq050Q9MYRffg//ga3Ct0Qxm4n0Vo8F76Au+eGMW1gJqscgNroJvcRl8/xZBhu7YYWcMaMtl2NXIAWdRhgEsRXmaFZvoyvAvJk5D1qy4g9ayGy0rmPuAyeBjrKMfwwnr/cTfeoIMPcFn8WzPzb1qw0WCSvTGcx2xj8MEwXWK4CN+B69jOkq2nCAYwkE9wRE+Bf/PdfdWgqCSkkEvfgVvYA5jmE8QTBSVcuHFXdSsOH+6KooyWAnewbfI4EvCorM4qVeiau4vusj9RYsJgmrKGdSwXfBhtdFOHsndrM2IjpeHXMpoiZ0Peq/xCLvSi/4y9MJXAAAAAElFTkSuQmCC")

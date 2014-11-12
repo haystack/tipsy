@@ -39,6 +39,7 @@ Component.prototype.bindEvents = function() {
 
     // Bind the event and adding in the necessary code for event delegation.
     $(el).on(event, selector, function(ev) {
+      ev.stopImmediatePropagation();
       return component[fn].call(component, ev);
     });
   }, this);
@@ -63,6 +64,8 @@ Component.prototype.render = function(context) {
   var component = this;
   var element = this.el;
 
+  context = context || (component.serialize ? component.serialize() : {});
+
   return this.compiled.then(function(template) {
     return template.render(context);
   }).then(function(contents) {
@@ -81,7 +84,8 @@ Component.prototype.$ = function(selector) {
 
 Component.register = function(selector, Component, context) {
   selectAll(selector, context).forEach(function(element) {
-    new Component(element).render();
+    var component = new Component(element);
+    component.render(component.serialize ? component.serialize() : {});
   });
 };
 

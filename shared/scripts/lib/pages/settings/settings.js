@@ -4,6 +4,7 @@ import Component from '../../component';
 import { select, selectAll } from '../../dom';
 import ProvidersComponent from '../../components/providers/providers';
 import DonationGoalComponent from '../../components/donation-goal/donation-goal';
+import RemindersComponent from '../../components/reminders/reminders';
 
 function SettingsPage() {
   Component.prototype.constructor.apply(this, arguments);
@@ -12,9 +13,18 @@ function SettingsPage() {
 SettingsPage.prototype = {
   template: 'pages/settings/settings.html',
 
+  events: {
+    'submit form': 'cancelForm'
+  },
+
+  cancelForm: function(ev) {
+    ev.preventDefault();
+  },
+
   afterRender: function() {
     new ProvidersComponent(select('set-providers', this.el)).render();
     new DonationGoalComponent(select('set-donation-goal', this.el)).render();
+    new RemindersComponent(select('set-reminders', this.el)).render();
   }
 };
 

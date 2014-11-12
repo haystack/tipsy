@@ -19,10 +19,12 @@
     <tr class="{{entry|hasAuthor}}-author"> 
       <td>
         <div class="relative">
-          {%if entry.favicon%}
+          {%if entry.favicon == 'errored'%}
+          <i data-host="{{entry.host}}" class="missing favicon"></i>
+          {%elsif entry.favicon%}
           <img data-host="{{entry.host}}" class="favicon" src="{{entry.favicon}}">
           {%else%}
-          <img data-host="{{entry.host}}" class="favicon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3gkSDTIVm5UJUwAAAUxJREFUSMfV1L9LHEEUwPGPsihioyD5C2wsTJPSSjT4o7UUwcpKTJneqE3AyjpdythopylE7BSx0UKLWN0ZBZEcEVHU5imLLNzo3RY+GPa7AzvfeW/2DSVHC8bxuUzJIh7KGq050Q9MYRffg//ga3Ct0Qxm4n0Vo8F76Au+eGMW1gJqscgNroJvcRl8/xZBhu7YYWcMaMtl2NXIAWdRhgEsRXmaFZvoyvAvJk5D1qy4g9ayGy0rmPuAyeBjrKMfwwnr/cTfeoIMPcFn8WzPzb1qw0WCSvTGcx2xj8MEwXWK4CN+B69jOkq2nCAYwkE9wRE+Bf/PdfdWgqCSkkEvfgVvYA5jmE8QTBSVcuHFXdSsOH+6KooyWAnewbfI4EvCorM4qVeiau4vusj9RYsJgmrKGdSwXfBhtdFOHsndrM2IjpeHXMpoiZ0Peq/xCLvSi/4y9MJXAAAAAElFTkSuQmCC">
+          <i data-host="{{entry.host}}" class="missing favicon"></i>
           {%endif%}
           {{entry.host}}
         </div>
@@ -53,8 +55,18 @@
             {%each entry.entries as visit%}
               <tr>
                 <td>{{visit|formatAccessTime}}</td>
-                <td>{{visit.tab.url}}</td>
-                <td>{{visit|authorInfo}}</td>
+                <td><a href="{{visit.tab.url}}" target="_blank">{{visit.tab.url}}</a></td>
+                <td>
+                  {%if visit.author.list.length%}
+                    {%if visit.author.list.0.name%}
+                      {{visit.author.list.0.name}}
+                    {%else%}
+                      <a href="{{ visit.author.list.0.href }}" target="_blank">Encourage to Tipsy</a>
+                    {%endif%}
+                  {%else%}
+                  No author tag present
+                  {%endif%}
+                </td>
               </tr>
             {%endeach%}
           </tbody>

@@ -1,91 +1,119 @@
+&
+  height 100%
+  padding-top 0px
+  text-align center
+
 .leader
-  width 60%
+  width 100%
   font-size 17px
+  font-style italic
+  color #757575
+  padding-bottom 20px
 
 strong
   font-size 14px
   color #333
+  padding-right 18px
+
+hr
+  padding-top 60px
 
 h2
   font-family 'Sansita One', sans-serif
-  color #FF5A5A
+  color #CCC
   font-size 200%
   font-weight normal
 
 p
-  font-style italic
-  color #757575
+  display block
+  width 100%
 
 form
   opacity 0
   transition opacity linear 2s
-  padding-top 30%
-  overflow hidden
-  height 400px
+  display table
+  width 100%
+  height calc(75% - 0.5px)
 
   &.fade
     opacity 1
 
-  input[name='threshold']
-    &:before
-      content '$'
+  input
+    text-align center
 
   input[type=image]
     margin-right 20px
 
-  button[type=submit]
+  button
+    cursor pointer
     background #FFF
-    border none
+    border 1px solid #F5F5F5
     outline none
     color #CCC
     padding 14px
     font-weight bold
-    padding-left 0
+    padding-left 17px
+    border-radius 30px
+    margin-right 20px
+
+    &.next
+      background #75C276
+      color #FFF
+
+      &:hover
+        background #99DB9A
+
+    &:hover
+      background #FCFCFC
 
 ol
   list-style-type none
-  counter-reset li-counter -1;
+  counter-reset li-counter -1
   position relative
   width 100%
+  display table-cell
+  vertical-align middle
+  height 100%
 
   li
     position absolute
     padding-left 20px
     margin-bottom 60px
+    left 0%
+    transition all linear .2s
+    opacity 1
     width 100%
 
-    &:first-child:before
-      content ''
-      background url(../img/logo64.png) no-repeat center
-      width 75px
-      height 75px
-      border-radius 70px
-      background-color #FFF
-      display block
-      position absolute
-      left auto
-      right 100px
+    &.collapse
+      opacity 0
+      left -50% !important
+
+    // Remove necessity for importants.
+    &.expand
+      opacity 1 !important
+      visibility visible !important
+      left 0% !important
 
     &:not(:first-child)
-      display none
+      visibility hidden
+      opacity 0
       top auto
-      left 12%
-      padding-left 100px
+      left 100%
+      width 100%
 
-    &:before
-      top 35px
-      position absolute
-      left -42px
+    .logo
       width 75px
-      content counter(li-counter)
-      counter-increment li-counter
-      background #74C175
-      padding 10px
-      text-align center
-      border-radius 70px
-      color #FDF8B0
-      font-weight bold
-      border 3px solid #F0F0F0
       height 75px
-      line-height 72px
-      font-size 35px
+      border-radius 70px
+      border 3px solid #CCC
+      background-color #FFF
+      display block
+      padding 15px
+      margin 0 auto
+
+      &:before
+        content ''
+        background url(../img/logo64.png) no-repeat center
+        width 75px
+        height 75px
+        display block
