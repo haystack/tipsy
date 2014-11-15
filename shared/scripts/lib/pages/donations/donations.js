@@ -68,17 +68,6 @@ DonationsPage.prototype = {
       entries: []
     };
 
-    // Enable valid payment providers.
-    storage.get('settings').then(function(settings) {
-      if (settings.providers && settings.providers.bitcoin) {
-        component.$('.pay.bitcoin').removeAttr('disabled');
-      }
-
-      if (settings.providers && settings.providers.dwolla) {
-        component.$('.pay.dwolla').removeAttr('disabled');
-      }
-    });
-
     // Render with the data found from the log.
     storage.get('log').then(function(resp) {
       var filteredAndSorted = component
