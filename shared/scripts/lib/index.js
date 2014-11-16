@@ -52,6 +52,7 @@ function setTab() {
       page.__rendered__ = true;
     }
 
+    // Augment the navigation depending on which page we're on.
     $('nav a').each(function() {
       var link = $(this);
       var body = $('body');

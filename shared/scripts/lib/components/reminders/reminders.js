@@ -2,17 +2,20 @@
 
 import Component from '../../component';
 import storage from '../../storage';
-
-// Reminder levels:
-// ----------------
+import { create as createNotification } from '../../notifications';
 
 function RemindersComponent() {
   Component.prototype.constructor.apply(this, arguments);
 
   var component = this;
 
-  // Find the next notify time and render.
-  component.findNext(2);
+  // Find the saved reminder level.
+  storage.get('settings').then(function(settings) {
+    component.reminderLevel = settings.reminderLevel;
+
+    // Re-render.
+    component.render();
+  });
 }
 
 RemindersComponent.prototype = {
@@ -21,6 +24,8 @@ RemindersComponent.prototype = {
   events: {
     'input input[type=range]': 'updateOutputAndSave'
   },
+
+  reminderLevel: 2,
 
   reminderLevelToDays: [
     // Daily.
@@ -34,7 +39,11 @@ RemindersComponent.prototype = {
   ],
 
   serialize: function() {
-    var month = moment().add(this.reminderLevelToDays[2], 'days').calendar();
+    // Convert the reminder level (index) to days, using the lookup table.
+    var reminderDays = this.reminderLevelToDays[this.reminderLevel];
+
+    // Default to a monthly reminder.
+    var month = moment().add(reminderDays, 'days').calendar();
 
     return {
       nextNotified: this.nextNotified || month
@@ -48,43 +57,49 @@ RemindersComponent.prototype = {
 
     output.find('span').removeClass('active').eq(index).addClass('active');
 
-    storage.get('settings').then(function(settings) {
-      return component.findNext(index).then(function(nextNotified) {
+    return storage.get('settings').then(function(settings) {
+      // Find the previously set level.
+      var prev = settings.reminderLevel;
+
+      return component.findNext(index, prev).then(function(nextNotified) {
         settings.nextNotified = nextNotified;
-        settings.reminderLevel = settings.reminderLevel || 2;
+        settings.reminderLevel = index || 2;
 
         return storage.set('settings', settings);
       });
     });
   },
 
-  findNext: function(level) {
+  findNext: function(level, prev) {
     var component = this;
     var days = this.reminderLevelToDays[level];
 
     return storage.get('settings').then(function(settings) {
-      var lastNotified = moment(settings.lastNotified);
-      var nextNotified = lastNotified.add(days, 'days');
+      var lastNotified = moment(new Date(component.nextNotified));
+
+      console.log(lastNotified.unix(), moment().unix());
+
+      // Only change here if the date is different.
+      if (lastNotified > moment() && level === prev) {
+        return lastNotified;
+      }
+
+      var nextNotified = moment().add(days, 'days');
 
       component.nextNotified = nextNotified.calendar();
 
       component.$('.next').html(component.nextNotified);
+
+      // Schedule the notification.
+      createNotification(nextNotified, days);
 
       return nextNotified;
     });
   },
 
   afterRender: function() {
-    var input = this.$('input');
-    var component = this;
-
-    storage.get('settings').then(function(settings) {
-      settings.reminderLevel = settings.reminderLevel || 2;
-      input.val(settings.reminderLevel);
-
-      // Update the output and save.
-      component.updateOutputAndSave(settings.reminderLevel);
-    });
+    // Default to month.
+    this.$('input[type=range]').val(this.reminderLevel);
   }
 };
 

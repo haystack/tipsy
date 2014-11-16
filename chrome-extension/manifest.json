@@ -32,11 +32,13 @@
     }
   ],
   "permissions": [
+    "alarms",
     "tabs",
     "history",
     "idle",
     "storage",
     "identity",
+    "notifications",
     "https://accounts.google.com/o/oauth2/token",
     "https://www.googleapis.com/",
     "https://api.coinbase.com/*",

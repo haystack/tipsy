@@ -8,7 +8,7 @@ function DonationsPage() {
 
   var component = this;
 
-  this.render({ entries: [] });
+  this.render();
 
   storage.get('log').then(function(log) {
 
@@ -22,6 +22,13 @@ DonationsPage.prototype = {
     'keyup input': 'filterInput',
     'blur input': 'formatAndSave',
     'change input': 'formatAndSave'
+  },
+
+  // Always default to an empty array when no data is passed.
+  serialize: function() {
+    return {
+      entries: []
+    };
   },
 
   payBitcoin: function() {
@@ -83,7 +90,7 @@ DonationsPage.prototype = {
       return filteredAndSorted;
     }).then(function(entries) {
       data.entries = entries;
-      component.render(data);
+      //component.render(data);
     });
   }
 };
