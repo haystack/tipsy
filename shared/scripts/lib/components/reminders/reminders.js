@@ -68,6 +68,8 @@ RemindersComponent.prototype = {
 
       component.nextNotified = nextNotified.calendar();
 
+      component.$('.next').html(component.nextNotified);
+
       return nextNotified;
     });
   },
