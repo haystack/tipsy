@@ -2,6 +2,9 @@ module.exports = ->
   @loadNpmTasks 'grunt-mocha-test'
 
   @config 'mochaTest',
+    options:
+      clearRequireCache: true
+
     'chrome-extension':
       src: [
         'test/integration/setup.js'
