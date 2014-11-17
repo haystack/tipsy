@@ -1,5 +1,7 @@
 'use strict';
 
+import { select, selectAll } from './dom';
+
 /**
  * Represents a Component
  */
@@ -99,7 +101,11 @@ Component.prototype.render = function(context) {
   }).then(function(contents) {
     element.innerHTML = contents;
     return contents;
-  }, console.error.bind(console)).then(function() {
+  }, function(ex) {
+    // If there was an error provide some useful reporting.
+    console.log(component, context);
+    console.log(ex.stack);
+  }).then(function() {
     if (component.afterRender) {
       component.afterRender();
     }
@@ -126,9 +132,13 @@ Component.prototype.$ = function(selector) {
  */
 Component.register = function(selector, Component, context) {
   $(selector, context).each(function() {
-    var component = new Component(this);
-    component.render(component.serialize ? component.serialize() : {});
+    new Component(this);
   });
+};
+
+Component.registerPage = function(selector, Component, context) {
+  var element = select(selector, context);
+  return new Component(element);
 };
 
 export default Component;

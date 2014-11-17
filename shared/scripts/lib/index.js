@@ -1,6 +1,7 @@
 'use strict';
 
 import { environment } from './environment';
+import { listen } from './notifications';
 import storage from './storage';
 import Component from './component';
 
@@ -11,16 +12,28 @@ import SettingsPage from './pages/settings/settings';
 import DonationsPage from './pages/donations/donations';
 
 // Register all pages.
-Component.register('#getting-started', GettingStartedPage);
-Component.register('#log', LogPage);
-Component.register('#settings', SettingsPage);
-Component.register('#donations', DonationsPage);
+var pages = {
+  '#getting-started': GettingStartedPage,
+  '#log': LogPage,
+  '#settings': SettingsPage,
+  '#donations': DonationsPage
+};
+
+// Register each page, and swap the pages object value from constructor to
+// instance.
+Object.keys(pages).forEach(function(selector) {
+  pages[selector] = Component.registerPage(selector, pages[selector]);
+});
+
+// Start listening for notifications.
+listen();
 
 /**
  * Sets the current tab in the extension.
  */
 function setTab() {
   var hash = location.hash;
+  var page = pages[hash];
 
   // When opening the extension without a hash determine where to route based
   // on if the end user has already configured the getting started page or not.
@@ -31,6 +44,15 @@ function setTab() {
     });
   }
   else {
+    // Render the page we're currently on, if we haven't already.
+    if (!page.__rendered__) {
+      page.render();
+
+      // Mark this page as rendered, so that we do not re-render.
+      page.__rendered__ = true;
+    }
+
+    // Augment the navigation depending on which page we're on.
     $('nav a').each(function() {
       var link = $(this);
       var body = $('body');

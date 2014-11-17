@@ -25,6 +25,7 @@ module.exports = ->
   @registerTask 'firefox-extension', [
     'clean:firefox-extension'
     'copy:firefox-extension'
+    'es6'
     'stylus:firefox-extension'
     'targethtml:firefox'
     'es6:firefox-extension'
