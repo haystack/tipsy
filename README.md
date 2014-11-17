@@ -9,37 +9,17 @@ Tipsy
 If you wish to work on Tipsy, you can find instructions on getting started
 below.  It uses [Node](http://nodejs.org) to install and run the extension.
 
-At the moment the build process and tests only work flawlessly in Linux.
+At the moment the build process and tests only work in Linux.
 
 #### Installing Node and dependencies ####
 
 Go to the [Node](http://nodejs.org) homepage and install for your platform.
 
-Next, open a command line prompt and enter the project directory.  The rest of
-the commands are run in that directory.
-
-### Installing dependencies ###
-
-Node comes packaged with a package manager that you can use to install modules.
+Next, open a command line prompt and enter the project directory.  You will
+install all development dependencies with one command:
 
 ``` bash
-# Install all dependencies.
 npm install
-```
-
-#### Client side dependencies ####
-
-The third party client side assets are versioned and managed by Bower, they are
-not checked in to prevent noisy diffs and conflicts.
-
-You can read more about Bower here: http://bower.io/
-
-They are automatically installed when you run `npm install` so typically there
-is no need to manually update the dependencies.  If you find yourself changing
-the dependencies, run:
-
-``` bash
-bower install
 ```
 
 ### Working on Chrome extension ###
@@ -50,13 +30,7 @@ Chrome](http://chrome.com/) installed.
 Once it is installed and configured you can build the extension with:
 
 ``` bash
-npm run build
-```
-
-or more specifically (if you only want to build the Chrome extension):
-
-``` bash
-npm run chrome-extension
+npm run build-chrome
 ```
 
 #### Loading the unpacked extension ####
@@ -65,33 +39,52 @@ The source code necessary to run the extension as unpacked lives in the
 *dist/tipsy* directory and can be dragged into the Extensions tab within
 Chrome.
 
-### Working on Firefox extension ###
+#### Watching the filesystem for changes ####
 
-To build the FireFox extension you don't need to do anything special.  The sdk
-is automatically downloaded and installed when you `npm install`.  If you have
-already run:
+You can have the extension automatically recompiled with:
 
 ``` shell
-npm run build
+npm run watch-chrome
 ```
 
-you already have the extension built in the *firefox-extension/dist* directory.
-If you do not have this built you can specifically build the *.crx* file with:
+#### Extension url ####
+
+- [chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html](chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html)
+
+### Working on Firefox extension ###
+
+Build the *.crx* file with:
 
 ``` shell
 npm run build-firefox
 ```
 
-### URLs for testing ###
+#### Watching the filesystem for changes ####
 
-Chrome:
+You can have the extension automatically recompiled with:
 
-- [chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html](chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html)
+``` shell
+npm run watch-firefox
+```
 
-FireFox:
+#### Extension url ####
 
 - [resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html](resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html)
 
-### Watch during development ###
+### Working on both Chrome and Firefox ###
 
-Run `npm run watch` to monitor the filesystem.
+To build both extensions you will need to ensure that you can build them
+individually per the instructions above.  Then the following command should
+work:
+
+``` shell
+npm run build
+```
+
+#### Watching the filesystem for changes ####
+
+You can have both extensions automatically recompiled with:
+
+``` shell
+npm run watch
+```
