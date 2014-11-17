@@ -62,7 +62,7 @@ RemindersComponent.prototype = {
       var prev = settings.reminderLevel;
 
       return component.findNext(index, prev).then(function(nextNotified) {
-        settings.nextNotified = nextNotified;
+        settings.nextNotified = Number(nextNotified);
         settings.reminderLevel = index || 2;
 
         return storage.set('settings', settings);
@@ -75,20 +75,21 @@ RemindersComponent.prototype = {
     var days = this.reminderLevelToDays[level];
 
     return storage.get('settings').then(function(settings) {
-      var lastNotified = moment(new Date(component.nextNotified));
-
-      console.log(lastNotified.unix(), moment().unix());
+      var lastNotified = moment(component.nextNotified);
 
       // Only change here if the date is different.
       if (lastNotified > moment() && level === prev) {
         return lastNotified;
       }
 
+      // Increment the amount of time, by today + number of days.
       var nextNotified = moment().add(days, 'days');
 
-      component.nextNotified = nextNotified.calendar();
+      // Assign this to the component so it can be referenced.
+      component.nextNotified = nextNotified;
 
-      component.$('.next').html(component.nextNotified);
+      // Update the value in the markup.
+      component.$('.next').html(nextNotified.calendar());
 
       // Schedule the notification.
       createNotification(nextNotified, days);

@@ -1,7 +1,13 @@
 import { environment } from './environment';
+import storage from './storage';
 
-export function create(time, days) {
-  var when = time.unix() * 1000;
+/**
+ * Schedule a new notification.
+ *
+ * @param {number} when - time as a moment object or unix timestamp.
+ * @param {number} days - how many days until the next notification.
+ */
+export function create(when, days) {
   var minutes = null;
 
   if (environment === 'chrome') {
@@ -11,15 +17,21 @@ export function create(time, days) {
     // When using the same id, Chrome will automatically clear out the previous
     // notification.
     chrome.alarms.create('tipsy', {
-      when: when,
+      when: Number(when),
       periodInMinutes: minutes
     });
   }
+  // In Firefox, the extension library cannot trigger a notification, so
+  // instead we let the background script handle it.  Just need to let the
+  // extension know when the right time is to trigger.
   else if (environment === 'firefox') {
-
+    self.port.emit('notification.set', when);
   }
 }
 
+/**
+ * Listens for Chrome alarms to trigger the next notification.
+ */
 export function listen() {
   if (environment === 'chrome') {
     chrome.alarms.onAlarm.addListener(function() {
@@ -31,8 +43,28 @@ export function listen() {
         message: 'Time to Donate!'
       }, function unhandledCallback() {});
     });
-  }
-  else if (environment === 'firefox') {
 
+    var reminderLevelToDays = [
+      // Daily.
+      1,
+      // Weekly.
+      7,
+      // Monthly.
+      30,
+      // Yearly.
+      365
+    ];
+
+    // Reset the next notified in the storage engine.
+    storage.get('settings').then(function(settings) {
+      var days = reminderLevelToDays[settings.reminderLevel];
+      var next = moment(settings.nextNotified).add(days, 'days');
+      settings.nextNotified = Number(next);
+
+      // Create the next alarm.
+      create(next, days);
+
+      return storage.set('settings', settings);
+    });
   }
 }
