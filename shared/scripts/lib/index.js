@@ -51,7 +51,7 @@ function setTab() {
   }
 }
 
-// Set the correct active tab.
+// Set the correct active tab on load.
 setTab();
 
 // Ensure that the tab is changed whenever the hash value is updated.
