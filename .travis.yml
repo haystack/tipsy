@@ -26,4 +26,6 @@ language: node_js
 node_js:
   - 0.10
 env:
-  - DISPLAY=':99.0'
+  global:
+    - secure: "ZUeyY/wcPM40iP7eGZxPCrOEOBjjhvW9tZJ5ZLxD8n4qB3HVdcU/tstUSuBF/GgTG7BgnLC3TMUP2l6pP6li/JOxfHXrEqVNwrG8VHhpVNMdogVaL/3d0UER/s2cT2ioU7B3bkc4YFc1vR67h235KLaVip8YhMpcF1hhR1P7SC0="
+    - secure: "q5oQpQRFCAfe+y6FgG7Jie48H2glHdAmatbanlYv35WVOwIk2G2SEzKrqSmMgx9mEwWhgK80+8i1bhj85x9uLCXPgJuCTqX4tjdqpL5GcQ354LDveHaXI4NjynrrUg8LF4VtEn8SOQOok7DWcI/9kcAGVfnZmlPQ3fiUdJlcXEE="
