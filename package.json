@@ -3,9 +3,14 @@
   "private": true,
   "scripts": {
     "watch": "grunt default watch",
+    "watch-chrome": "grunt chrome-extension watch:chrome-extension",
+    "watch-firefox": "grunt firefox-extension watch:firefox-extension",
+    "build": "grunt",
     "build-chrome": "grunt chrome-extension",
     "build-firefox": "grunt firefox-extension",
     "test": "grunt && grunt mochaTest && grunt shell:s3",
+    "test-chrome": "grunt mochaTest:chrome-extension",
+    "test-firefox": "grunt mochaTest:firefox-extension",
     "postinstall": "npm dedupe ; grunt mozilla-addon-sdk ; npm run python2",
     "python2": "grunt shell:python2"
   },

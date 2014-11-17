@@ -4,7 +4,8 @@ import { createExtension, addContentScript } from './lib/extension';
 import { initialize } from './lib/activity';
 import './lib/watcher';
 
-// Display the tray icon and open the extension upon being clicked.
+// Firefox addons need to be instructed to show an icon.  This call also hooks
+// up the click functionality in Chrome.
 createExtension({
   id: 'tipsy-icon',
   label: 'Launch Tipsy',
@@ -16,6 +17,8 @@ createExtension({
     '64': './img/logo64.png'
   },
 
+  // These scripts are dynamically injected with Firefox and ignored in the
+  // html.
   scripts: [
     'node_modules/jquery/dist/jquery.js',
     'node_modules/combyne/dist/combyne.js',

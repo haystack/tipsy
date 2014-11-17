@@ -4,9 +4,9 @@ import { environment } from './lib/environment';
 import { selectAll } from './lib/dom';
 
 /**
- * postMessage
+ * Allows communication between content script and background script.
  *
- * @param body
+ * @param {Object} body - the message payload.
  */
 function postMessage(body) {
   body = JSON.stringify(body);
@@ -105,6 +105,7 @@ var addEvent = function(element, events, state) {
   });
 };
 
+// Whenever the mouse moves or the page scrolls, set the state to `false`.
 addEvent(document.body, 'scroll mousemove', false);
 
 // Loop through all media types and bind to their respective state events to

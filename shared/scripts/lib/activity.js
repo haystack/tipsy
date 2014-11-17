@@ -5,7 +5,10 @@ import storage from './storage';
 import { tabs } from './tabs';
 
 /**
- * Ensures that the log key exists for querying and saving.
+ * This ensures that log is an object and not undefined, as the `storage#get`
+ * call defaults to an empty object if it was not previously set.
+ *
+ * @return {Promise} that resolves once the log has been updated.
  */
 export function initialize() {
   return storage.get('log').then(function(log) {
@@ -14,9 +17,10 @@ export function initialize() {
 }
 
 /**
- * start
+ * Sets up the tab in the cache with the current access time and the tab id.
+ * In Firefox this will also attempt to grab the favicon url.
  *
- * @param {Object} tab - A tab to monitor.
+ * @param {Object} tab - to monitor.
  */
 export function start(tab) {
   // Ensure we're working with a tab object, which may or may not already
@@ -27,7 +31,7 @@ export function start(tab) {
   currentTab.accessTime = Date.now();
   currentTab.tab = currentTab.tab || tab;
 
-  // We can extract the favicon from firefox here.
+  // We can extract the favicon from Firefox here.
   if (environment === 'firefox') {
     var getFavicon = require('sdk/places/favicon');
     getFavicon(tab).then(function(url) {
@@ -39,10 +43,11 @@ export function start(tab) {
 }
 
 /**
- * stop
+ * Once the activity module determines the tab is inactive or closed, this
+ * function is called to end the tab tracking.
  *
- * @param {Object} tab - A tab to monitor.
- * @return {Promise} resolves when log has been written to storage engine.
+ * @param {Object} tab - to monitor.
+ * @return {Promise} that resolves when log has been written to storage engine.
  */
 export function stop(tab) {
   // Open access to the current log so that we can append the latest tab entry

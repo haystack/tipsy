@@ -1,0 +1,112 @@
+{
+    "shared/scripts/background.js": [
+        "./lib/extension",
+        "./lib/activity",
+        "./lib/watcher"
+    ],
+    "shared/scripts/contentscript.js": [
+        "./lib/environment",
+        "./lib/dom"
+    ],
+    "shared/scripts/lib/activity.js": [
+        "./environment",
+        "./storage",
+        "./tabs"
+    ],
+    "shared/scripts/lib/component.js": [
+        "./dom"
+    ],
+    "shared/scripts/lib/components/donation-goal/donation-goal.js": [
+        "../../component",
+        "../../storage"
+    ],
+    "shared/scripts/lib/components/log-table/log-table.js": [
+        "../../component",
+        "../../storage"
+    ],
+    "shared/scripts/lib/components/providers/providers.js": [
+        "../../component",
+        "../../storage",
+        "../../oauth",
+        "../../providers/bitcoin",
+        "../../providers/dwolla",
+        "../../providers/paypal",
+        "../../providers/stripe"
+    ],
+    "shared/scripts/lib/components/reminders/reminders.js": [
+        "../../component",
+        "../../storage"
+    ],
+    "shared/scripts/lib/dom.js": [],
+    "shared/scripts/lib/environment.js": [],
+    "shared/scripts/lib/extension.js": [
+        "./environment",
+        "./storage",
+        "./activity",
+        "./tabs"
+    ],
+    "shared/scripts/lib/index.js": [
+        "./environment",
+        "./storage",
+        "./component",
+        "./pages/getting-started/getting-started",
+        "./pages/log/log",
+        "./pages/settings/settings",
+        "./pages/donations/donations"
+    ],
+    "shared/scripts/lib/notifications.js": [],
+    "shared/scripts/lib/oauth.js": [
+        "./environment",
+        "./storage"
+    ],
+    "shared/scripts/lib/pages/donations/donations.js": [
+        "../../component",
+        "../../storage"
+    ],
+    "shared/scripts/lib/pages/getting-started/getting-started.js": [
+        "../../component",
+        "../../storage",
+        "../../dom",
+        "../../components/providers/providers",
+        "../../components/donation-goal/donation-goal",
+        "../../components/reminders/reminders"
+    ],
+    "shared/scripts/lib/pages/log/log.js": [
+        "../../component",
+        "../../dom",
+        "../../storage",
+        "../../components/log-table/log-table"
+    ],
+    "shared/scripts/lib/pages/settings/settings.js": [
+        "../../component",
+        "../../dom",
+        "../../components/providers/providers",
+        "../../components/donation-goal/donation-goal",
+        "../../components/reminders/reminders"
+    ],
+    "shared/scripts/lib/providers/bitcoin.js": [
+        "../oauth",
+        "../storage"
+    ],
+    "shared/scripts/lib/providers/dwolla.js": [
+        "../oauth"
+    ],
+    "shared/scripts/lib/providers/paypal.js": [
+        "../oauth"
+    ],
+    "shared/scripts/lib/providers/stripe.js": [
+        "../oauth"
+    ],
+    "shared/scripts/lib/storage.js": [
+        "./environment"
+    ],
+    "shared/scripts/lib/tabs.js": [
+        "./environment"
+    ],
+    "shared/scripts/lib/watcher.js": [
+        "./environment",
+        "./activity",
+        "./tabs",
+        "./storage"
+    ]
+}
