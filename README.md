@@ -49,7 +49,7 @@ npm run watch-chrome
 
 #### Extension url ####
 
-- [chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html](chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html)
+chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html
 
 ### Working on Firefox extension ###
 
@@ -69,7 +69,7 @@ npm run watch-firefox
 
 #### Extension url ####
 
-- [resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html](resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html)
+resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html
 
 ### Working on both Chrome and Firefox ###
 
