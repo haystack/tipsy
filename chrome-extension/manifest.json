@@ -38,12 +38,14 @@
     "idle",
     "storage",
     "notifications",
-    "https://www.googleapis.com/"
+    "https://www.googleapis.com/",
+    "https://www.dwolla.com/",
+    "https://www.coinbase.com/"
   ],
   "web_accessible_resources": [
     "js/**/*",
     "js/contentscript.js.map",
     "bower_components/**/*"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; script-src 'self' https://www.dwolla.com/; object-src 'self'"
 }

@@ -6,13 +6,10 @@ import storage from '../../storage';
 function DonationsPage() {
   Component.prototype.constructor.apply(this, arguments);
 
-  var component = this;
+  this.renderTable();
 
-  this.render();
-
-  storage.get('log').then(function(log) {
-
-  });
+  // Whenever the data changes re-render the table.
+  storage.onChange(this.renderTable.bind(this));
 }
 
 DonationsPage.prototype = {
@@ -24,19 +21,55 @@ DonationsPage.prototype = {
     'change input': 'formatAndSave'
   },
 
-  // Always default to an empty array when no data is passed.
-  serialize: function() {
-    return {
+  filters: [
+    'timeSpent'
+  ],
+
+  /**
+   * timeSpent
+   *
+   * @param val
+   * @return
+   */
+  timeSpent: function(val) {
+    return moment.duration(val, 'milliseconds').humanize();
+  },
+
+  /**
+   * Render the donations table.
+   *
+   * @return
+   */
+  renderTable: function() {
+    var component = this;
+
+    // Set the default data.
+    component.data = {
       entries: []
     };
+
+    // Render with the data found from the log.
+    storage.get('settings').then(function(settings) {
+      storage.get('log').then(function(resp) {
+        var filteredAndSorted = component
+          // Convert the log Object to a filterable/sortable Array.
+          .toArray(resp, settings)
+          // Sort and filter passing along the log component instance as
+          // context.
+          .filter(component.filter, component);
+
+        return filteredAndSorted;
+      }).then(function(entries) {
+        component.data.entries = entries;
+        component.render();
+      });
+    });
   },
 
-  payBitcoin: function() {
-
-  },
-
-  payDwolla: function() {
-
+  serialize: function() {
+    return {
+      entries: this.data.entries
+    };
   },
 
   filterInput: function(ev) {
@@ -51,36 +84,47 @@ DonationsPage.prototype = {
     this.$('input').val(currency);
   },
 
-  filter: function(entry) {
-    var authorCount = entry.entries.filter(function(entry) {
-      return entry.author && entry.author.list.length;
-    }).length;
+  /**
+   * toArray
+   *
+   * @param resp
+   * @return
+   */
+  toArray: function(resp, settings) {
+    var entries = [];
 
-    // Attach the number of authors to the entry, now that it's calculated.
-    entry.authorCount = authorCount;
+    Object.keys(resp).forEach(function(key) {
+      entries.push.apply(entries, resp[key].map(
+        this.calculate.bind(this, settings)
+      ));
+    }, this);
 
-    return true;
+    return entries;
   },
 
-  afterRender: function() {
-    var component = this;
-    var data = {
-      entries: []
-    };
+  /**
+   * Calculates the estimated amount per entry.
+   *
+   * @param settings
+   * @param entry
+   * @return
+   */
+  calculate: function(settings, entry) {
+    // Convert timespent to hours.
+    var timeSpent = entry.timeSpent / 1000 / 60 / 60;
 
-    // Render with the data found from the log.
-    storage.get('log').then(function(resp) {
-      var filteredAndSorted = component
-        // Convert the log Object to a filterable/sortable Array.
-        .toArray(resp)
-        // Sort and filter passing along the log component instance as context.
-        .filter(component.filter, component);
+    // The donation goal amount is saved as a currency string, so we want
+    // to emulate the empty amount if nothing was set.
+    var donationGoal = settings.donationGoal || '$0';
+    donationGoal = Number(donationGoal.slice(1));
 
-      return filteredAndSorted;
-    }).then(function(entries) {
-      data.entries = entries;
-      //component.render(data);
-    });
+    entry.estimatedAmount = Math.round(timeSpent * donationGoal).toFixed(2);
+
+    return entry;
+  },
+
+  filter: function(entry) {
+    return entry.author && entry.author.list.length;
   }
 };
 

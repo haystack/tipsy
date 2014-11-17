@@ -29,16 +29,36 @@
         </tr>
       {%else%}
         {%each entries as entry%}
+          {%each entry.author.list as author%}
         <tr>
-          <td>{{entry.name}}</td>
-          <td>{{entry.timeSpent}}</td>
+          <td>{{author.name}}</td>
+          <td>{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
           <td>
           
-          <input disabled type="image" class="pay bitcoin" src="../img/bitcoin_pay.png">
-          <input disabled type="image" class="pay dwolla" src="../img/dwolla_pay.png">
+          {%if author.dwolla%}
+            <script
+              src="https://www.dwolla.com/scripts/button.min.js" class="dwolla_button" type="text/javascript"
+              data-key="{{ author.dwolla }}"
+              data-redirect="http://google.com/"
+              data-label="Donate with Dwolla"
+              data-name="Tipsy"
+              data-description="Tipsy"
+              data-amount="5.00"
+              data-shipping="0.00"
+              data-tax="0.00"
+              data-guest-checkout="true"
+              data-type="simple"
+            >
+            </script>
+          {%endif%}
+
+          {%if author.bitcoin%}
+            <a class="coinbase-button" data-code="{{ author.bitcoin }}" data-button-style="custom_small" href="https://www.coinbase.com/checkouts/56aa4626057f2e415444b373f5f9d6aa">Donate with Bitcoin</a><script src="https://www.coinbase.com/assets/button.js" type="text/javascript"></script>
+          {%endif%}
           </td>
         </tr>
+          {%endeach%}
         {%endeach%}
       {%endif%}
       </tbody>
