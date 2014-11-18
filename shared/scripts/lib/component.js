@@ -109,6 +109,8 @@ Component.prototype.render = function(context) {
     if (component.afterRender) {
       component.afterRender();
     }
+  }).catch(function(ex) {
+    console.log(ex.stack);
   });
 };
 

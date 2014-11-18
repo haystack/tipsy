@@ -1,14 +1,4 @@
 <div>
-  <!--
-  <fieldset>
-    <h2 class="ratio">$0.00 / $20.00</h2>
-    <h2>Progress towards completing this donation:</h2>
-    <progress value="0" max="1"></progress>
-
-    <p>Donation goal ends: 10/31/2014</p>
-  </fieldset>
-  -->
-
   <fieldset>
     <!-- Display the current list of pages to pay. -->
     <h2>Make donations:</h2>
@@ -30,33 +20,11 @@
       {%else%}
         {%each entries as entry%}
           {%each entry.author.list as author%}
-        <tr>
+        <tr class="entry" data-dwolla="{{ author.dwolla }}" data-coinbase="{{ author.bitcoin }}">
           <td>{{author.name}}</td>
           <td>{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
-          <td>
-          
-          {%if author.dwolla%}
-            <script
-              src="https://www.dwolla.com/scripts/button.min.js" class="dwolla_button" type="text/javascript"
-              data-key="{{ author.dwolla }}"
-              data-redirect="http://google.com/"
-              data-label="Donate with Dwolla"
-              data-name="Tipsy"
-              data-description="Tipsy"
-              data-amount="5.00"
-              data-shipping="0.00"
-              data-tax="0.00"
-              data-guest-checkout="true"
-              data-type="simple"
-            >
-            </script>
-          {%endif%}
-
-          {%if author.bitcoin%}
-            <a class="coinbase-button" data-code="{{ author.bitcoin }}" data-button-style="custom_small" href="https://www.coinbase.com/checkouts/56aa4626057f2e415444b373f5f9d6aa">Donate with Bitcoin</a><script src="https://www.coinbase.com/assets/button.js" type="text/javascript"></script>
-          {%endif%}
-          </td>
+          <td class="payment">No payment processors supported by this page.</td>
         </tr>
           {%endeach%}
         {%endeach%}

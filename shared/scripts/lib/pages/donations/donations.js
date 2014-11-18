@@ -2,6 +2,8 @@
 
 import Component from '../../component';
 import storage from '../../storage';
+import { inject as injectDwolla } from '../../processors/dwolla';
+import { inject as injectCoinbase } from '../../processors/coinbase';
 
 function DonationsPage() {
   Component.prototype.constructor.apply(this, arguments);
@@ -118,6 +120,7 @@ DonationsPage.prototype = {
     var donationGoal = settings.donationGoal || '$0';
     donationGoal = Number(donationGoal.slice(1));
 
+    // Assign the estimated amount to the entry item.
     entry.estimatedAmount = Math.round(timeSpent * donationGoal).toFixed(2);
 
     return entry;
@@ -125,6 +128,35 @@ DonationsPage.prototype = {
 
   filter: function(entry) {
     return entry.author && entry.author.list.length;
+  },
+
+  afterRender: function() {
+    this.$('tr.entry').each(function() {
+      var $this = $(this);
+      // Extract the estimated value.
+      var amount = $this.find('.amount').val().slice(1);
+
+      // The payment container.
+      var payment = $this.find('.payment');
+
+      var dwollaToken = $this.data('dwolla');
+      var coinbaseToken = $this.data('coinbase');
+
+      // Hide the no processors text.
+      if (dwollaToken || coinbaseToken) {
+        payment.empty();
+      }
+
+      // Only inject if the author has dwolla.
+      //if (dwollaToken) {
+      //  injectDwolla(payment, amount, dwollaToken);
+      //}
+
+      // Only inject if the author has coinbase.
+      if (coinbaseToken) {
+        injectCoinbase(payment, amount, coinbaseToken);
+      }
+    });
   }
 };
 
