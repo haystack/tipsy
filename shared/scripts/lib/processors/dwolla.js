@@ -1,12 +1,15 @@
 'use strict';
 
 export function inject($el, amount, token) {
-  $('<script>')
+  var redirect = 'http://97.107.132.235:9999?redirect=' +
+    encodeURIComponent(location.href.split('#')[0]);
+
+  var script = $('<script>')
     .addClass('dwolla_button')
     .attr({
       'src': 'https://www.dwolla.com/scripts/button.min.js',
       'data-key': token,
-      'data-redirect': 'http://google.com/',
+      'data-redirect': redirect,
       'data-label': 'Donate with Dwolla',
       'data-name': 'Tipsy',
       'data-description': 'Tipsy',
@@ -17,4 +20,10 @@ export function inject($el, amount, token) {
       'data-type': 'simple'
     })
   .appendTo($el);
+
+  return {
+    update: function(amount) {
+      script.next('a.d-btn').attr('data-amount', amount.slice(1));
+    }
+  }
 }

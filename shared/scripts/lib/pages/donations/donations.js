@@ -3,7 +3,6 @@
 import Component from '../../component';
 import storage from '../../storage';
 import { inject as injectDwolla } from '../../processors/dwolla';
-import { inject as injectCoinbase } from '../../processors/coinbase';
 
 function DonationsPage() {
   Component.prototype.constructor.apply(this, arguments);
@@ -76,14 +75,21 @@ DonationsPage.prototype = {
 
   filterInput: function(ev) {
     var val = ev.target.value.replace(/[^0-9.]/g, '');
-    this.$('input').val('$' + val);
+    this.$(ev.currentTarget).val('$' + val);
   },
 
   formatAndSave: function(ev) {
     var val = ev.target.value.replace(/[^0-9.]/g, '');
     var currency = '$' + parseFloat(val).toFixed(2);
 
-    this.$('input').val(currency);
+    this.$(ev.currentTarget).val(currency);
+
+    // Update any payment methods on this element.
+    var row = $(ev.currentTarget).closest('tr.entry').data();
+
+    if (row.dwolla) {
+      row.dwolla.update(currency);
+    }
   },
 
   /**
@@ -138,23 +144,16 @@ DonationsPage.prototype = {
 
       // The payment container.
       var payment = $this.find('.payment');
-
       var dwollaToken = $this.data('dwolla');
-      var coinbaseToken = $this.data('coinbase');
 
       // Hide the no processors text.
-      if (dwollaToken || coinbaseToken) {
+      if (dwollaToken) {
         payment.empty();
       }
 
       // Only inject if the author has dwolla.
       if (dwollaToken) {
-        injectDwolla(payment, amount, dwollaToken);
-      }
-
-      // Only inject if the author has coinbase.
-      if (coinbaseToken) {
-        injectCoinbase(payment, amount, coinbaseToken);
+        $this.data().dwolla = injectDwolla(payment, amount, dwollaToken);
       }
     });
   }
