@@ -148,9 +148,9 @@ DonationsPage.prototype = {
       }
 
       // Only inject if the author has dwolla.
-      //if (dwollaToken) {
-      //  injectDwolla(payment, amount, dwollaToken);
-      //}
+      if (dwollaToken) {
+        injectDwolla(payment, amount, dwollaToken);
+      }
 
       // Only inject if the author has coinbase.
       if (coinbaseToken) {
