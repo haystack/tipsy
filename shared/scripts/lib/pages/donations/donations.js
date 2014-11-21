@@ -23,8 +23,13 @@ DonationsPage.prototype = {
   },
 
   filters: [
-    'timeSpent'
+    'timeSpent',
+    'or'
   ],
+
+  or: function(one, other) {
+    return one || other;
+  },
 
   /**
    * timeSpent
@@ -100,11 +105,44 @@ DonationsPage.prototype = {
    */
   toArray: function(resp, settings) {
     var entries = [];
+    var component = this;
 
     Object.keys(resp).forEach(function(key) {
-      entries.push.apply(entries, resp[key].map(
-        this.calculate.bind(this, settings)
-      ));
+      // Calculate the estimated amount for each entry.
+      var calculate = resp[key].map(this.calculate.bind(this, settings));
+
+      // Localize each entry into a hash table based on the host.
+      var localize = calculate.reduce(function(memo, current) {
+        var prev = memo[current.author.hostname];
+
+        if (prev && parseFloat(current.estimatedAmount) > 0) {
+          prev.push(current);
+        }
+        else {
+          if (parseFloat(current.estimatedAmount) > 0) {
+            memo[current.author.hostname] = [current];
+          }
+        }
+
+        return memo;
+      }, {});
+
+      // Condense into a single array.
+      var condensed = Object.keys(localize).reduce(function(memo, current) {
+        current = localize[current];
+
+        // Iterate over each item in the list to display.
+        current.forEach(function(entry) {
+          // Make sure there is author information.
+          if (entry.author.list) {
+            memo.push(entry);
+          }
+        });
+
+        return memo;
+      }, []);
+
+      entries.push.apply(entries, condensed);
     }, this);
 
     return entries;

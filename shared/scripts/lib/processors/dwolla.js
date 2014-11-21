@@ -25,5 +25,5 @@ export function inject($el, amount, token) {
     update: function(amount) {
       script.next('a.d-btn').attr('data-amount', amount.slice(1));
     }
-  }
+  };
 }

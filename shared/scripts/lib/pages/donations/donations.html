@@ -6,6 +6,7 @@
     <table class="pure-table pure-table-bordered pure-table-striped">
       <thead>
         <tr>
+          <th>Host</th>
           <th>Name</th>
           <th>Time spent</th>
           <th>Recommended donation</th>
@@ -15,16 +16,17 @@
       <tbody>
       {%if not entries.length%}
         <tr>
-          <td colspan="4">Nobody to pay yet, get browsing!</td>
+          <td colspan="5">Nobody to pay yet, get browsing!</td>
         </tr>
       {%else%}
         {%each entries as entry%}
           {%each entry.author.list as author%}
         <tr class="entry" data-dwolla="{{ author.dwolla }}" data-coinbase="{{ author.bitcoin }}">
-          <td>{{author.name}}</td>
+          <td>{{entry.author.hostname}}</td>
+          <td>{{author.name|or "Anonymous"}}</td>
           <td>{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
-          <td class="payment">No payment processors supported by this page.</td>
+          <td class="payment">No payment processors supported by this author.</td>
         </tr>
           {%endeach%}
         {%endeach%}
