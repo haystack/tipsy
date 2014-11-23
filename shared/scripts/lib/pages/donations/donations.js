@@ -3,11 +3,17 @@
 import Component from '../../component';
 import storage from '../../storage';
 import { inject as injectDwolla } from '../../processors/dwolla';
+import { inject as injectPaypal } from '../../processors/paypal';
 
 function DonationsPage() {
   Component.prototype.constructor.apply(this, arguments);
 
-  this.renderTable();
+  // Set the default table data.
+  this.data = {
+    entries: []
+  };
+
+  //this.renderTable();
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
@@ -49,11 +55,6 @@ DonationsPage.prototype = {
   renderTable: function() {
     var component = this;
 
-    // Set the default data.
-    component.data = {
-      entries: []
-    };
-
     // Render with the data found from the log.
     storage.get('settings').then(function(settings) {
       storage.get('log').then(function(resp) {
@@ -68,6 +69,9 @@ DonationsPage.prototype = {
       }).then(function(entries) {
         component.data.entries = entries;
         component.render();
+      }).catch(function(ex) {
+        console.log(ex);
+        console.log(ex.stack);
       });
     });
   },
@@ -95,6 +99,10 @@ DonationsPage.prototype = {
     if (row.dwolla) {
       row.dwolla.update(currency);
     }
+
+    if (row.paypal) {
+      row.paypal.update(currency);
+    }
   },
 
   /**
@@ -107,37 +115,52 @@ DonationsPage.prototype = {
     var entries = [];
     var component = this;
 
+    // Reset the data entries.
+    this.data.entries = [];
+
+    // Resp is an object that is broken down by domain to list of entries
+    // visited.  The most useful way to
     Object.keys(resp).forEach(function(key) {
-      // Calculate the estimated amount for each entry.
-      var calculate = resp[key].map(this.calculate.bind(this, settings));
+      var calculated = resp[key]
+        // Condense down the page logic.
+        .reduce(function(memo, current) {
+          // Used to determine if we're adding for the first time, or updating
+          // an existing entry.
+          var isUpdated = false;
 
-      // Localize each entry into a hash table based on the host.
-      var localize = calculate.reduce(function(memo, current) {
-        var prev = memo[current.author.hostname];
+          // Check if this url was already added.
+          memo.forEach(function(entry) {
+            // If there is already an entry with the same url, update it.
+            if (entry.tab.url === current.tab.url) {
+              entry.timeSpent += current.timeSpent;
+              isUpdated = true;
+            }
+          });
 
-        if (prev && parseFloat(current.estimatedAmount) > 0) {
-          prev.push(current);
-        }
-        else {
-          if (parseFloat(current.estimatedAmount) > 0) {
-            memo[current.author.hostname] = [current];
+          // If the current entry was not appended to a previous entry, push
+          // it as a new item, since this is a page not yet tracked.
+          if (!isUpdated) {
+            memo.push(current);
           }
-        }
 
-        return memo;
-      }, {});
+          return memo;
+        }, [])
+        // Calculate the estimated amount for each entry.
+        .map(function(entry) {
+          return component.calculate(settings, entry);
+        })
+        // Ensure we're only working with estimated amounts greater than `0`.
+        .filter(function(entry) {
+          console.log(entry);
+          return parseFloat(entry.estimatedAmount) > 0;
+        });
 
       // Condense into a single array.
-      var condensed = Object.keys(localize).reduce(function(memo, current) {
-        current = localize[current];
-
-        // Iterate over each item in the list to display.
-        current.forEach(function(entry) {
-          // Make sure there is author information.
-          if (entry.author.list) {
-            memo.push(entry);
-          }
-        });
+      var condensed = calculated.reduce(function(memo, current) {
+        // Make sure there is author information.
+        if (current.author.list.length) {
+          memo.push(current);
+        }
 
         return memo;
       }, []);
@@ -165,7 +188,7 @@ DonationsPage.prototype = {
     donationGoal = Number(donationGoal.slice(1));
 
     // Assign the estimated amount to the entry item.
-    entry.estimatedAmount = Math.round(timeSpent * donationGoal).toFixed(2);
+    entry.estimatedAmount = (timeSpent * donationGoal).toFixed(2);
 
     return entry;
   },
@@ -183,15 +206,21 @@ DonationsPage.prototype = {
       // The payment container.
       var payment = $this.find('.payment');
       var dwollaToken = $this.data('dwolla');
+      var paypalToken = $this.data('paypal');
 
       // Hide the no processors text.
-      if (dwollaToken) {
+      if (dwollaToken || paypalToken) {
         payment.empty();
       }
 
       // Only inject if the author has dwolla.
       if (dwollaToken) {
         $this.data().dwolla = injectDwolla(payment, amount, dwollaToken);
+      }
+
+      // Only inject if the author has paypal.
+      if (paypalToken) {
+        $this.data().paypal = injectPaypal(payment, amount, paypalToken);
       }
     });
   }

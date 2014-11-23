@@ -38,6 +38,11 @@ function setTab() {
   // When opening the extension without a hash determine where to route based
   // on if the end user has already configured the getting started page or not.
   if (!hash) {
+    if (location.search) {
+      console.log(deparam(location.search.slice(1)));
+      return;
+    }
+
     storage.get('settings').then(function(settings) {
       // Update the hash fragment to change pages.
       location.href = settings.showLog ? '#donations' : '#getting-started';
