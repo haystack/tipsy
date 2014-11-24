@@ -3,3 +3,4 @@
 /node_modules
 /chrome-extension/dist
 /firefox-extension/dist
+/cjs

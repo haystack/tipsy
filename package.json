@@ -12,7 +12,8 @@
     "test-chrome": "grunt mochaTest:chrome-extension",
     "test-firefox": "grunt mochaTest:firefox-extension",
     "postinstall": "npm dedupe && grunt mozilla-addon-sdk && npm run python2",
-    "python2": "grunt shell:python2"
+    "python2": "grunt shell:python2",
+    "cjs": "compile-modules convert -f commonjs shared/scripts/**/*.js -o cjs/"
   },
   "devDependencies": {
     "es6-module-loader": "^0.9.4",
