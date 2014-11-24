@@ -1,7 +1,7 @@
 <div>
   <fieldset>
     <!-- Display the current list of pages to pay. -->
-    <h2>Make donations:</h2>
+    <h2>Make a donation</h2>
 
     <table class="pure-table pure-table-bordered pure-table-striped">
       <thead>
@@ -9,7 +9,7 @@
           <th>Host</th>
           <th>Name</th>
           <th>Time spent</th>
-          <th>Recommended donation</th>
+          <th>Recommendation</th>
           <th>Payment options</th>
         </tr>
       </thead>
@@ -21,13 +21,22 @@
       {%else%}
         {%each entries as entry%}
           {%each entry.author.list as author%}
-        <tr class="entry" data-dwolla="{{ author.dwolla }}" data-paypal="{{ author.paypal }}">
-          <td><a target="_blank" href="{{entry.tab.url}}">{{entry.tab.url}}</a></td>
+        <tr class="entry"
+          data-dwolla="{{ author.dwolla }}"
+          data-paypal="{{ author.paypal }}"
+          data-host="{{ entry.author.hostname }}"
+          data-url="{{ entry.tab.url }}"
+        >
+          <td><a target="_blank" title="{{entry.tab.url}}" href="{{entry.tab.url}}">{{entry.tab.url}}</a></td>
           <td>{{author.name|or "Anonymous"}}</td>
           <td>{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
-          <td class="payment">
-            No payment processors supported by this author.
+          <td class="relative">
+            <div class="payment">
+              No payment processors supported by this author.
+            </div>
+
+            <button class="remove pure-button">&#10007;</button>
           </td>
         </tr>
           {%endeach%}

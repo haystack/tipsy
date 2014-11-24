@@ -13,7 +13,7 @@ function DonationsPage() {
     entries: []
   };
 
-  //this.renderTable();
+  this.renderTable();
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
@@ -25,7 +25,8 @@ DonationsPage.prototype = {
   events: {
     'keyup input': 'filterInput',
     'blur input': 'formatAndSave',
-    'change input': 'formatAndSave'
+    'change input': 'formatAndSave',
+    'click .remove': 'remove'
   },
 
   filters: [
@@ -45,6 +46,23 @@ DonationsPage.prototype = {
    */
   timeSpent: function(val) {
     return moment.duration(val, 'milliseconds').humanize();
+  },
+
+  remove: function(ev) {
+    var row = $(ev.currentTarget).closest('tr').data();
+    var host = row.host;
+    var url = row.url;
+
+    storage.get('settings').then(function(settings) {
+      storage.get('log').then(function(resp) {
+        // Filter out these items.
+        resp[host] = resp[host].filter(function(entry) {
+          return entry.tab.url !== url;
+        });
+
+        return storage.set('log', resp);
+      });
+    });
   },
 
   /**
@@ -118,6 +136,8 @@ DonationsPage.prototype = {
     // Reset the data entries.
     this.data.entries = [];
 
+    console.log('start');
+
     // Resp is an object that is broken down by domain to list of entries
     // visited.  The most useful way to
     Object.keys(resp).forEach(function(key) {
@@ -151,7 +171,6 @@ DonationsPage.prototype = {
         })
         // Ensure we're only working with estimated amounts greater than `0`.
         .filter(function(entry) {
-          console.log(entry);
           return parseFloat(entry.estimatedAmount) > 0;
         });
 
@@ -167,6 +186,8 @@ DonationsPage.prototype = {
 
       entries.push.apply(entries, condensed);
     }, this);
+
+    console.log('end');
 
     return entries;
   },
@@ -198,6 +219,19 @@ DonationsPage.prototype = {
   },
 
   afterRender: function() {
+    // This event must be bound before any payment buttons are clicked.
+    this.$('.payment')[0].addEventListener('click', function(ev) {
+      var tr = $(ev.currentTarget).closest('tr').data();
+
+      // Need to synchronously save the current url & host.
+      window.localStorage.url = tr.url;
+      window.localStorage.host = tr.host;
+
+      window.alert('You will now be redirected to the payment site.');
+
+    // Capture is set to true here so that the event fires before the click.
+    }, true);
+
     this.$('tr.entry').each(function() {
       var $this = $(this);
       // Extract the estimated value.

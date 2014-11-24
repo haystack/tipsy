@@ -101,15 +101,12 @@ Component.prototype.render = function(context) {
   }).then(function(contents) {
     element.innerHTML = contents;
     return contents;
-  }, function(ex) {
-    // If there was an error provide some useful reporting.
-    console.log(component, context);
-    console.log(ex.stack);
   }).then(function() {
     if (component.afterRender) {
       component.afterRender();
     }
   }).catch(function(ex) {
+    console.log(component, context);
     console.log(ex.stack);
   });
 };

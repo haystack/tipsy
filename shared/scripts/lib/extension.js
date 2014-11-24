@@ -50,36 +50,36 @@ export function createExtension(options) {
     var nextNotified = storage.engine.nextNotified;
 
     // Reusable function to show the extension and reset.
-    var showNotification = function() {
-      // Always reset the timeout.
-      timers.clearTimeout(timeout);
+    //var showNotification = function() {
+    //  // Always reset the timeout.
+    //  timers.clearTimeout(timeout);
 
-      notifications.notify({
-        title: 'Tipsy',
-        text: 'Time to donate!'
-      });
+    //  notifications.notify({
+    //    title: 'Tipsy',
+    //    text: 'Time to donate!'
+    //  });
 
-      // Set the next notification.
-      var days = reminderLevelToDays[storage.engine.reminderLevel];
-      storage.engine.nextNotified = Date.now() * (days * 1440 * 60000);
+    //  // Set the next notification.
+    //  var days = reminderLevelToDays[storage.engine.reminderLevel];
+    //  storage.engine.nextNotified = Date.now() * (days * 1440 * 60000);
 
-      // Convert the new date to milliseconds.
-      var milliseconds = storage.engine.nextNotified;
+    //  // Convert the new date to milliseconds.
+    //  var milliseconds = storage.engine.nextNotified;
 
-      // Set the next timeout.
-      timeout = timers.setTimeout(showNotification, Date.now() - milliseconds);
-    };
+    //  // Set the next timeout.
+    //  timeout = timers.setTimeout(showNotification, Date.now() - milliseconds);
+    //};
 
-    // If this notification is scheduled for the future, set a timeout.
-    if (nextNotified > 0) {
-      // Set a timeout with the difference until the notification should
-      // trigger.
-      timeout = timers.setTimeout(showNotification, Date.now() - nextNotified);
-    }
-    // Otherwise immediately show and schedule for the next one.
-    else {
-      showNotification();
-    }
+    //// If this notification is scheduled for the future, set a timeout.
+    //if (nextNotified > 0) {
+    //  // Set a timeout with the difference until the notification should
+    //  // trigger.
+    //  timeout = timers.setTimeout(showNotification, Date.now() - nextNotified);
+    //}
+    //// Otherwise immediately show and schedule for the next one.
+    //else {
+    //  showNotification();
+    //}
 
     // Hooks up the content script once the tab has been loaded.  This also
     // sets up the messaging bridge.
@@ -89,13 +89,13 @@ export function createExtension(options) {
       });
 
       // Reset the current notificaiton.
-      worker.port.on('notification.set', function(days) {
-        timers.clearTimeout(timeout);
+      //worker.port.on('notification.set', function(days) {
+      //  timers.clearTimeout(timeout);
 
-        // Cache this value for easier access.
-        nextNotified = storage.engine.nextNotified;
-        timeout = setTimeout(showNotification, Date.now() - nextNotified);
-      });
+      //  // Cache this value for easier access.
+      //  nextNotified = storage.engine.nextNotified;
+      //  timeout = setTimeout(showNotification, Date.now() - nextNotified);
+      //});
 
       // Proxy getting a value from the storage engine.
       worker.port.on('storage.get', function(key) {
@@ -146,6 +146,8 @@ export function addContentScript(path) {
   if (environment === 'firefox') {
     var data = require('sdk/self').data;
     var pageMod = require('sdk/page-mod');
+
+    console.log('whatever');
 
     pageMod.PageMod({
       include: ['*'],

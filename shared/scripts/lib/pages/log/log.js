@@ -138,7 +138,10 @@ LogPage.prototype = {
       return filteredAndSorted;
     }).then(function(entries) {
       data.entries = entries;
-      log.table.render(data);
+
+      if (log.table) {
+        log.table.render(data);
+      }
     });
   }
 };
