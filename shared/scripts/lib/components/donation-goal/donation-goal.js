@@ -45,4 +45,3 @@ DonationGoalComponent.prototype = {
 DonationGoalComponent.prototype.__proto__ = Component.prototype;
 
 export default DonationGoalComponent;
-

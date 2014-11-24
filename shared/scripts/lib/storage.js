@@ -87,6 +87,9 @@ storage.engine = function() {
       // At the moment we can know if data is updated when set is called.
       onChange: function(callback) {
         this.onChangeCallback = callback;
+
+        // Trigger immediately.
+        callback();
       }
     };
   }

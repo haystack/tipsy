@@ -34,10 +34,40 @@ listen();
 function setTab() {
   var hash = location.hash;
   var page = pages[hash];
+  var params = {};
 
   // When opening the extension without a hash determine where to route based
   // on if the end user has already configured the getting started page or not.
   if (!hash) {
+    if (location.search) {
+      params = deparam(location.search.slice(1));
+
+      // Coerce to an array, since error sometimes comes back as an array.
+      if ([].concat(params.error).indexOf('failure') > -1) {
+        location.href = '#donations';
+        return;
+      }
+
+      var host = localStorage.host;
+      var url = localStorage.url;
+
+      delete window.localStorage.url;
+      delete window.localStorage.host;
+
+      // Otherwise we can assume the payment was successful.  We can now
+      // remove all the items from the storage.
+      storage.get('settings').then(function(settings) {
+        storage.get('log').then(function(resp) {
+          // Filter out these items.
+          resp[host] = resp[host].filter(function(entry) {
+            return entry.tab.url !== url;
+          });
+
+          return storage.set('log', resp);
+        });
+      });
+    }
+
     storage.get('settings').then(function(settings) {
       // Update the hash fragment to change pages.
       location.href = settings.showLog ? '#donations' : '#getting-started';

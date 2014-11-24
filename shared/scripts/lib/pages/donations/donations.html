@@ -1,44 +1,45 @@
 <div>
-  <!--
-  <fieldset>
-    <h2 class="ratio">$0.00 / $20.00</h2>
-    <h2>Progress towards completing this donation:</h2>
-    <progress value="0" max="1"></progress>
-
-    <p>Donation goal ends: 10/31/2014</p>
-  </fieldset>
-  -->
-
   <fieldset>
     <!-- Display the current list of pages to pay. -->
-    <h2>Make donations:</h2>
+    <h2>Make a donation</h2>
 
     <table class="pure-table pure-table-bordered pure-table-striped">
       <thead>
         <tr>
+          <th>Host</th>
           <th>Name</th>
           <th>Time spent</th>
-          <th>Recommended donation</th>
+          <th>Recommendation</th>
           <th>Payment options</th>
         </tr>
       </thead>
       <tbody>
       {%if not entries.length%}
         <tr>
-          <td colspan="4">Nobody to pay yet, get browsing!</td>
+          <td colspan="5">Nobody to pay yet, get browsing!</td>
         </tr>
       {%else%}
         {%each entries as entry%}
-        <tr>
-          <td>{{entry.name}}</td>
-          <td>{{entry.timeSpent}}</td>
+          {%each entry.author.list as author%}
+        <tr class="entry"
+          data-dwolla="{{ author.dwolla }}"
+          data-paypal="{{ author.paypal }}"
+          data-host="{{ entry.author.hostname }}"
+          data-url="{{ entry.tab.url }}"
+        >
+          <td><a target="_blank" title="{{entry.tab.url}}" href="{{entry.tab.url}}">{{entry.tab.url}}</a></td>
+          <td>{{author.name|or "Anonymous"}}</td>
+          <td>{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
-          <td>
-          
-          <input disabled type="image" class="pay bitcoin" src="../img/bitcoin_pay.png">
-          <input disabled type="image" class="pay dwolla" src="../img/dwolla_pay.png">
+          <td class="relative">
+            <div class="payment">
+              No payment processors supported by this author.
+            </div>
+
+            <button class="remove pure-button">&#10007;</button>
           </td>
         </tr>
+          {%endeach%}
         {%endeach%}
       {%endif%}
       </tbody>

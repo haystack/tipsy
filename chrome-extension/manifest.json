@@ -37,17 +37,16 @@
     "history",
     "idle",
     "storage",
-    "identity",
     "notifications",
-    "https://accounts.google.com/o/oauth2/token",
-    "https://www.googleapis.com/",
-    "https://api.coinbase.com/*",
-    "https://www.dwolla.com/*"
+    "https://www.dwolla.com/",
+    "https://www.coinbase.com/",
+    "https://api.coinbase.com/"
   ],
   "web_accessible_resources": [
     "js/**/*",
     "js/contentscript.js.map",
-    "bower_components/**/*"
+    "bower_components/**/*",
+    "html/index.html"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "frame-src 'unsafe-eval' 'self' https://coinbase.com https://www.coinbase.com; script-src 'unsafe-eval' 'self' https://api.coinbase.com https://www.dwolla.com https://www.coinbase.com; object-src 'self'; style-src 'unsafe-inline' 'self' https://www.coinbase.com https://www.dwolla.com https://fonts.googleapis.com"
 }

@@ -12,7 +12,8 @@
   border 2px solid #E0E0E0
   border-radius 5px
   box-shadow 4px 1px rgba(224, 224, 224, 0.25)
-  width calc(100% - 68px)
+  width 100%
+  box-sizing border-box
 
 .pay
   width auto
@@ -22,29 +23,48 @@
 p
   margin-bottom 0
 
-progress
-  width 100%
-  border 2px solid #CCC
-  background #FFFEE5
-  height 32px
-  border-radius 8px
-  overflow hidden
+table
+  margin-top 14px
 
-  &::-moz-progress-bar
-    background #B0FFA1
+  th
+    font-size 80%
 
-  &::-webkit-progress-bar
-    background #FFFEE5
+  td
+    &.relative
+      position relative
 
-  &::-webkit-progress-value
-    background #B0FFA1
-    position relative
+    &:first-child
+      max-width 340px
+      text-overflow ellipsis
+      white-space nowrap
+      overflow hidden
 
-    &:after
-      content ''
-      display block
+    &:last-child
+      min-width 300px
+
+    .remove
       position absolute
-      right 0
-      width 2px
-      height 100%
-      background #CCC
+      top 50%
+      right -57px
+      margin-top -16px
+
+  tr
+    &:hover
+      td
+        background-color #FCE6D2 !important
+
+// Overrides for payment processors.
+
+// Dwolla adjustments.
+.d-btn
+  display inline-block
+  margin-right 5px
+
+// PayPal adjustments.
+form[name=_xclick]
+  display inline-block
+  margin-right 5px
+
+  input[type=image]
+    position relative
+    top -6px

@@ -1,4 +1,5 @@
-@import url(http://fonts.googleapis.com/css?family=Sansita\+One)
+@import "nib"
+@import url(https://fonts.googleapis.com/css?family=Sansita\+One)
 @import url(../node_modules/purecss/tables.css)
 @import url(../node_modules/purecss/buttons.css)
 @import url(../node_modules/purecss/forms.css)
@@ -17,9 +18,6 @@
 log-table
   display block
   @import '../scripts/lib/components/log-table/log-table.styl'
-set-providers
-  display block
-  @import '../scripts/lib/components/providers/providers.styl'
 set-donation-goal
   display block
   @import '../scripts/lib/components/donation-goal/donation-goal.styl'
@@ -58,6 +56,7 @@ nav
   position relative
   padding 0 15%
   z-index 1
+  user-select none
 
   h1
     display inline-block
