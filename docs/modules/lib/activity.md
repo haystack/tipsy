@@ -1,5 +1,7 @@
 ### Activity
 
+![](https://raw.githubusercontent.com/tbranyen/tipsy/more-documentation/docs/_assets/activity.png)
+
 #### Overview
 
 This module is responsible for modifying the internal tab tracking cache and
