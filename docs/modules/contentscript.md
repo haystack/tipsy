@@ -1,5 +1,7 @@
 ### Content script
 
+![](https://raw.githubusercontent.com/tbranyen/tipsy/more-documentation/docs/_assets/contentscript.png)
+
 #### Overview
 
 This script is injected into individual tabs to communicate with the the
