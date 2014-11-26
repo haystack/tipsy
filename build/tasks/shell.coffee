@@ -6,6 +6,10 @@ module.exports = ->
 
   env = process.env
 
+  chrome = ''
+  python2 = ''
+  s3 = ''
+
   # https://code.google.com/p/selenium/wiki/ChromeDriver#Requirements
   if process.platform is 'linux'
     chrome = '/usr/bin/google-chrome'
@@ -21,6 +25,7 @@ module.exports = ->
     python2 = 'cd build/tools ; grep -Rl python . | xargs sed -ri "s/([^!]|^)python(\\s|$)/\\1python2\\2/g"'
   else if process.platform is 'darwin'
     python2 = ''
+  else
 
   # Only run the s3 task if Travis is building master and not in a pull
   # request.
