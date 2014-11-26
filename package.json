@@ -11,7 +11,7 @@
     "test": "grunt && grunt mochaTest && grunt shell:s3",
     "test-chrome": "grunt mochaTest:chrome-extension",
     "test-firefox": "grunt mochaTest:firefox-extension",
-    "postinstall": "npm dedupe ; grunt mozilla-addon-sdk ; npm run python2",
+    "postinstall": "npm dedupe && grunt mozilla-addon-sdk && npm run python2",
     "python2": "grunt shell:python2"
   },
   "devDependencies": {
