@@ -1,3 +1,6 @@
+path = require 'path'
+fs = require 'fs'
+
 module.exports = ->
   @loadNpmTasks 'grunt-shell'
 
@@ -8,6 +11,11 @@ module.exports = ->
     chrome = '/usr/bin/google-chrome'
   else if process.platform is 'darwin'
     chrome = '"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"'
+  else if process.platform is 'win32'
+    chrome = '"' + 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' + '"'
+
+    if not fs.existsSync chrome
+      chrome = '"' + 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' + '"'
 
   if process.platform is 'linux'
     python2 = 'cd build/tools ; grep -Rl python . | xargs sed -ri "s/([^!]|^)python(\\s|$)/\\1python2\\2/g"'
@@ -25,8 +33,8 @@ module.exports = ->
     'chrome-extension':
       command: [
         chrome
-        '--pack-extension=chrome-extension/dist/tipsy'
-        '--pack-extension-key=chrome-extension/key.pem'
+        '--pack-extension=' + path.resolve('chrome-extension/dist/tipsy')
+        '--pack-extension-key=' + path.resolve('chrome-extension/key.pem')
         '--no-message-box'
       ].join(' ')
 
