@@ -4,31 +4,30 @@
 
 #### Overview
 
-This module is responsible for modifying the internal tab tracking cache and
-the log object inside the storage engine.
-
-This module does not do any monitoring or tracking itself.  That happens within
-the watcher module.
+A lightweight abstraction that provides Document querying with selectors.
 
 #### Purpose
 
-- To start and stop tab activity recording.
+- The content script should do its best to not affect other scripts on a given
+  page.  This script provides the necessary lookups to avoid a library like
+  jQuery.
 
 #### Notes
 
-It may be required to convert the explicit storage dependency to be injected
-allowing for alternative implementations to be used.  Although it's possible
-that this storage mechanism will be useful to other extensions as well.
+This module is completely standalone and should realistically only be depended
+on by the content script.  Early on in development, it was attempted to avoid
+jQuery (which turned out to be a bad idea, backfilling jQuery is a pain), so
+there may be other modules that are still using some functions.
 
-If querying is necessary, a new function `query` could be introduced.  This is
-not necessary for this extension, but might be useful.
+In the case of `selectAll` the return value will always be an Array, instead of
+a NodeList, which is beneficial for Array operations.
+
+Both methods allow the passing of a context object, which is a DOM Element that
+will scope the lookups.
 
 #### Exported properties
 
 Name       | Type     | Description
 ---------- | -------- | -----------
-initialize | function | Ensures a log object in the storage engine is present.
-start      | function | Activates a tab to be tracked internally.
-stop       | function | Deactivates and saves the recorded tab information.
-
-
+select     | function | Selects a single element (first) found for a selector.
+selectAll  | function | Selects all elements found for a selector.
