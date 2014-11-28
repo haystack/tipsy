@@ -23,7 +23,6 @@ export function initialize() {
  * @param {Object} tab - to monitor.
  */
 export function start(tab) {
-  console.log('Starting', tab);
   // Ensure we're working with a tab object, which may or may not already
   // exist.
   var currentTab = tabs[tab.id] || {};
@@ -43,7 +42,6 @@ export function start(tab) {
  * @return {Promise} that resolves when log has been written to storage engine.
  */
 export function stop(tab) {
-  console.log('Stopping', tab);
   // Open access to the current log so that we can append the latest tab entry
   // into it.
   return storage.get('log').then(function(log) {
