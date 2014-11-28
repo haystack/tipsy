@@ -53,8 +53,12 @@ if (environment === 'chrome') {
 
     // Fetch the tab information from Chrome.
     chrome.tabs.get(tabId, function(tab) {
-      if (tabs[tabId] && tabId !== tabs.lastAccessed) {
-        stop(tabs[tabs.lastAccessed].tab);
+      var lastAccessed = tabs[tabs.lastAccessed];
+
+      // If we have changed the tab from a previous tab, stop tracking on that
+      // previous tab.
+      if (lastAccessed && tabId !== tabs.lastAccessed) {
+        stop(lastAccessed.tab);
       }
 
       // If this tab is not already being tracked, start it.
@@ -86,8 +90,10 @@ if (environment === 'chrome') {
 
   // When the tab is removed, stop the timer.
   chrome.tabs.onRemoved.addListener(function(tabId, changeInfo) {
-    if (tabs[tabId] && tabs[tabId].tab.url !== changeInfo.url) {
-      stop(tabs[tabId].tab);
+    var currentAccessed = tabs[tabId];
+
+    if (currentAccessed && currentAccessed.tab.url !== changeInfo.url) {
+      stop(currentAccessed.tab);
     }
   });
 
@@ -106,9 +112,13 @@ if (environment === 'chrome') {
       return;
     }
 
+    var lastAccessed = tabs[tabs.lastAccessed];
+
     // Stop the last accessed tab if the window is closed.
     if (winId === chrome.windows.WINDOW_ID_NONE) {
-      return stop(tabs[tabs.lastAccessed].tab);
+      if (lastAccessed) {
+        return stop(lastAccessed.tab);
+      }
     }
   });
 
