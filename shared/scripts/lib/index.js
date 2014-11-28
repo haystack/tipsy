@@ -76,10 +76,9 @@ function setTab() {
   else {
     // Render the page we're currently on, if we haven't already.
     if (!page.__rendered__) {
-      page.render();
-
       // Mark this page as rendered, so that we do not re-render.
       page.__rendered__ = true;
+      page.render();
     }
 
     // Augment the navigation depending on which page we're on.
