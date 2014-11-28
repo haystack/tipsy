@@ -75,7 +75,7 @@ if (environment === 'chrome') {
     // If there is a previous tab we were tracking, and it differs from this
     // one, stop that one in favor of the current.
     if (tabId !== tabs.lastAccessed && tabs[tabs.lastAccessed]) {
-      stop(tabs[tabId].tab);
+      stop(tabs[tabs.lastAccessed].tab);
     }
 
     else if (tabs[tabId] && changeInfo.url) {
@@ -120,7 +120,6 @@ if (environment === 'chrome') {
     // page.
     getCurrentTab().then(function(tab) {
       if (req.name === 'isIdle') {
-        console.log('hit');
         idle.update(req.data, tab);
       }
 
