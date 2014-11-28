@@ -1,13 +1,22 @@
 'use strict';
 
 export function inject($el, amount, token) {
+  var base = location.href.split('#')[0];
   var redirect = 'http://97.107.132.235:9999?redirect=' +
-    encodeURIComponent(location.href.split('#')[0]);
+    encodeURIComponent(base);
+
+  var src = 'https://www.dwolla.com/scripts/button.min.js';
+
+  // If we're in testing, swap the token with our test account.
+  if (localStorage.testing === 'true') {
+    token = 'lYNGTjRZRQAU4j32+qB4fBAPNDTQQGeZHF9cZFrH+83qm21sTL';
+    src = base + '/../../scripts/vendor/dwolla.js';
+  }
 
   var script = $('<script>')
     .addClass('dwolla_button')
     .attr({
-      'src': 'https://www.dwolla.com/scripts/button.min.js',
+      'src': src,
       'data-key': token,
       'data-redirect': redirect,
       'data-label': 'Donate with Dwolla',

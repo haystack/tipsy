@@ -46,13 +46,16 @@ function setTab() {
     if (location.search) {
       params = deparam(location.search.slice(1));
 
-      delete window.localstorage.url;
-      delete window.localstorage.host;
+      delete window.localStorage.url;
+      delete window.localStorage.host;
 
       // Coerce to an array, since error sometimes comes back as an array.
       if ([].concat(params.error).indexOf('failure') > -1) {
         // Remove the query string from the url.
-        history.replaceState({}, "", location.href.split("?")[0])
+        history.replaceState({}, "", location.href.split("?")[0]);
+
+        // Display the error.
+        alert(params.error_description);
 
         // Redirect to donations.
         location.href = '#donations';
@@ -69,9 +72,17 @@ function setTab() {
             return entry.tab.url !== url;
           });
 
-          return storage.set('log', resp);
+          return storage.set('log', resp).then(function() {
+            // Remove the query string from the url.
+            history.replaceState({}, "", location.href.split("?")[0]);
+
+            // Redirect to donations.
+            location.href = '#donations';
+          });
         });
       });
+
+      return;
     }
 
     storage.get('settings').then(function(settings) {
