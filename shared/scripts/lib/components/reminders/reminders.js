@@ -2,7 +2,7 @@
 
 import Component from '../../component';
 import storage from '../../storage';
-import { create as createNotification } from '../../notifications';
+import { create as createNotification, toDays } from '../../notifications';
 
 function RemindersComponent() {
   Component.prototype.constructor.apply(this, arguments);
@@ -30,16 +30,7 @@ RemindersComponent.prototype = {
   reminderLevel: 2,
 
   // Converts the level to a number of days.
-  reminderLevelToDays: [
-    // Daily.
-    1,
-    // Weekly.
-    7,
-    // Monthly.
-    30,
-    // Yearly.
-    365
-  ],
+  reminderLevelToDays: toDays,
 
   serialize: function() {
     // Convert the reminder level (index) to days, using the lookup table.

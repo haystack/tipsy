@@ -1,6 +1,17 @@
 import { environment } from './environment';
 import storage from './storage';
 
+export var toDays = [
+  // Daily.
+  1,
+  // Weekly.
+  7,
+  // Monthly.
+  30,
+  // Yearly.
+  365
+];
+
 /**
  * Schedule a new notification.
  *
@@ -44,20 +55,9 @@ export function listen() {
       }, function unhandledCallback() {});
     });
 
-    var reminderLevelToDays = [
-      // Daily.
-      1,
-      // Weekly.
-      7,
-      // Monthly.
-      30,
-      // Yearly.
-      365
-    ];
-
     // Reset the next notified in the storage engine.
     storage.get('settings').then(function(settings) {
-      var days = reminderLevelToDays[settings.reminderLevel];
+      var days = toDays[settings.reminderLevel];
       var next = moment(settings.nextNotified).add(days, 'days');
       settings.nextNotified = Number(next);
 
