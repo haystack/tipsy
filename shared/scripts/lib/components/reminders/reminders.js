@@ -22,11 +22,14 @@ RemindersComponent.prototype = {
   template: 'components/reminders/reminders.html',
 
   events: {
+    // Whenever the input is updated, update the settings and save.
     'input input[type=range]': 'updateOutputAndSave'
   },
 
+  // Defaults to a month.
   reminderLevel: 2,
 
+  // Converts the level to a number of days.
   reminderLevelToDays: [
     // Daily.
     1,
@@ -43,11 +46,9 @@ RemindersComponent.prototype = {
     var reminderDays = this.reminderLevelToDays[this.reminderLevel];
 
     // Default to a monthly reminder.
-    var month = moment().add(reminderDays, 'days').calendar();
+    var monthDefault = moment().add(reminderDays, 'days').calendar();
 
-    return {
-      nextNotified: this.nextNotified || month
-    };
+    return { nextNotified: this.nextNotified || monthDefault };
   },
 
   updateOutputAndSave: function(ev) {
@@ -55,6 +56,7 @@ RemindersComponent.prototype = {
     var output = this.$('output');
     var index = ev.target ? ev.target.value : ev;
 
+    // Display the correct output.
     output.find('span').removeClass('active').eq(index).addClass('active');
 
     return storage.get('settings').then(function(settings) {
@@ -99,8 +101,12 @@ RemindersComponent.prototype = {
   },
 
   afterRender: function() {
-    // Default to month.
-    this.$('input[type=range]').val(this.reminderLevel);
+    var index = this.reminderLevel;
+    var range = this.$('input[type=range]').val(index);
+    var output = this.$('output');
+
+    // Display the correct output.
+    output.find('span').removeClass('active').eq(index).addClass('active');
   }
 };
 
