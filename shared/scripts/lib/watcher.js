@@ -8,26 +8,26 @@ import storage from './storage';
 // Tracks the current pages open in tabs.  Whenever a tab is closed, remove
 // from the list.
 var idle = {
+  // A good default threshold timeout.
   seconds: 20,
 
   // Idle is a global concept.
-  isIdle: false
-};
+  isIdle: false,
 
-/**
- * Updates the idle state and triggers appropriate actions depending on that
- * state.
- *
- * @param state
- */
-function updateIdle(state, tab) {
-  // If the state is unchanged, don't bother doing anything.
-  if (idle.isIdle === state) {
-    return;
+  // Updates the idle state and triggers appropriate actions depending on that
+  // state.
+  update: function(state, tab) {
+    // If the state is unchanged, don't bother doing anything.
+    if (this.isIdle === state) {
+      return;
+    }
+
+    // Always update the current tab based on the idle access.
+    tabs.lastAccessed = tab.id;
+
+    return this.isIdle ? stop(tab) : start(tab);
   }
-
-  return idle.isIdle ? stop(tab) : start(tab);
-}
+};
 
 // Chrome extension have access to the `idle` API which determines if users
 // are interacting with the page or not.
@@ -37,13 +37,48 @@ if (environment === 'chrome') {
   // Monitor whether or not the page is considered idle.
   chrome.idle.onStateChanged.addListener(function(newState) {
     getCurrentTab().then(function(tab) {
-      updateIdle(newState === 'locked' || newState === 'idle', tab );
+      idle.update(newState === 'locked' || newState === 'idle', tab);
+    });
+  });
+
+  // Called when focus is moved to a new tab.
+  chrome.tabs.onActivated.addListener(function(tabInfo) {
+    var tabId = tabInfo.tabId;
+
+    // If we are currently idle, do nothing.
+    if (idle.isIdle) {
+      return;
+    }
+
+    // Fetch the tab information from Chrome.
+    chrome.tabs.get(tabId, function(tab) {
+      if (tabs[tabId] && tabId !== tabs.lastAccessed) {
+        stop(tabs[tabs.lastAccessed].tab);
+      }
+
+      // If this tab is not already being tracked, start it.
+      if (!tabs[tabId]) {
+        start(tab);
+      }
+
+      tabs.lastAccessed = tabId;
     });
   });
 
   // Monitor whenever the tab is updated to detect for url changes.
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
-    if (tabs[tabId] && changeInfo.url) {
+    // If we are currently idle, do nothing.
+    if (idle.isIdle) {
+      return;
+    }
+
+    // If there is a previous tab we were tracking, and it differs from this
+    // one, stop that one in favor of the current.
+    if (tabId !== tabs.lastAccessed && tabs[tabs.lastAccessed]) {
+      stop(tabs[tabId].tab);
+    }
+
+    else if (tabs[tabId] && changeInfo.url) {
       stop(tabs[tabId].tab);
     }
   });
@@ -52,6 +87,27 @@ if (environment === 'chrome') {
   chrome.tabs.onRemoved.addListener(function(tabId, changeInfo) {
     if (tabs[tabId] && tabs[tabId].tab.url !== changeInfo.url) {
       stop(tabs[tabId].tab);
+    }
+  });
+
+  // Called when the window has changed.
+  // Has two cases:
+  //
+  // 1) left chrome: must update last visited time spent.
+  // 2) opened window: must create or update new entry.
+  //
+  // Edit: This actually triggers more often that the previous two assertions.
+  // This triggers whenever the focus changes, so if you move your mouse in and
+  // out of a window it will trigger.
+  chrome.windows.onFocusChanged.addListener(function(winId) {
+    // If we are currently idle, do nothing.
+    if (idle.isIdle) {
+      return;
+    }
+
+    // Stop the last accessed tab if the window is closed.
+    if (winId === chrome.windows.WINDOW_ID_NONE) {
+      return stop(tabs[tabs.lastAccessed].tab);
     }
   });
 
@@ -64,7 +120,7 @@ if (environment === 'chrome') {
     // page.
     getCurrentTab().then(function(tab) {
       if (req.name === 'isIdle') {
-        updateIdle(req.data, tab);
+        idle.update(req.data, tab);
       }
 
       if (req.name === 'author') {
@@ -109,10 +165,10 @@ else if (environment === 'firefox') {
       // Wait for the idle time to reach the designatd threshold before
       // changing the state.
       if (idleService.idleTime >= (idle.seconds * 1000)) {
-        updateIdle(true, tab);
+        idle.update(true, tab);
       }
       else {
-        updateIdle(false, tab);
+        idle.update(false, tab);
       }
     });
   }, 1000);

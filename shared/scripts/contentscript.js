@@ -106,7 +106,7 @@ var addEvent = function(element, events, state) {
 };
 
 // Whenever the mouse moves or the page scrolls, set the state to `false`.
-addEvent(document.body, 'scroll mousemove', false);
+//addEvent(document.body, 'scroll mousemove', false);
 
 // Loop through all media types and bind to their respective state events to
 // update the idle state.
