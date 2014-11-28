@@ -65,13 +65,17 @@ export function stop(tab) {
     // Ensure that the log for this url is an array of entries.
     log[host] = Array.isArray(log[host]) ? log[host] : [];
 
-    // Add the information necessary to render the log and payments correctly.
-    log[host].push({
-      author: tabs[tab.id].author,
-      tab: tab,
-      accessTime: tabs[tab.id].accessTime,
-      timeSpent: Date.now() - tabs[tab.id].accessTime
-    });
+    // Never push an entry in that does not contain the host.
+    if (tab.url.indexOf(host) > -1) {
+      // Add the information necessary to render the log and payments
+      // correctly.
+      log[host].push({
+        author: tabs[tab.id].author,
+        tab: tab,
+        accessTime: tabs[tab.id].accessTime,
+        timeSpent: Date.now() - tabs[tab.id].accessTime
+      });
+    }
 
     // Write log updates back to the storage engine.
     return storage.set('log', log).then(function() {

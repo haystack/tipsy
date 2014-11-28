@@ -19,6 +19,32 @@ function postMessage(body) {
   }
 }
 
+
+/**
+ * Debounce a function to not thrash the message passing.
+ *
+ * @param {Function} fn - A function to debounce.
+ * @param {number} delay - How long to wait.
+ * @return {Function} A new function that will be used in place and debounced.
+ */
+function debounce(fn, delay) {
+  // Close around this variable so that subsequent calls will always reference
+  // the same timer.
+  var timeout;
+
+  return function() {
+    var args = arguments;
+
+    // Always clear the timeout.
+    clearTimeout(timeout);
+
+    // Set a new timeout.
+    timeout = setTimeout(function() {
+      fn.apply(this, args);
+    }.bind(this), delay);
+  };
+}
+
 /**
  * Find the current domain name.
  *
@@ -91,17 +117,15 @@ postMessage({
 
 // Makes it easier to denote what the current page idle is.  Binds multiple
 // events to an element and then passes along what the state should be.
-//
-// FIXME Should use an inherent debounce here.
 var addEvent = function(element, events, state) {
   // Allow multiple events to be bound.
   events.split(' ').forEach(function(event) {
-    element.addEventListener(event, function() {
+    element.addEventListener(event, debounce(function() {
       postMessage({
         name: 'isIdle',
         data: state
       });
-    }, true);
+    }, 500), true);
   });
 };
 

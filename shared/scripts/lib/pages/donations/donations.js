@@ -219,18 +219,22 @@ DonationsPage.prototype = {
   },
 
   afterRender: function() {
-    // This event must be bound before any payment buttons are clicked.
-    this.$('.payment')[0].addEventListener('click', function(ev) {
-      var tr = $(ev.currentTarget).closest('tr').data();
+    var paymentElement = this.$('.payment')[0];
 
-      // Need to synchronously save the current url & host.
-      window.localStorage.url = tr.url;
-      window.localStorage.host = tr.host;
+    if (paymentElement) {
+      // This event must be bound before any payment buttons are clicked.
+      paymentElement.addEventListener('click', function(ev) {
+        var tr = $(ev.currentTarget).closest('tr').data();
 
-      window.alert('You will now be redirected to the payment site.');
+        // Need to synchronously save the current url & host.
+        window.localStorage.url = tr.url;
+        window.localStorage.host = tr.host;
 
-    // Capture is set to true here so that the event fires before the click.
-    }, true);
+        window.alert('You will now be redirected to the payment site.');
+
+      // Capture is set to true here so that the event fires before the click.
+      }, true);
+    }
 
     this.$('tr.entry').each(function() {
       var $this = $(this);

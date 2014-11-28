@@ -141,6 +141,9 @@ LogTableComponent.prototype = {
       component.$('i.missing.favicon').each(function(key, el) {
         component.showFavicon(log, el, $(el).data('host'));
       });
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
     });
   }
 };

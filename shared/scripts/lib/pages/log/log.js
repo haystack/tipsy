@@ -57,7 +57,10 @@ LogPage.prototype = {
    * @return
    */
   toArray: function(resp) {
-    return Object.keys(resp).map(function(key) {
+    return Object.keys(resp).filter(function(key) {
+      // Ensure at least one entry per host.
+      return resp[key].length;
+    }).map(function(key) {
       return {
         host: key,
         entries: resp[key],
@@ -142,6 +145,9 @@ LogPage.prototype = {
       if (log.table) {
         log.table.render(data);
       }
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
     });
   }
 };
