@@ -120,6 +120,7 @@ if (environment === 'chrome') {
     // page.
     getCurrentTab().then(function(tab) {
       if (req.name === 'isIdle') {
+        console.log('hit');
         idle.update(req.data, tab);
       }
 
