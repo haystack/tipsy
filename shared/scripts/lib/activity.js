@@ -28,7 +28,7 @@ export function start(tab) {
   var currentTab = tabs[tab.id] || {};
 
   // Add the tab object and current access time.
-  currentTab.accessTime = Date.now();
+  currentTab.accessTime = currentTab.accessTime || Date.now();
   currentTab.tab = currentTab.tab || tab;
 
   console.info('Started tracking: %s', tab.url);
