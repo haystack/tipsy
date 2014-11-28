@@ -55,7 +55,7 @@ function setTab() {
         history.replaceState({}, "", location.href.split("?")[0]);
 
         // Display the error.
-        alert(params.error_description);
+        window.alert(params.error_description);
 
         // Redirect to donations.
         location.href = '#donations';
