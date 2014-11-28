@@ -45,8 +45,9 @@ if (environment === 'chrome') {
   chrome.tabs.onActivated.addListener(function(tabInfo) {
     var tabId = tabInfo.tabId;
 
-    // If we are currently idle, do nothing.
-    if (idle.isIdle) {
+    // If we are currently idle, do nothing.  If there is no `tabId` do not
+    // attempt to make a get call.
+    if (idle.isIdle || !tabId) {
       return;
     }
 
