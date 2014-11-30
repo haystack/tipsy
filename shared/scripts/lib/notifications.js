@@ -53,18 +53,18 @@ export function listen() {
         title: 'Tipsy',
         message: 'Time to Donate!'
       }, function unhandledCallback() {});
-    });
 
-    // Reset the next notified in the storage engine.
-    storage.get('settings').then(function(settings) {
-      var days = toDays[settings.reminderLevel];
-      var next = moment(settings.nextNotified).add(days, 'days');
-      settings.nextNotified = Number(next);
+      // Reset the next notified in the storage engine.
+      storage.get('settings').then(function(settings) {
+        var days = toDays[settings.reminderLevel];
+        var next = moment(settings.nextNotified).add(days, 'days');
+        settings.nextNotified = Number(next);
 
-      // Create the next alarm.
-      create(next, days);
+        // Create the next alarm.
+        create(next, days);
 
-      return storage.set('settings', settings);
+        return storage.set('settings', settings);
+      });
     });
   }
 }

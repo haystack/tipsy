@@ -147,8 +147,6 @@ export function addContentScript(path) {
     var data = require('sdk/self').data;
     var pageMod = require('sdk/page-mod');
 
-    console.log('whatever');
-
     pageMod.PageMod({
       include: ['*'],
       contentScriptFile: data.url(path),
