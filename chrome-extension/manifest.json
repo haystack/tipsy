@@ -39,8 +39,7 @@
     "storage",
     "notifications",
     "https://www.dwolla.com/",
-    "https://www.coinbase.com/",
-    "https://api.coinbase.com/"
+    "https://uat.dwolla.com/"
   ],
   "web_accessible_resources": [
     "js/**/*",
@@ -48,5 +47,5 @@
     "bower_components/**/*",
     "html/index.html"
   ],
-  "content_security_policy": "frame-src 'unsafe-eval' 'self' https://coinbase.com https://www.coinbase.com; script-src 'unsafe-eval' 'self' https://api.coinbase.com https://www.dwolla.com https://www.coinbase.com; object-src 'self'; style-src 'unsafe-inline' 'self' https://www.coinbase.com https://www.dwolla.com https://fonts.googleapis.com"
+  "content_security_policy": "script-src 'unsafe-eval' 'self' https://www.dwolla.com https://uat.dwolla.com; object-src 'self'; style-src 'unsafe-inline' 'self' https://uat.dwolla.com https://www.dwolla.com https://fonts.googleapis.com"
 }

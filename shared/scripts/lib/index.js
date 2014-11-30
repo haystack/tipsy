@@ -36,23 +36,32 @@ function setTab() {
   var page = pages[hash];
   var params = {};
 
+  // Used for payment redirection.
+  var host = localStorage.host;
+  var url = localStorage.url;
+
   // When opening the extension without a hash determine where to route based
   // on if the end user has already configured the getting started page or not.
   if (!hash) {
     if (location.search) {
       params = deparam(location.search.slice(1));
 
-      // Coerce to an array, since error sometimes comes back as an array.
-      if ([].concat(params.error).indexOf('failure') > -1) {
-        location.href = '#donations';
-        return;
-      }
-
-      var host = localStorage.host;
-      var url = localStorage.url;
-
       delete window.localStorage.url;
       delete window.localStorage.host;
+
+      // Coerce to an array, since error sometimes comes back as an array.
+      if ([].concat(params.error).indexOf('failure') > -1) {
+        // Remove the query string from the url.
+        history.replaceState({}, "", location.href.split("?")[0]);
+
+        // Display the error.
+        window.alert(params.error_description);
+
+        // Redirect to donations.
+        location.href = '#donations';
+
+        return;
+      }
 
       // Otherwise we can assume the payment was successful.  We can now
       // remove all the items from the storage.
@@ -63,9 +72,17 @@ function setTab() {
             return entry.tab.url !== url;
           });
 
-          return storage.set('log', resp);
+          return storage.set('log', resp).then(function() {
+            // Remove the query string from the url.
+            history.replaceState({}, "", location.href.split("?")[0]);
+
+            // Redirect to donations.
+            location.href = '#donations';
+          });
         });
       });
+
+      return;
     }
 
     storage.get('settings').then(function(settings) {
@@ -76,10 +93,9 @@ function setTab() {
   else {
     // Render the page we're currently on, if we haven't already.
     if (!page.__rendered__) {
-      page.render();
-
       // Mark this page as rendered, so that we do not re-render.
       page.__rendered__ = true;
+      page.render();
     }
 
     // Augment the navigation depending on which page we're on.

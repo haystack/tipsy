@@ -13,6 +13,7 @@ function DonationsPage() {
     entries: []
   };
 
+  // Always attempt to render the inner table.
   this.renderTable();
 
   // Whenever the data changes re-render the table.
@@ -86,7 +87,11 @@ DonationsPage.prototype = {
         return filteredAndSorted;
       }).then(function(entries) {
         component.data.entries = entries;
-        component.render();
+
+        // This page hasn't been officially rendered yet.
+        if (component.__rendered__) {
+          component.render();
+        }
       }).catch(function(ex) {
         console.log(ex);
         console.log(ex.stack);
@@ -135,8 +140,6 @@ DonationsPage.prototype = {
 
     // Reset the data entries.
     this.data.entries = [];
-
-    console.log('start');
 
     // Resp is an object that is broken down by domain to list of entries
     // visited.  The most useful way to
@@ -187,8 +190,6 @@ DonationsPage.prototype = {
       entries.push.apply(entries, condensed);
     }, this);
 
-    console.log('end');
-
     return entries;
   },
 
@@ -219,22 +220,15 @@ DonationsPage.prototype = {
   },
 
   afterRender: function() {
-    var paymentElement = this.$('.payment')[0];
+    this.$('.payment').on('mouseup', function(ev) {
+      var tr = $(ev.currentTarget).closest('tr').data();
 
-    if (paymentElement) {
-      // This event must be bound before any payment buttons are clicked.
-      paymentElement.addEventListener('click', function(ev) {
-        var tr = $(ev.currentTarget).closest('tr').data();
+      // Need to synchronously save the current url & host.
+      window.localStorage.url = tr.url;
+      window.localStorage.host = tr.host;
 
-        // Need to synchronously save the current url & host.
-        window.localStorage.url = tr.url;
-        window.localStorage.host = tr.host;
-
-        window.alert('You will now be redirected to the payment site.');
-
-      // Capture is set to true here so that the event fires before the click.
-      }, true);
-    }
+      window.alert('You will now be redirected to the payment site.');
+    });
 
     this.$('tr.entry').each(function() {
       var $this = $(this);
