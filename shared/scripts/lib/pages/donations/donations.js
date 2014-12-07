@@ -230,6 +230,7 @@ DonationsPage.prototype = {
       window.alert('You will now be redirected to the payment site.');
     });
 
+    // Inject payment information for each entry.
     this.$('tr.entry').each(function() {
       var $this = $(this);
       // Extract the estimated value.
@@ -254,6 +255,11 @@ DonationsPage.prototype = {
       if (paypalToken) {
         $this.data().paypal = injectPaypal(payment, amount, paypalToken);
       }
+    });
+
+    // Enable table sorting.
+    this.tablesort = new Tablesort(this.$('table')[0], {
+      descending: true
     });
   }
 };

@@ -1,0 +1,33 @@
+<tr class="entry-history">
+  <td colspan="5">
+    <table class="pure-table pure-table-bordered pure-table-striped">
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Author information</th>
+          <th>Access time</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {%each entry.entries as visit%}
+          <tr>
+            <td><a href="{{visit.tab.url}}" target="_blank">{{visit.tab.url}}</a></td>
+            <td>
+              {%if visit.author.list.length%}
+                {%if visit.author.list.0.name%}
+                  {{visit.author.list.0.name}}
+                {%else%}
+                  <a href="{{ visit.author.list.0.href }}" target="_blank">Encourage to Tipsy</a>
+                {%endif%}
+              {%else%}
+              No author tag present
+              {%endif%}
+            </td>
+            <td>{{visit|formatAccessTime}}</td>
+          </tr>
+        {%endeach%}
+      </tbody>
+    </table>
+  </td>
+</tr>

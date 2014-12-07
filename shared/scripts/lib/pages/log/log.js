@@ -13,7 +13,27 @@ import LogTableComponent from '../../components/log-table/log-table';
 function LogPage() {
   Component.prototype.constructor.apply(this, arguments);
 
+  // Whenever the storage engine changes, update the log table.
   storage.onChange(this.renderTable.bind(this));
+
+  var component = this;
+
+  // Save the log data for future access.
+  this.data = { entries: [] };
+
+  // Fetch the entry history template that will be used to show detailed log.
+  this.entryHistory = this.fetch('components/log-table/entry-history.html')
+    // Convert to a template, once fetched.
+    .then(function(contents) {
+      var template = combyne(contents);
+
+      // Register all filters to the template.
+      [].concat(component.filters).forEach(function(filter) {
+        template.registerFilter(filter, component[filter]);
+      });
+
+      return template;
+    });
 }
 
 LogPage.prototype = {
@@ -24,12 +44,33 @@ LogPage.prototype = {
   events: {
     'click .author': 'toggleNoAuthor',
     'click .reset': 'resetLog',
-    'click tr': 'toggleEntryHistory'
+    'click tbody tr': 'toggleEntryHistory',
+    'click .entry-history': 'cancelEvent'
+  },
+
+  // Register these functions as filters.
+  filters: [
+    'formatAccessTime'
+  ],
+
+  /**
+   * formatAccessTime
+   *
+   * @param val
+   * @return
+   */
+  formatAccessTime: function(val) {
+    var date = new Date(val.accessTime);
+    return moment(date).format("hA - ddd, MMM Do, YYYY");
   },
 
   afterRender: function() {
     this.table = new LogTableComponent(select('log-table', this.el));
     this.renderTable();
+  },
+
+  handleMissingFavicon: function(ev) {
+    console.log(ev);
   },
 
   /**
@@ -47,7 +88,32 @@ LogPage.prototype = {
   },
 
   toggleEntryHistory: function(ev) {
-    $(ev.currentTarget).toggleClass('active').next(".entry-history").toggle();
+    var component = this;
+    var tr = $(ev.currentTarget);
+
+    // Toggle the active class on click.
+    tr.toggleClass('active');
+
+    // Once the history template has been fetched, add the entry history.
+    this.entryHistory.then(function(template) {
+      var index = Number(tr.data('key'));
+
+      // Only render the current entry.
+      if (tr.is('.active')) {
+        tr.after(template.render({ entry: component.data.entries[index] }));
+      }
+      else {
+        tr.siblings('tr.entry-history').remove();
+      }
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+    });
+
+    // Enable table sorting.
+    //new Tablesort(next.find('table')[0], {
+    //  descending: true
+    //});
   },
 
   /**
@@ -125,7 +191,9 @@ LogPage.prototype = {
    */
   renderTable: function() {
     var log = this;
-    var data = {
+
+    // Save the log data for future access.
+    log.data = {
       entries: []
     };
 
@@ -140,10 +208,10 @@ LogPage.prototype = {
 
       return filteredAndSorted;
     }).then(function(entries) {
-      data.entries = entries;
+      log.data.entries = entries;
 
       if (log.table) {
-        log.table.render(data);
+        log.table.render(log.data);
       }
     }).catch(function(ex) {
       console.log(ex);

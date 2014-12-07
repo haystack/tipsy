@@ -1,0 +1,27 @@
+th.sort-header
+  cursor pointer
+
+  &::-moz-selection, &::selection
+    background transparent
+
+  &:after
+    content ''
+    float right
+    margin-top 7px
+    border-width 0 4px 4px
+    border-style solid
+    border-color #404040 transparent
+    visibility hidden
+
+  &:hover:after
+    visibility visible
+
+th.sort-up:after
+th.sort-down:after
+th.sort-down:hover:after
+  visibility visible
+  opacity 0.4
+
+th.sort-up:after
+  border-bottom none
+  border-width 4px 4px 0
