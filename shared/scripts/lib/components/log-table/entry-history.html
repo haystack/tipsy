@@ -12,7 +12,7 @@
       <tbody>
         {%each entry.entries as visit%}
           <tr>
-            <td><a href="{{visit.tab.url}}" target="_blank">{{visit.tab.url}}</a></td>
+            <td class="url"><a href="{{visit.tab.url}}" target="_blank">{{visit.tab.url}}</a></td>
             <td>
               {%if visit.author.list.length%}
                 {%if visit.author.list.0.name%}
@@ -24,7 +24,8 @@
               No author tag present
               {%endif%}
             </td>
-            <td>{{visit|formatAccessTime}}</td>
+
+            <td data-sort="{{visit|formatAccessTime 'true'}}">{{visit|formatAccessTime}}</td>
           </tr>
         {%endeach%}
       </tbody>

@@ -91,6 +91,11 @@ LogPage.prototype = {
     var component = this;
     var tr = $(ev.currentTarget);
 
+    // Inside a TH.
+    if (tr.parents('th').length) {
+      return false;
+    }
+
     // Toggle the active class on click.
     tr.toggleClass('active');
 
@@ -101,19 +106,16 @@ LogPage.prototype = {
       // Only render the current entry.
       if (tr.is('.active')) {
         tr.after(template.render({ entry: component.data.entries[index] }));
+
+        // Enable table sorting.
+        new Tablesort(component.$('tr.entry-history table')[0], {
+          descending: true
+        });
       }
       else {
         tr.next('tr.entry-history').remove();
       }
-    }).catch(function(ex) {
-      console.log(ex);
-      console.log(ex.stack);
     });
-
-    // Enable table sorting.
-    //new Tablesort(next.find('table')[0], {
-    //  descending: true
-    //});
   },
 
   /**
