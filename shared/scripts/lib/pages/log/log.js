@@ -103,7 +103,7 @@ LogPage.prototype = {
         tr.after(template.render({ entry: component.data.entries[index] }));
       }
       else {
-        tr.siblings('tr.entry-history').remove();
+        tr.next('tr.entry-history').remove();
       }
     }).catch(function(ex) {
       console.log(ex);
