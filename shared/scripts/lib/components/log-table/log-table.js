@@ -23,12 +23,31 @@ LogTableComponent.prototype = {
    * timeSpent
    *
    * @param val
+   * @param isValue
    * @return
    */
-  timeSpent: function(val) {
+  timeSpent: function(val, isValue) {
+    var time = moment.duration(val.reduce(function(prev, current) {
+      return prev + current.timeSpent;
+    }, 0), 'milliseconds');
+
+    if (isValue) {
+      return time;
+    }
+
+    return time.humanize();
+  },
+
+  /**
+   * timeSpentValue
+   *
+   * @param val
+   * @return
+   */
+  timeSpentValue: function(val) {
     return moment.duration(val.reduce(function(prev, current) {
       return prev + current.timeSpent;
-    }, 0), 'milliseconds').humanize();
+    }, 0), 'milliseconds');
   },
 
   /**
@@ -65,10 +84,16 @@ LogTableComponent.prototype = {
    * formatAccessTime
    *
    * @param val
+   * @param isValue
    * @return
    */
-  formatAccessTime: function(val) {
+  formatAccessTime: function(val, isValue) {
     var date = new Date(val.accessTime);
+
+    if (isValue) {
+      return moment(date).unix();
+    }
+
     return moment(date).format("hA - ddd, MMM Do, YYYY");
   },
 

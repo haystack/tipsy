@@ -1,4 +1,4 @@
-<table class="pure-table pure-table-bordered pure-table-striped">
+<table class="pure-table pure-table-bordered">
   <thead>
     <tr>
       <th>Domain</th>
@@ -28,8 +28,8 @@
         {%endif%}
       </td>
       <td>{{entry.entries.length}}</td>
-      <td>{{entry.entries|timeSpent}}</td>
-      <td>{{entry.entries|findLast|formatAccessTime}}</td>
+      <td data-sort="{{entry.entries|timeSpent 'true'}}">{{entry.entries|timeSpent}}</td>
+      <td data-sort="{{entry.entries|findLast|formatAccessTime 'true'}}">{{entry.entries|findLast|formatAccessTime}}</td>
     </tr>
     {%endeach%}
   {%endif%}
