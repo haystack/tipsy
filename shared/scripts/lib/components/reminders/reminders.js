@@ -29,7 +29,7 @@ function RemindersComponent() {
   // the next notified time.
   storage.onChange(function() {
     storage.get('settings').then(function(settings) {
-      var nextNotified = moment(settings.nextNotified);
+      var nextNotified = moment(new Date(settings.nextNotified));
 
       // Update the value in the markup.
       component.$('.next').html(nextNotified.calendar());
@@ -50,7 +50,7 @@ RemindersComponent.prototype = {
   ],
 
   calendar: function(val) {
-    return moment(val).calendar();
+    return moment(new Date(val)).calendar();
   },
 
   // Defaults to a month, you can look up the association inside the
@@ -92,7 +92,7 @@ RemindersComponent.prototype = {
       var prev = settings.reminderLevel;
 
       // Find the next notified time.
-      var lastNotified = moment(component.nextNotified);
+      var lastNotified = moment(new Date(component.nextNotified));
 
       // Get the number of days associated at this level.
       var days = toDays[index];

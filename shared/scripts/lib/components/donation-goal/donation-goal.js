@@ -53,7 +53,10 @@ DonationGoalComponent.prototype = {
 
   updateOwe: function(settings) {
     var donationInterval = settings.donationInterval || 60;
-    var est = +settings.donationGoal.slice(1) * (5 / donationInterval);
+    var donationGoal = settings.donationGoal;
+    donationGoal = donationGoal ? +donationGoal.slice(1) : 0;
+
+    var est = donationGoal * (5 / donationInterval);
 
     this.$('.owe').text('$' + est.toFixed(2));
   },
@@ -69,6 +72,8 @@ DonationGoalComponent.prototype = {
         .attr('selected', true);
 
       component.updateOwe(settings);
+    }).catch(function(ex) {
+      console.log(ex);
     });
   }
 };
