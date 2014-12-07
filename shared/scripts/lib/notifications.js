@@ -4,12 +4,14 @@ import storage from './storage';
 export var toDays = [
   // Daily.
   1,
+  // Half weekly.
+  3.5,
   // Weekly.
   7,
+  // Bi-weekly.
+  14,
   // Monthly.
-  30,
-  // Yearly.
-  365
+  30
 ];
 
 /**
