@@ -47,16 +47,15 @@
         <table class="pure-table pure-table-bordered pure-table-striped">
           <thead>
             <tr>
-              <th>Access time</th>
               <th>URL</th>
               <th>Author information</th>
+              <th>Access time</th>
             </tr>
           </thead>
 
           <tbody>
             {%each entry.entries as visit%}
               <tr>
-                <td>{{visit|formatAccessTime}}</td>
                 <td><a href="{{visit.tab.url}}" target="_blank">{{visit.tab.url}}</a></td>
                 <td>
                   {%if visit.author.list.length%}
@@ -69,6 +68,7 @@
                   No author tag present
                   {%endif%}
                 </td>
+                <td>{{visit|formatAccessTime}}</td>
               </tr>
             {%endeach%}
           </tbody>
