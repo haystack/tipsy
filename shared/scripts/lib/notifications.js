@@ -79,4 +79,48 @@ export function listen() {
       });
     });
   }
+
+  else if (environment === 'firefox') {
+    var notifications = require('sdk/notifications');
+    var timers = require('timers');
+
+    // Create a notification timeout upon launching that figures out when, the
+    // next reminder should trigger.
+    var timeout;
+
+    // Cache this value for easier access.
+    var nextNotified = storage.engine.nextNotified;
+
+    // Reusable function to show the extension and reset.
+    //var showNotification = function() {
+    //  // Always reset the timeout.
+    //  timers.clearTimeout(timeout);
+
+    //  notifications.notify({
+    //    title: 'Tipsy',
+    //    text: 'Time to donate!'
+    //  });
+
+    //  // Set the next notification.
+    //  var days = reminderLevelToDays[storage.engine.reminderLevel];
+    //  storage.engine.nextNotified = Date.now() * (days * 1440 * 60000);
+
+    //  // Convert the new date to milliseconds.
+    //  var milliseconds = storage.engine.nextNotified;
+
+    //  // Set the next timeout.
+    //  timeout = timers.setTimeout(showNotification, Date.now() - milliseconds);
+    //};
+
+    //// If this notification is scheduled for the future, set a timeout.
+    //if (nextNotified > 0) {
+    //  // Set a timeout with the difference until the notification should
+    //  // trigger.
+    //  timeout = timers.setTimeout(showNotification, Date.now() - nextNotified);
+    //}
+    //// Otherwise immediately show and schedule for the next one.
+    //else {
+    //  showNotification();
+    //}
+  }
 }
