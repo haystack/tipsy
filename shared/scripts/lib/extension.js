@@ -3,6 +3,7 @@
 import { environment } from './environment';
 import storage from './storage';
 import { start, stop } from './activity';
+import { listen } from './notifications';
 import { getCurrentTab, tabs } from './tabs';
 
 /**
@@ -11,6 +12,9 @@ import { getCurrentTab, tabs } from './tabs';
  * @param {Object} options - to specify configuration.
  */
 export function createExtension(options) {
+  // Listen for notifications.
+  listen();
+
   // In Chrome we only need to set up the icon click event to open the
   // extension.
   if (environment === 'chrome') {

@@ -47,25 +47,35 @@ export function create(when, days) {
  */
 export function listen() {
   if (environment === 'chrome') {
-    chrome.alarms.onAlarm.addListener(function() {
-      // Once the alarm triggers, create a notification to dispaly to the user.
-      chrome.notifications.create("tipsy", {
-        type: 'basic',
-        iconUrl: '../img/logo64.png',
-        title: 'Tipsy',
-        message: 'Time to Donate!'
-      }, function unhandledCallback() {});
+    storage.get('settings').then(function(settings) {
+      var createNotification = function() {
+        // Once the alarm triggers, create a notification to dispaly to the
+        // user.
+        chrome.notifications.create("tipsy", {
+          type: 'basic',
+          iconUrl: '../img/logo64.png',
+          title: 'Tipsy',
+          message: 'Time to Donate!'
+        }, function unhandledCallback() {
+          // Reset the next notified in the storage engine.
+          var days = toDays[settings.reminderLevel];
+          var next = new Date(settings.nextNotified);
+          next.setDate(next.getDate() + days);
+          settings.nextNotified = Number(next);
 
-      // Reset the next notified in the storage engine.
-      storage.get('settings').then(function(settings) {
-        var days = toDays[settings.reminderLevel];
-        var next = moment(settings.nextNotified).add(days, 'days');
-        settings.nextNotified = Number(next);
+          // Create the next alarm.
+          create(next, days);
 
-        // Create the next alarm.
-        create(next, days);
+          storage.set('settings', settings);
+        });
+      };
 
-        return storage.set('settings', settings);
+      if (Number(settings.nextNotified) < Date.now()) {
+        createNotification();
+      }
+
+      chrome.alarms.onAlarm.addListener(function() {
+        createNotification();
       });
     });
   }
