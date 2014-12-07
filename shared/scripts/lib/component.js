@@ -101,6 +101,9 @@ Component.prototype.render = function(context) {
   }).then(function(contents) {
     element.innerHTML = contents;
     return contents;
+  }, function(ex) {
+    // If there was an error provide some useful reporting.
+    console.log(ex.stack);
   }).then(function() {
     if (component.afterRender) {
       component.afterRender();
@@ -135,6 +138,14 @@ Component.register = function(selector, Component, context) {
   });
 };
 
+/**
+ * Register a page and return it.  This differs from `register`.
+ *
+ * @param {string} selector
+ * @param {Function} Component
+ * @param {Object} context
+ * @return {Object}
+ */
 Component.registerPage = function(selector, Component, context) {
   var element = select(selector, context);
   return new Component(element);

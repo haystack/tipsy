@@ -1,5 +1,7 @@
 ### Background script
 
+![](https://raw.githubusercontent.com/tbranyen/tipsy/more-documentation/docs/_assets/background.png)
+
 #### Overview
 
 This code runs "eternally" so long as the extension is installed.  It starts up

@@ -65,7 +65,7 @@ they are dynamically injected. This is to overcome limitations with addons.
 The source is organized into three distinct pieces that can be often reused
 and shared.  The associated graphs visualize the dependency structure.
 
-![](https://github.com/tbranyen/tipsy/blob/docs/docs/_assets/extension.png)
+![](https://raw.githubusercontent.com/tbranyen/tipsy/more-documentation/docs/_assets/overview.png)
 
 ##### Background script
 
