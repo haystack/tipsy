@@ -10,7 +10,7 @@ export function inject($el, amount, token) {
   // If we're in testing, swap the token with our test account.
   if (localStorage.testing === 'true') {
     token = 'lYNGTjRZRQAU4j32+qB4fBAPNDTQQGeZHF9cZFrH+83qm21sTL';
-    src = base + '/../../scripts/vendor/dwolla.js';
+    src = base + '/../../vendor/dwolla.js';
   }
 
   var script = $('<script>')
