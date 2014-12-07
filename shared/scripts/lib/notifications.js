@@ -45,7 +45,7 @@ export function create(when, days) {
 /**
  * Listens for Chrome alarms to trigger the next notification.
  */
-export function listen(woerker) {
+export function listen(worker) {
   if (environment === 'chrome') {
     storage.get('settings').then(function(settings) {
       var createNotification = function() {

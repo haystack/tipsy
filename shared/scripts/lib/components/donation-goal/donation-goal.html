@@ -1,4 +1,4 @@
-<h2>Set a donation goal per hour</h2>
+<h2>Set a donation goal</h2>
 
 <p class="info">
   <i class="fa fa-info-circle"></i>
@@ -7,8 +7,18 @@
   donations will be calculated from this amount.
 </p>
 
-<input type="text" placeholder="$0.00">
+<!-- Will only be centered in Getting Started. -->
+<div class="centered">
+  <input type="text" placeholder="$0.00"> <span class="per">per</span>
+
+  <select>
+    <option value="1">Minute</option>
+    <option value="60" selected>Hour</option>
+    <option value="1440">Day</option>
+  </select>
+</div>
 
 <p class="notes">
   <!-- Display average time spent and what that would amount to. -->
+  If you spent 5 minutes on a page you would be encouraged to donate: <strong class="owe"></strong>
 </p>

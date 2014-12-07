@@ -201,8 +201,11 @@ DonationsPage.prototype = {
    * @return
    */
   calculate: function(settings, entry) {
+    // Default to an hour.
+    var donationInterval = settings.donationInterval || 60;
+
     // Convert timespent to hours.
-    var timeSpent = entry.timeSpent / 1000 / 60 / 60;
+    var timeSpent = entry.timeSpent / 1000 / 60 / donationInterval;
 
     // The donation goal amount is saved as a currency string, so we want
     // to emulate the empty amount if nothing was set.
