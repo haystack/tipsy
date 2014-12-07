@@ -45,7 +45,7 @@ export function create(when, days) {
 /**
  * Listens for Chrome alarms to trigger the next notification.
  */
-export function listen() {
+export function listen(woerker) {
   if (environment === 'chrome') {
     storage.get('settings').then(function(settings) {
       var createNotification = function() {
@@ -90,6 +90,15 @@ export function listen() {
 
     // Cache this value for easier access.
     var nextNotified = storage.engine.nextNotified;
+
+    // Reset the current notificaiton.
+    worker.port.on('notification.set', function(days) {
+      timers.clearTimeout(timeout);
+
+      // Cache this value for easier access.
+      nextNotified = storage.engine.nextNotified;
+      //timeout = setTimeout(showNotification, Date.now() - nextNotified);
+    });
 
     // Reusable function to show the extension and reset.
     //var showNotification = function() {

@@ -1,1 +1,2 @@
-shared/scripts/vendor/dwolla.js
+shared/vendor/dwolla.js
+shared/vendor/deparam.js

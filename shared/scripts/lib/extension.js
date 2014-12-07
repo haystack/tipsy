@@ -12,12 +12,12 @@ import { getCurrentTab, tabs } from './tabs';
  * @param {Object} options - to specify configuration.
  */
 export function createExtension(options) {
-  // Listen for notifications.
-  listen();
-
   // In Chrome we only need to set up the icon click event to open the
   // extension.
   if (environment === 'chrome') {
+    // Listen for notifications.
+    listen();
+
     chrome.browserAction.onClicked.addListener(function() {
       chrome.tabs.create({
         url: chrome.extension.getURL(options.indexUrl)
@@ -39,14 +39,8 @@ export function createExtension(options) {
         contentScriptFile: options.scripts.map(data.url)
       });
 
-      // Reset the current notificaiton.
-      worker.port.on('notification.set', function(days) {
-        timers.clearTimeout(timeout);
-
-        // Cache this value for easier access.
-        nextNotified = storage.engine.nextNotified;
-        timeout = setTimeout(showNotification, Date.now() - nextNotified);
-      });
+      // Pass in the worker to allow notifications to set the listener.
+      listen(worker);
 
       // Proxy getting a value from the storage engine.
       worker.port.on('storage.get', function(key) {
