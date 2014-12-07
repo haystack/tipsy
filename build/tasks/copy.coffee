@@ -10,6 +10,7 @@ module.exports = ->
     'node_modules/purecss/*',
     'node_modules/combyne/dist/*'
     'node_modules/moment/min/*'
+    'node_modules/tablesort/*'
   ]
 
   @config 'copy',

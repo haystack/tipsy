@@ -1,8 +1,12 @@
-@import "nib"
+@import 'nib'
 @import url(https://fonts.googleapis.com/css?family=Sansita\+One)
 @import url(../node_modules/purecss/tables.css)
 @import url(../node_modules/purecss/buttons.css)
 @import url(../node_modules/purecss/forms.css)
+@import '../vendor/font-awesome.min.css'
+
+// Table sorting.
+@import './table-sorting.styl'
 
 // Pages.
 #getting-started
@@ -129,3 +133,8 @@ p.info
   padding 10px
   border-radius 5px
   background #FCFCFC
+  color #588099
+  box-sizing border-box
+
+  i
+    margin-right 3px

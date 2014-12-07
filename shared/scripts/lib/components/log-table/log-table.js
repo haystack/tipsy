@@ -72,78 +72,24 @@ LogTableComponent.prototype = {
     return moment(date).format("hA - ddd, MMM Do, YYYY");
   },
 
-  URL: window.URL || window.webkitURL,
-
-  /**
-   * Fetch and cache the favicon or show the previously cached.
-   *
-   * Inspired by:
-   * http://stackoverflow.com/questions/8022425/getting-blob-data-from-xhr-request
-   *
-   * @param host
-   * @param el
-   * @return
-   */
-  showFavicon: function(log, el, host) {
-    var URL = this.URL;
-    var xhr = new XMLHttpRequest();
-
-    xhr.open('GET', 'http://' + host + '/favicon.ico', true);
-    xhr.responseType = 'arraybuffer';
-
-    xhr.onload = function(e) {
-      if (this.status == 404 || this.status == 403) {
-        log[host][0].favicon = 'errored';
-        storage.set('log', log);
-      }
-
-      if (this.status == 200) {
-        var uInt8Array = new Uint8Array(this.response);
-        var length = uInt8Array.length;
-        var binaryString = new Array(length);
-
-        while (length--) {
-          binaryString[length] = String.fromCharCode(uInt8Array[length]);
-        }
-
-        var base64 = window.btoa(binaryString.join(''));
-        var src = 'data:image/x-icon;base64,' + base64;
-
-        if (base64) {
-          // Swap for the favicon image.
-          $(el).replaceWith($('<img class="favicon" src="' + src + '"/>'));
-
-          // Update the log with the cached favicon.
-          log[host][0].favicon = src;
-          storage.set('log', log);
-        }
-      }
-    };
-
-    xhr.onerror = function() {
-      log[host][0].favicon = 'errored';
-      storage.set('log', log);
-    };
-
-    // Either fetch and cache or use the previously cached favicon.
-    if (!log[host][0].favicon) {
-      xhr.send();
-    }
-    else {
-      $(el).attr('src', log[host].favicon);
-    }
-  },
-
   afterRender: function() {
     var component = this;
 
-    storage.get('log').then(function(log) {
-      component.$('i.missing.favicon').each(function(key, el) {
-        component.showFavicon(log, el, $(el).data('host'));
-      });
-    }).catch(function(ex) {
-      console.log(ex);
-      console.log(ex.stack);
+    // This event will fire before tablesort is hit and will remove any
+    // expanded entries to avoid order confusion.
+    this.el.addEventListener('click', function(ev) {
+      var thead = component.$('thead')[0];
+
+      // Wipe out all entry history logs.
+      if ($.contains(thead, ev.target)) {
+        component.$('.entry-history').remove();
+        component.$('.active').removeClass('active');
+      }
+    }, true);
+
+    // Enable table sorting.
+    this.tablesort = new Tablesort(this.$('table')[0], {
+      descending: true
     });
   }
 };

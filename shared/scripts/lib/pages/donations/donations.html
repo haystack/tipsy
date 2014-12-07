@@ -3,6 +3,12 @@
     <!-- Display the current list of pages to pay. -->
     <h2>Make a donation</h2>
 
+    <p class="info">
+      <i class="fa fa-info-circle"></i>
+
+      Here you can make recommended donations or customize the amount.  Click the <strong>X</strong> button to remove the entry from the donations page.
+    </p>
+
     <table class="pure-table pure-table-bordered pure-table-striped">
       <thead>
         <tr>
@@ -31,12 +37,14 @@
           <td>{{author.name|or "Anonymous"}}</td>
           <td>{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
-          <td class="relative">
-            <div class="payment">
-              No payment processors supported by this author.
-            </div>
+          <td>
+            <div class="relative">
+              <div class="payment">
+                No payment processors provided by this page.
+              </div>
 
-            <button class="remove pure-button">&#10007;</button>
+              <button class="remove pure-button">&#10007;</button>
+            </div>
           </td>
         </tr>
           {%endeach%}

@@ -201,8 +201,11 @@ DonationsPage.prototype = {
    * @return
    */
   calculate: function(settings, entry) {
+    // Default to an hour.
+    var donationInterval = settings.donationInterval || 60;
+
     // Convert timespent to hours.
-    var timeSpent = entry.timeSpent / 1000 / 60 / 60;
+    var timeSpent = entry.timeSpent / 1000 / 60 / donationInterval;
 
     // The donation goal amount is saved as a currency string, so we want
     // to emulate the empty amount if nothing was set.
@@ -230,6 +233,7 @@ DonationsPage.prototype = {
       window.alert('You will now be redirected to the payment site.');
     });
 
+    // Inject payment information for each entry.
     this.$('tr.entry').each(function() {
       var $this = $(this);
       // Extract the estimated value.
@@ -254,6 +258,11 @@ DonationsPage.prototype = {
       if (paypalToken) {
         $this.data().paypal = injectPaypal(payment, amount, paypalToken);
       }
+    });
+
+    // Enable table sorting.
+    this.tablesort = new Tablesort(this.$('table')[0], {
+      descending: true
     });
   }
 };

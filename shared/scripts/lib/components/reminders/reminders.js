@@ -18,10 +18,22 @@ function RemindersComponent() {
 
   // Find the saved reminder level.
   storage.get('settings').then(function(settings) {
+    component.nextNotified = settings.nextNotified;
     component.reminderLevel = settings.reminderLevel;
 
     // Re-render with this new value set.
     component.render();
+  });
+
+  // Whenever the storage engine is updated, do a quick check for updating
+  // the next notified time.
+  storage.onChange(function() {
+    storage.get('settings').then(function(settings) {
+      var nextNotified = moment(new Date(settings.nextNotified));
+
+      // Update the value in the markup.
+      component.$('.next').html(nextNotified.calendar());
+    });
   });
 }
 
@@ -31,6 +43,14 @@ RemindersComponent.prototype = {
   events: {
     // Whenever the input is updated, update the settings and save.
     'input input[type=range]': 'updateOutputAndSave'
+  },
+
+  filters: [
+    'calendar'
+  ],
+
+  calendar: function(val) {
+    return moment(new Date(val)).calendar();
   },
 
   // Defaults to a month, you can look up the association inside the
@@ -72,13 +92,18 @@ RemindersComponent.prototype = {
       var prev = settings.reminderLevel;
 
       // Find the next notified time.
-      var lastNotified = moment(component.nextNotified);
+      var lastNotified = moment(new Date(component.nextNotified));
 
       // Get the number of days associated at this level.
       var days = toDays[index];
 
       // Increment the amount of time, by today + number of days.
       var nextNotified = moment().add(days, 'days');
+
+      // If in testing mode, default to a minute to make things easier.
+      if (localStorage.testing === 'true') {
+        nextNotified = moment().add(1, 'minutes');
+      }
 
       // Only change here if the level is different.
       if (index !== prev) {
@@ -90,6 +115,8 @@ RemindersComponent.prototype = {
 
         // Schedule the notification.
         createNotification(nextNotified, days);
+
+        console.info('Created new notification at:' + nextNotified);
       }
 
       // Set the new notification time and the reminder level.

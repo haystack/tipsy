@@ -1,7 +1,6 @@
 'use strict';
 
 import { environment } from './environment';
-import { listen } from './notifications';
 import storage from './storage';
 import Component from './component';
 
@@ -24,9 +23,6 @@ var pages = {
 Object.keys(pages).forEach(function(selector) {
   pages[selector] = Component.registerPage(selector, pages[selector]);
 });
-
-// Start listening for notifications.
-listen();
 
 /**
  * Sets the current tab in the extension.

@@ -23,7 +23,8 @@ createExtension({
     'node_modules/jquery/dist/jquery.js',
     'node_modules/combyne/dist/combyne.js',
     'node_modules/moment/min/moment.min.js',
-    'scripts/vendor/deparam.js',
+    'node_modules/tablesort/tablesort.min.js',
+    'vendor/deparam.js',
     'js/tipsy.js'
   ]
 });
