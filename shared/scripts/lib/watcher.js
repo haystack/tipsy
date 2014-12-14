@@ -86,6 +86,10 @@ if (environment === 'chrome') {
     else if (tabs[tabId] && changeInfo.url) {
       stop(tabs[tabId].tab);
     }
+
+    else if (tabs[tabId]) {
+      start(tabs[tabId]);
+    }
   });
 
   // When the tab is removed, stop the timer.

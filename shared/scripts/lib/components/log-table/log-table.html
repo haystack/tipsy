@@ -16,7 +16,7 @@
     </tr>
   {%else%}
     {%each entries as entry key%}
-    <tr data-key="{{key}}" class="{{entry|hasAuthor}}-author"> 
+    <tr data-host="{{entry.host}}" data-key="{{key}}" class="{{entry|hasAuthor}}-author"> 
       <td>
         {{entry.host}}
       </td>
@@ -28,7 +28,7 @@
         {%endif%}
       </td>
       <td>{{entry.entries.length}}</td>
-      <td data-sort="{{entry.entries|timeSpent 'true'}}">{{entry.entries|timeSpent}}</td>
+      <td data-sort="{{entry.entries|timeSpent 'true'}}" class="timeSpent">{{entry.entries|timeSpent}}</td>
       <td data-sort="{{entry.entries|findLast|formatAccessTime 'true'}}">{{entry.entries|findLast|formatAccessTime}}</td>
     </tr>
     {%endeach%}
