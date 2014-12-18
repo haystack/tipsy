@@ -3,8 +3,23 @@
 <p class="info">
   <i class="fa fa-info-circle"></i>
 
-  Set how much value your time spent on a given website is.  Recommended
-  donations will be calculated from this amount.
+  Choose a rate type that you want Tipsy to use when calculating the donation. 
+</p>
+<p class ="centered">
+  <label for="browsingRateRadio">
+    <input id="browsingRateRadio" type="radio" name="rates" value="browsingRate" >
+      <span class="rates">Browsing Rate:</span>Have the rate apply to your browsing time only.
+  </label><br>
+  <label for="calendarRateRadio">
+    <input id="calendarRateRadio" type="radio" name="rates" value="calendarRate" >
+      <span class="rates">Calendar Rate:</span>Have the rate apply per calendar time.
+  </label>
+</p>
+
+<p class="info">
+  <i class="fa fa-info-circle"></i>
+
+  donations will be calculated from the following rate amount.
 </p>
 
 <!-- Will only be centered in Getting Started. -->
@@ -20,5 +35,5 @@
 
 <p class="notes">
   <!-- Display average time spent and what that would amount to. -->
-  If you spent 5 minutes on a page you would be encouraged to donate: <strong class="owe"></strong>
+  If you spent 5 minutes <span class="avgTime"></span> you would be encouraged to donate: <strong class="owe"></strong>
 </p>

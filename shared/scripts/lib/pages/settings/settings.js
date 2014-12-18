@@ -3,7 +3,9 @@
 import Component from '../../component';
 import { select, selectAll } from '../../dom';
 import DonationGoalComponent from '../../components/donation-goal/donation-goal';
-import RemindersComponent from '../../components/reminders/reminders';
+import ReminderIntervalComponent from '../../components/reminders/reminder-interval';
+import ReminderThreshGlobalComponent from '../../components/reminders/reminder-thresh-global';
+import ReminderThreshLocalComponent from '../../components/reminders/reminder-thresh-local';
 
 function SettingsPage() {
   Component.prototype.constructor.apply(this, arguments);
@@ -22,7 +24,9 @@ SettingsPage.prototype = {
 
   afterRender: function() {
     new DonationGoalComponent(select('set-donation-goal', this.el)).render();
-    new RemindersComponent(select('set-reminders', this.el)).render();
+    new ReminderIntervalComponent(select('set-reminder-interval', this.el)).render();
+    new ReminderThreshGlobalComponent(select('set-reminder-thresh-global', this.el)).render();
+    new ReminderThreshLocalComponent(select('set-reminder-thresh-local', this.el)).render();
   }
 };
 

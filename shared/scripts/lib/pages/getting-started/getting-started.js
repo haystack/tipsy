@@ -4,7 +4,7 @@ import Component from '../../component';
 import storage from '../../storage';
 import { select } from '../../dom';
 import DonationGoalComponent from '../../components/donation-goal/donation-goal';
-import RemindersComponent from '../../components/reminders/reminders';
+import RemindersComponent from '../../components/reminders/reminder-interval';
 
 function GettingStartedPage() {
   Component.prototype.constructor.apply(this, arguments);
