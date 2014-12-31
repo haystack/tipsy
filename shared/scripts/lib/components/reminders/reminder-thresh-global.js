@@ -17,7 +17,8 @@ ReminderThreshGlobalComponent.prototype = {
     'change input[type=checkbox]': 'selectedReminderThreshGlobal'
   },
   
-  selectedReminderThreshGlobal: function(ev) {
+  selectedReminderThreshGlobal: function(ev) {  
+  
     var input = this.$('input[type=text]');
     var span = this.$('.remindWhen')
     var isChecked = this.$('#threshGlobalCheckbox').prop('checked');
