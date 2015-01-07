@@ -43,7 +43,8 @@ ReminderIntervalComponent.prototype = {
   events: {
     // Whenever the input is updated, update the settings and save.
     'change input[type=checkbox]': 'selectedReminderInterval',
-    'input input[type=range]': 'updateOutputAndSave'
+    'input input[type=range]': 'updateOutputAndSave',
+    'change select' : 'updateIntervalReminder',
   },
 
   filters: [
@@ -75,19 +76,37 @@ ReminderIntervalComponent.prototype = {
   },
   
   selectedReminderInterval: function(ev) {
-    var range = this.$('input[type=range]');
+    // var range = this.$('input[type=range]');
     var output = this.$('output');
     var isChecked = this.$('#intervalCheckbox').prop('checked');
-
+    var remindMeText = this.$('.fixedIntervalReminder');
+    var dropdowns = this.$('.intervalCheck');
+    var checkboxes = this.$('.checks')
     if (isChecked) {
-      range.prop('disabled', false);
+      // range.prop('disabled', false);
+      /*
       var index = this.reminderLevel;
       console.log(this);
       output.find('span').removeClass('active').eq(index).addClass('active');
+      */
+      remindMeText.addClass('active');
+      dropdowns.prop('disabled', false)
+      checkboxes.prop('disabled', false);
     } else if (!isChecked) {
-      output.find('span').removeClass('active')
-  	  range.prop('disabled', true);
+      // output.find('span').removeClass('active')
+  	  // range.prop('disabled', true);
+  	  var remindMeText = this.$('.fixedIntervalReminder');
+  	  remindMeText.removeClass('active');
+  	  dropdowns.prop('disabled', true);
+  	  checkboxes.prop('disabled', true);
   	}
+  },
+  
+  updateIntervalReminder: function(ev) {
+  	var component = this;
+  	return storage.get('settings').then(function(settings) {
+  		var prevTimeSpanNumber = settings.timeSpandNumber;
+  	});
   },
 
   /**
@@ -153,7 +172,7 @@ ReminderIntervalComponent.prototype = {
   afterRender: function() {
     //console.log(this.reminderLevel);
     var index = this.reminderLevel;
-    var range = this.$('input[type=range]').val(index);
+    // var range = this.$('input[type=range]').val(index);
     var output = this.$('output');
 
     // Display the correct output.
