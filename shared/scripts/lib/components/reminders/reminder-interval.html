@@ -7,7 +7,7 @@
 
 <label for="intervalCheckbox">
   <input id="intervalCheckbox" type="checkbox" name="rates" checked>
-  <span class="reminderCheckbox">Interval Reminder:</span>
+  <span class="intervalCheckbox">Interval Reminder:</span>
 </label>
 
 <p>
@@ -16,37 +16,40 @@
 
       <label for="fixedIntervalCheckbox">
         <input id="intervalCheckbox"  class="checks" type="checkbox" name="rates" checked>
-        <select class="intervalCheck" id="timeSpanNumber">
+        <select class="intervalCheck dateType" id="timeSpanNumber">
           <option value="1">1</option>
           <option value="2" selected>2</option>
           <option value="3">3</option>
           <option value="4">4</option>
         </select>
-        <select class="intervalCheck" id="timeSpanType">
-          <option value="days">days</option>
-          <option value="weeks" selected>weeks</option>
-          <option value="months">months</option>
+        <select class="intervalCheck dateType" id="timeSpanType">
+          <option value="1">days</option>
+          <option value="7" selected>weeks</option>
+          <option value="30">months</option>
         </select>
         <span class="fixedIntervalReminder active">at</span>
-        <input type="time" value="10:00" class="intervalCheck">
+        <input type="time" value="10:00" class="intervalCheck dateType" id="timeSpanTime">
 
       <div class="pos">
         <label for="dayWeekCheckbox">
         <input id="dayWeekCheckbox" type="checkbox" class="checks" name="rates" checked>
-        <select class="intervalCheck">
-          <option value="mon" selected>Monday</option>
-          <option value="tue">Tuesday</option>
-          <option value="wed">Wednesday</option>
-          <option value="thu">Thursday</option>
-          <option value="fri">Friday</option>
-          <option value="sat">Saturday</option>
-          <option value="sun">Sunday</option>
+        <select class="intervalCheck dayType" id="weekdayInterval">
+          <option value="Monday" selected>Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
         </select>
         <span class="fixedIntervalReminder active">at</span>
-        <input type="time" value="10:00" class="intervalCheck">
+        <input type="time" value="10:00" class="intervalCheck dayType" id="weekdayIntervalTime">
       </div>
       
   </div>
+</p>
+<p>
+  Your next reminder will trigger: <span class="next">{{ nextNotified|calendar }}.</span>
 </p>
 
 <!-- ><input name="interval" type="range" min="0" max="4" value="1" class="intervalRange">

@@ -18,8 +18,17 @@ function ReminderIntervalComponent() {
 
   // Find the saved reminder level.
   storage.get('settings').then(function(settings) {
-    component.nextNotified = settings.nextNotified;
+  
+    component.nextNotifiedDay = settings.nextNotifiedDay;
+    component.nextNotifiedDate = settings.nextNotifiedDate;
     component.reminderLevel = settings.reminderLevel;
+    
+    component.timeSpanNumber = settings.timeSpanNumber;
+    component.timeSpanType = settings.timeSpanType;
+    component.timeSpanTime = settings.timeSpanTime;
+    
+    component.weekdayInterval = settings.weekdayInterval;
+    component.weekdayIntervalTime = settings.weekdayIntervalTime;
 
     // Re-render with this new value set.
     component.render();
@@ -29,10 +38,16 @@ function ReminderIntervalComponent() {
   // the next notified time.
   storage.onChange(function() {
     storage.get('settings').then(function(settings) {
-      var nextNotified = moment(new Date(settings.nextNotified));
+      var nextNotifiedDay = moment(new Date(settings.nextNotifiedDay));
+      var nextNotifiedDate = moment(new Date(settings.nextNotifiedDate));
+      
+      if (nextNotifiedDay < nextNotifiedDate || !nextNotifiedDate) {
+      	component.$('.next').html(moment(nextNotifiedDay).calendar());
+      } else if (nextNotifiedDate < nextNotifiedDay || !nextNotifiedDate) {
 
       // Update the value in the markup.
-      component.$('.next').html(nextNotified.calendar());
+      	component.$('.next').html(moment(nextNotifiedDate).calendar());
+      }
     });
   });
 }
@@ -45,6 +60,7 @@ ReminderIntervalComponent.prototype = {
     'change input[type=checkbox]': 'selectedReminderInterval',
     'input input[type=range]': 'updateOutputAndSave',
     'change select' : 'updateIntervalReminder',
+    'change input[type=time]': 'updateIntervalReminder'
   },
 
   filters: [
@@ -103,10 +119,110 @@ ReminderIntervalComponent.prototype = {
   },
   
   updateIntervalReminder: function(ev) {
-  	var component = this;
-  	return storage.get('settings').then(function(settings) {
-  		var prevTimeSpanNumber = settings.timeSpandNumber;
-  	});
+	var component = this;
+    if ($(ev.currentTarget).hasClass("dateType")) {
+
+	
+  	  
+	  	var timeSpanNumber = component.$('#timeSpanNumber').val();
+	  	var timeSpanType = component.$('#timeSpanType').val();
+	  	var timeSpanTime = component.$('#timeSpanTime').val();
+
+  	
+  		this.timeSpanNumber = timeSpanNumber;
+  		this.timeSpandType = timeSpanType;
+  		this.timeSpanTime = timeSpanTime;
+  	
+  	
+  		return storage.get('settings').then(function(settings) {
+  			var prevTimeSpanNumber = settings.timeSpanNumber;
+  			var prevTimeSpanType = settings.timeSpanType;
+  		
+  			var prevDays  = prevTimeSpanNumber * prevTimeSpanType;
+  		
+  			var prevTimeSpanTime = settings.timeSpanTime;
+  		
+  			var days = timeSpanNumber * timeSpanType;
+
+  			var nextNotified = moment().add(days, 'days');
+  		
+  			if (localStorage.testing === 'true') {
+           nextNotified = moment().add(1, 'minutes'); 
+        }
+		
+        if (prevDays !== days || prevTimeSpanTime !== timeSpanTime) {
+        	
+        	//console.info("next notif");
+        	var hours = parseInt(timeSpanTime.split(":")[0]);
+        	var mins = parseInt(timeSpanTime.split(":")[1]);
+
+        	nextNotified = new Date(nextNotified);
+        	nextNotified.setHours(hours, mins, 0);
+        	component.nextNotifiedDate = nextNotified;
+        	
+        	createNotification('tipsy-dateInterval', nextNotified, days);
+        	//console.log(nextNotified);
+        	moment().format('MMMM Do YYYY, h:mm:ss a');
+        	//component.$('.next').html(moment(nextNotified).calendar());
+        	//console.info('Created new date-interval notification at:' + moment(nextNotified).calendar());
+        };
+        
+        settings.timeSpanNumber = timeSpanNumber;
+       	settings.timeSpanType = timeSpanType;
+        settings.timeSpanTime = timeSpanTime;
+
+				settings.nextNotifiedDate = Number(component.nextNotifiedDate);
+        
+      return storage.set('settings', settings);
+  	  }).catch(function(ex) {
+        console.log(ex);
+        console.log(ex.stack);
+      });
+     } else if ($(ev.currentTarget).hasClass("dayType")) {
+     
+     		var weekdayInterval = component.$('#weekdayInterval').val();
+  			var weekdayIntervalTime = component.$('#weekdayIntervalTime').val();
+  		
+  		  this.weekdayInterval = weekdayInterval;
+  			this.weekdayIntervalTime = weekdayIntervalTime;
+  		
+  			return storage.get('settings').then(function(settings) {
+  			
+  				var nextNotified = moment().day(weekdayInterval);
+  				
+  				if (localStorage.testing === 'true') {
+          	nextNotified = moment().add(1, 'minutes'); 
+       		}
+       		var hours = parseInt(weekdayIntervalTime.split(":")[0]);
+        	var mins = parseInt(weekdayIntervalTime.split(":")[1]);
+        	
+       		nextNotified = new Date(nextNotified);
+        	nextNotified.setHours(hours, mins, 0);
+					
+       		if (nextNotified < Date.now()) {
+  					nextNotified.setDate(nextNotified.getDate() + 7);
+  					console.log("here");
+  				};
+       		
+       		component.nextNotifiedDay = nextNotified;
+       		createNotification('tipsy-dayInterval', nextNotified, 7);
+       		
+       		moment().format('MMMM Do YYYY, h:mm:ss a');
+        	//component.$('.next').html(moment(nextNotified).calendar());
+        	
+  				settings.weekdayInterval = weekdayInterval;
+      		settings.weekdayIntervalTime = weekdayIntervalTime;
+      		
+      		settings.nextNotifiedDay = Number(component.nextNotifiedDay);
+      		
+  				return storage.set('settings', settings);
+  	  	}).catch(function(ex) {
+        	console.log(ex);
+        	console.log(ex.stack);
+      	});
+     } else {
+     	console.info("wrong type");
+     }
   },
 
   /**
@@ -157,7 +273,7 @@ ReminderIntervalComponent.prototype = {
 
       // Set the new notification time and the reminder level.
       settings.nextNotified = Number(nextNotified);
-      settings.reminderLevel = index || 2;
+      //settings.reminderLevel = index || 2;
 
       return storage.set('settings', settings);
     }).catch(function(ex) {
@@ -171,12 +287,49 @@ ReminderIntervalComponent.prototype = {
    */
   afterRender: function() {
     //console.log(this.reminderLevel);
-    var index = this.reminderLevel;
+    //var index = this.reminderLevel;
     // var range = this.$('input[type=range]').val(index);
-    var output = this.$('output');
+    //var output = this.$('output');
 
     // Display the correct output.
-    output.find('span').removeClass('active').eq(index).addClass('active');
+
+    this.$('#timeSpanNumber').val(this.timeSpanNumber || 1);
+    this.$('#timeSpanType').val(this.timeSpanType || "1");
+    this.$('#timeSpanTime').val(this.timeSpanTime || "10:00");
+    this.$('#weekdayInterval').val(this.weekdayInterval || "Sunday")
+    this.$('#weekdayIntervalTime').val(this.weekdayIntervalTime || "10:00");
+    var nextNotifiedDate = this.nextNotifiedDate;
+    var nextNotifiedDay = this.nextNotifiedDay;
+    //console.log(nextNotified);
+    //console.log("hellllloooo1 " + nextNotifiedDay);
+    //console.log("hellllloooo2 " + nextNotifiedDate);
+    
+    if (!nextNotifiedDay && !nextNotifiedDate) {
+    	//alert("hello");
+   	  var nextNotified = moment().add(1, 'days');
+   	  nextNotified = new Date(nextNotified);
+      nextNotified.setHours(10, 0, 0);
+      
+      createNotification('tipsy-dateInterval', nextNotified, 1);
+      console.log("hphph[] " + nextNotified);
+      settings.nextNotifiedDate = nextNotified;
+      this.$('.next').html(moment(nextNotified).calendar());
+    } else if (!nextNotifiedDay && this.nextNotifiedDate) {
+    	this.$('.next').html(moment(nextNotifiedDate).calendar());
+    } else if (nextNotifiedDay && !nextNotifiedDate) {
+      this.$('.next').html(moment(nextNotifiedDay).calendar());
+    } else if (nextNotifiedDay && nextNotifiedDate) {
+    	if (nextNotifiedDay < nextNotifiedDate) {
+    		this.$('.next').html(moment(nextNotifiedDay).calendar());
+    	} else {
+    		this.$('.next').html(moment(nextNotifiedDate).calendar());
+    	}
+    }
+    
+   	 
+    
+    //console.log(this.timeSpanTime);
+    //output.find('span').removeClass('active').eq(index).addClass('active');
   }
 };
 

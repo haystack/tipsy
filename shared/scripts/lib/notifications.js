@@ -20,16 +20,16 @@ export var toDays = [
  * @param {number} when - time as a moment object or unix timestamp.
  * @param {number} days - how many days until the next notification.
  */
-export function create(when, days) {
+export function create(name, when, days) {
   var minutes = null;
 
   if (environment === 'chrome') {
     // Convert the repeating days to minutes.
     minutes = days * (24 * 60);
 
-    // When using the same id, Chrome will automatically clear out the previous
+    // When using the same name, Chrome will automatically clear out the previous
     // notification.
-    chrome.alarms.create('tipsy', {
+    chrome.alarms.create(name, {
       when: Number(when),
       periodInMinutes: minutes
     });
