@@ -496,9 +496,7 @@ ReminderIntervalComponent.prototype = {
       
       createNotification('tipsy-dateInterval', nextNotified, 1);
       settings.nextNotifiedDate = nextNotified;
-      
-      
-      
+
       this.$('.next').html(moment(nextNotified).calendar());
     } else if (!nextNotifiedDay && this.nextNotifiedDate) {
       this.$('.next').html(moment(nextNotifiedDate).calendar());
