@@ -31,10 +31,10 @@ function ReminderIntervalComponent() {
     component.weekdayInterval = settings.weekdayInterval;
     component.weekdayIntervalTime = settings.weekdayIntervalTime;
 
-		component.intervalsEnabled = settings.intervalsEnabled;
+    component.intervalsEnabled = settings.intervalsEnabled;
 		
-		component.dateIntervalEnabled = settings.dateIntervalEnabled;
-		component.dayIntervalEnabled = settings.dayIntervalEnabled;
+    component.dateIntervalEnabled = settings.dateIntervalEnabled;
+    component.dayIntervalEnabled = settings.dayIntervalEnabled;
 	
     // Re-render with these new values set.
     component.render();
@@ -42,37 +42,36 @@ function ReminderIntervalComponent() {
 
   // Whenever the storage engine is updated, do a quick check for updating
   // the next notified time.
-	storage.onChange(function() {
-  	var nextNotifiedDay;
-  	var nextNotifiedDate;
+  storage.onChange(function() {
+    var nextNotifiedDay;
+    var nextNotifiedDate;
 		
 		// make sure that the notifcations that are set are gotten
-  	storage.get('settings').then(function(settings) {
+    storage.get('settings').then(function(settings) {
       nextNotifiedDay = moment(new Date(settings.nextNotifiedDay));
       nextNotifiedDate = moment(new Date(settings.nextNotifiedDate));
  
       return Promise.all([
         getNotification('tipsy-dateInterval'),
         getNotification('tipsy-dayInterval')
-      ]);
+       ]);
     }).then(function(alarms) {
       var dateIntervalAlarm = alarms[0];
       var dayIntervalAlarm = alarms[1];
      	
-     	// set the "next reminder" text
-     	if (nextNotifiedDate && !dayIntervalAlarm && dateIntervalAlarm) {
-     		component.$('.next').html(moment(nextNotifiedDate).calendar());
-     	} else if (nextNotifiedDay && !dateIntervalAlarm && dayIntervalAlarm) {
-     		component.$('.next').html(moment(nextNotifiedDay).calendar());
-     	} else if (!dayIntervalAlarm && !dateIntervalAlarm) {
-     		component.$('.next').html('Never.');
-     	}
-      else if ((nextNotifiedDay < nextNotifiedDate || !nextNotifiedDate)) {
-      	component.$('.next').html(moment(nextNotifiedDay).calendar());
+       	// set the "next reminder" text
+      if (nextNotifiedDate && !dayIntervalAlarm && dateIntervalAlarm) {
+        component.$('.next').html(moment(nextNotifiedDate).calendar());
+      } else if (nextNotifiedDay && !dateIntervalAlarm && dayIntervalAlarm) {
+        component.$('.next').html(moment(nextNotifiedDay).calendar());
+      } else if (!dayIntervalAlarm && !dateIntervalAlarm) {
+        component.$('.next').html('Never.');
+      } else if ((nextNotifiedDay < nextNotifiedDate || !nextNotifiedDate)) {
+        component.$('.next').html(moment(nextNotifiedDay).calendar());
       } else if (((nextNotifiedDate < nextNotifiedDay || !nextNotifiedDay) || !dayIntervalAlarm) 					) {
-      	component.$('.next').html(moment(nextNotifiedDate).calendar());
+        component.$('.next').html(moment(nextNotifiedDate).calendar());
       } else {
-      	console.error("Next notif text has problem, shouldn't be here");
+        console.error("Next notif text has problem, shouldn't be here");
       }
     });
   });
@@ -117,28 +116,28 @@ ReminderIntervalComponent.prototype = {
     var remindMeText = component.$('.fixedIntervalReminder');
     var dropdowns = component.$('.intervalCheck');
     var checkboxes = component.$('.checks');
-  	component.$('.fixedIntervalReminder').removeClass('active');
-  	component.$('.intervalCheck').prop('disabled', true);
-  	component.$('.checks').prop('disabled', true);
-  	clearNotification('tipsy-dateInterval');
-  	clearNotification('tipsy-dayInterval');
-  	component.dateIntervalEnabled = component.$("#dateCheckbox").prop('checked');
-  	component.dayIntervalEnabled = component.$("#dayWeekCheckbox").prop('checked');
-  	component.$("#dateCheckbox").prop('checked', false);
-  	component.$("#dayWeekCheckbox").prop('checked', false);
+    component.$('.fixedIntervalReminder').removeClass('active');
+    component.$('.intervalCheck').prop('disabled', true);
+    component.$('.checks').prop('disabled', true);
+    clearNotification('tipsy-dateInterval');
+    clearNotification('tipsy-dayInterval');
+    component.dateIntervalEnabled = component.$("#dateCheckbox").prop('checked');
+    component.dayIntervalEnabled = component.$("#dayWeekCheckbox").prop('checked');
+    component.$("#dateCheckbox").prop('checked', false);
+    component.$("#dayWeekCheckbox").prop('checked', false);
 
-  	if (mod) {
-  		storage.get('settings').then(function(settings) {
-  	 		settings.intervalsEnabled = false;
+    if (mod) {
+      storage.get('settings').then(function(settings) {
+        settings.intervalsEnabled = false;
 
-  	 		settings.dateIntervalEnabled = false;
-  	 		settings.dayIntervalEnabled = false;
-  	 		return storage.set('settings', settings);
-  		}).catch(function(ex) {
-        console.log(ex);
-        console.log(ex.stack);
-    	});
-  	}
+        settings.dateIntervalEnabled = false;
+        settings.dayIntervalEnabled = false;
+        return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+      });
+    }
   },
   
   /**
@@ -149,28 +148,28 @@ ReminderIntervalComponent.prototype = {
   */
   enableIntervals: function(component) {    
 
-  	component.$('.front').addClass('active');
+    component.$('.front').addClass('active');
     component.$('.checks').prop('disabled', false);
     
     storage.get('settings').then(function(settings) {
 
-  	 	settings.dateIntervalEnabled = component.dateIntervalEnabled;
-  	 	settings.dayIntervalEnabled = component.dayIntervalEnabled;
+      settings.dateIntervalEnabled = component.dateIntervalEnabled;
+      settings.dayIntervalEnabled = component.dayIntervalEnabled;
   	 	
-  	 	if (component.dateIntervalEnabled) {
-  	 		component.enableDateInterval(component, true);
-  	 	};
+      if (component.dateIntervalEnabled) {
+        component.enableDateInterval(component, true);
+      };
   	 	
-  	 	if (component.dayIntervalEnabled) {
-  	 		component.enableDayInterval(component, true);	 	
-  	 	};
+      if (component.dayIntervalEnabled) {
+        component.enableDayInterval(component, true);	 	
+      };
   	 	
-  	 	settings.intervalsEnabled = true;
-  	 	component.intervalsEnabled = true;
-  	 	return storage.set('settings', settings);
-  	}).catch(function(ex) {
-        console.log(ex);
-        console.log(ex.stack);
+      settings.intervalsEnabled = true;
+      component.intervalsEnabled = true;
+      return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
     });
   },
   
@@ -179,20 +178,20 @@ ReminderIntervalComponent.prototype = {
   */
   disableDateInterval: function(component, mod) {
   
-  	component.$('.dateType').prop('disabled', true);
-  	component.$('.dateText').removeClass('active');
-		component.$("#dateCheckbox").prop('checked', false);
-		component.dateIntervalEnabled = false;
+    component.$('.dateType').prop('disabled', true);
+    component.$('.dateText').removeClass('active');
+    component.$("#dateCheckbox").prop('checked', false);
+    component.dateIntervalEnabled = false;
 		
-		clearNotification('tipsy-dateInterval');
-		if (mod) {
-			storage.get('settings').then(function(settings) {
-  	 		settings.dateIntervalEnabled = false;
-  	 		return storage.set('settings', settings);
-  		}).catch(function(ex) {
-        	console.log(ex);
-        	console.log(ex.stack);
-    	});
+    clearNotification('tipsy-dateInterval');
+    if (mod) {
+      storage.get('settings').then(function(settings) {
+        settings.dateIntervalEnabled = false;
+        return storage.set('settings', settings);
+      }).catch(function(ex) {
+        console.log(ex);
+        console.log(ex.stack);
+      });
     }
   },
   
@@ -200,18 +199,18 @@ ReminderIntervalComponent.prototype = {
   * Enables the date interval reminder method only
   */
   enableDateInterval: function(component, all) {
-  	component.$('.dateType').prop('disabled', false);
-  	component.$("#dateCheckbox").prop('checked', true);
-  	component.$('.dateText').addClass('active');
-  	createNotification('tipsy-dateInterval', component.nextNotifiedDate, 
+    component.$('.dateType').prop('disabled', false);
+    component.$("#dateCheckbox").prop('checked', true);
+    component.$('.dateText').addClass('active');
+    createNotification('tipsy-dateInterval', component.nextNotifiedDate, 
   											component.days);
-  	storage.get('settings').then(function(settings) {
-  	 	settings.dateIntervalEnabled = true;
-  	 	if (all) settings.intervalsEnabled = true;
-  	 	return storage.set('settings', settings);
-  	}).catch(function(ex) {
-        console.log(ex);
-        console.log(ex.stack);
+    storage.get('settings').then(function(settings) {
+      settings.dateIntervalEnabled = true;
+      if (all) settings.intervalsEnabled = true;
+      return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
     });
   },
   
@@ -219,19 +218,19 @@ ReminderIntervalComponent.prototype = {
   * Disables the day interval reminder method only
   */  
   disableDayInterval: function(component, mod) {
-  	component.$('.dayType').prop('disabled', true);
-  	component.$('.dayText').removeClass('active');
-  	component.$("#dayWeekCheckbox").prop('checked', false);
-		clearNotification('tipsy-dayInterval');
-		component.dayIntervalEnabled = false;
-		if (mod) {
-			storage.get('settings').then(function(settings) {
-  	 		settings.dayIntervalEnabled = false;
-  	 		return storage.set('settings', settings);
-  		}).catch(function(ex) {
-        	console.log(ex);
-        	console.log(ex.stack);
-    	});
+    component.$('.dayType').prop('disabled', true);
+    component.$('.dayText').removeClass('active');
+    component.$("#dayWeekCheckbox").prop('checked', false);
+    clearNotification('tipsy-dayInterval');
+    component.dayIntervalEnabled = false;
+    if (mod) {
+      storage.get('settings').then(function(settings) {
+        settings.dayIntervalEnabled = false;
+        return storage.set('settings', settings);
+      }).catch(function(ex) {
+        console.log(ex);
+        console.log(ex.stack);
+      });
     }
   },
 
@@ -239,210 +238,210 @@ ReminderIntervalComponent.prototype = {
   * Enables the day interval reminder method only
   */   
   enableDayInterval: function(component, all) {
-  	component.$('.dayType').prop('disabled', false);
-  	component.$('.dayText').addClass('active');
-  	component.$("#dayWeekCheckbox").prop('checked', true);
-  	createNotification('tipsy-dayInterval', component.nextNotifiedDay, 7);
-  	storage.get('settings').then(function(settings) {
-  	 	settings.dayIntervalEnabled = true;
-  	 	if (all) settings.intervalsEnabled = true;
-  	 	return storage.set('settings', settings);
-  	}).catch(function(ex) {
-        console.log(ex);
-        console.log(ex.stack);
+    component.$('.dayType').prop('disabled', false);
+    component.$('.dayText').addClass('active');
+    component.$("#dayWeekCheckbox").prop('checked', true);
+    createNotification('tipsy-dayInterval', component.nextNotifiedDay, 7);
+    storage.get('settings').then(function(settings) {
+      settings.dayIntervalEnabled = true;
+      if (all) settings.intervalsEnabled = true;
+      return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
     });
   },
 
- 	/**
- 	* Handle when the Reminder Interval is checked.
- 	*/
+  /**
+  * Handle when the Reminder Interval is checked.
+  */
   selectedReminderInterval: function(ev) {
-  	var isChecked;
-  	var isDateChecked;
-  	var isDayChecked;
-  	if (!($(ev.currentTarget).hasClass("checks"))) {
-    	isChecked = this.$('#intervalCheckbox').prop('checked');
-    	if (isChecked) {
-				this.enableIntervals(this);
-    	} else if (!isChecked) {
-				this.disableIntervals(this, true);
-  		}
-  	} else {
+    var isChecked;
+    var isDateChecked;
+    var isDayChecked;
+    if (!($(ev.currentTarget).hasClass("checks"))) {
+      isChecked = this.$('#intervalCheckbox').prop('checked');
+      if (isChecked) {
+        this.enableIntervals(this);
+      } else if (!isChecked) {
+        this.disableIntervals(this, true);
+      }
+    } else {
   	
-  		isDateChecked = this.$("#dateCheckbox").prop('checked');
-  		isDayChecked = this.$("#dayWeekCheckbox").prop('checked');
+      isDateChecked = this.$("#dateCheckbox").prop('checked');
+      isDayChecked = this.$("#dayWeekCheckbox").prop('checked');
   		
-  		if ($(ev.currentTarget).hasClass("date")) {
-  			if (isDateChecked) {
-  				this.enableDateInterval(this, false);
-  			} else {
-  				this.disableDateInterval(this, true);
-  			}
-  		}
+      if ($(ev.currentTarget).hasClass("date")) {
+        if (isDateChecked) {
+          this.enableDateInterval(this, false);
+        } else {
+          this.disableDateInterval(this, true);
+        }
+      }
   		
-  		if ($(ev.currentTarget).hasClass("day")) {
-  			if (isDayChecked) {
-  				this.enableDayInterval(this, false);
-  			} else {
-  				this.disableDayInterval(this, true);
-  			}
-  		}
+      if ($(ev.currentTarget).hasClass("day")) {
+        if (isDayChecked) {
+          this.enableDayInterval(this, false);
+        } else {
+          this.disableDayInterval(this, true);
+        }
+      }
   		
-			storage.get('settings').then(function(settings) {
-  	 		settings.dateIntervalEnabled = isDateChecked;
-  	 		settings.dayIntervalEnabled = isDayChecked;
-  	 		if (isChecked) {
-  	 			settings.intervalsEnabled = true;
-  	 		}
-  	 		return storage.set('settings', settings);
-  		}).catch(function(ex) {
+      storage.get('settings').then(function(settings) {
+        settings.dateIntervalEnabled = isDateChecked;
+        settings.dayIntervalEnabled = isDayChecked;
+        if (isChecked) {
+          settings.intervalsEnabled = true;
+        }
+        return storage.set('settings', settings);
+      }).catch(function(ex) {
         console.log(ex);
         console.log(ex.stack);
-    	});
-  	}
+      });
+    }
   },
   
   /**
   * Handle changes to the the interval data.
   */
   updateIntervalReminder: function(ev) {
-	var component = this;
+    var component = this;
     if ($(ev.currentTarget).hasClass("dateType")) {
     
-	  	var timeSpanNumber = component.$('#timeSpanNumber').val();
-	  	var timeSpanType = component.$('#timeSpanType').val();
-	  	var timeSpanTime = component.$('#timeSpanTime').val();
+      var timeSpanNumber = component.$('#timeSpanNumber').val();
+      var timeSpanType = component.$('#timeSpanType').val();
+      var timeSpanTime = component.$('#timeSpanTime').val();
   	
-  		this.timeSpanNumber = timeSpanNumber;
-  		this.timeSpandType = timeSpanType;
-  		this.timeSpanTime = timeSpanTime;
+      this.timeSpanNumber = timeSpanNumber;
+      this.timeSpandType = timeSpanType;
+      this.timeSpanTime = timeSpanTime;
   	
-  		return storage.get('settings').then(function(settings) {
-  			var prevTimeSpanNumber = settings.timeSpanNumber;
-  			var prevTimeSpanType = settings.timeSpanType;
+      return storage.get('settings').then(function(settings) {
+        var prevTimeSpanNumber = settings.timeSpanNumber;
+        var prevTimeSpanType = settings.timeSpanType;
   		
-  			var prevDays  = prevTimeSpanNumber * prevTimeSpanType;
+        var prevDays  = prevTimeSpanNumber * prevTimeSpanType;
   		
-  			var prevTimeSpanTime = settings.timeSpanTime;
+        var prevTimeSpanTime = settings.timeSpanTime;
   		
-  			var days = timeSpanNumber * timeSpanType;
+        var days = timeSpanNumber * timeSpanType;
 
-  			var nextNotified = moment().add(days, 'days');
+        var nextNotified = moment().add(days, 'days');
   		
-  			if (localStorage.testing === 'true') {
-           nextNotified = moment().add(1, 'minutes'); 
+        if (localStorage.testing === 'true') {
+          nextNotified = moment().add(1, 'minutes'); 
         }
 		
         if (prevDays !== days || prevTimeSpanTime !== timeSpanTime) {
         	
-        	//console.info("next notif");
-        	var hours = parseInt(timeSpanTime.split(":")[0]);
-        	var mins = parseInt(timeSpanTime.split(":")[1]);
+        //console.info("next notif");
+          var hours = parseInt(timeSpanTime.split(":")[0]);
+          var mins = parseInt(timeSpanTime.split(":")[1]);
 
-        	nextNotified = new Date(nextNotified);
-        	nextNotified.setHours(hours, mins, 0);
-        	component.nextNotifiedDate = nextNotified;
+          nextNotified = new Date(nextNotified);
+          nextNotified.setHours(hours, mins, 0);
+          component.nextNotifiedDate = nextNotified;
         	
-        	createNotification('tipsy-dateInterval', nextNotified, days);
+          createNotification('tipsy-dateInterval', nextNotified, days);
         	//console.log(nextNotified);
-        	moment().format('MMMM Do YYYY, h:mm:ss a');
+          moment().format('MMMM Do YYYY, h:mm:ss a');
 
         };
         
         settings.timeSpanNumber = timeSpanNumber;
-       	settings.timeSpanType = timeSpanType;
+        settings.timeSpanType = timeSpanType;
         settings.timeSpanTime = timeSpanTime;
         settings.days = days;
 
-				settings.nextNotifiedDate = Number(component.nextNotifiedDate);
+        settings.nextNotifiedDate = Number(component.nextNotifiedDate);
         
       return storage.set('settings', settings);
-  	  }).catch(function(ex) {
+      }).catch(function(ex) {
         console.log(ex);
         console.log(ex.stack);
       });
-     } else if ($(ev.currentTarget).hasClass("dayType")) {
+    } else if ($(ev.currentTarget).hasClass("dayType")) {
      
-     		var weekdayInterval = component.$('#weekdayInterval').val();
-  			var weekdayIntervalTime = component.$('#weekdayIntervalTime').val();
+        var weekdayInterval = component.$('#weekdayInterval').val();
+        var weekdayIntervalTime = component.$('#weekdayIntervalTime').val();
   		
-  		  this.weekdayInterval = weekdayInterval;
-  			this.weekdayIntervalTime = weekdayIntervalTime;
+        this.weekdayInterval = weekdayInterval;
+        this.weekdayIntervalTime = weekdayIntervalTime;
   		
-  			return storage.get('settings').then(function(settings) {
+        return storage.get('settings').then(function(settings) {
   			
-  				var nextNotified = moment().day(weekdayInterval);
+          var nextNotified = moment().day(weekdayInterval);
   				
-  				if (localStorage.testing === 'true') {
-          	nextNotified = moment().add(1, 'minutes'); 
-       		}
-       		var hours = parseInt(weekdayIntervalTime.split(":")[0]);
-        	var mins = parseInt(weekdayIntervalTime.split(":")[1]);
+          if (localStorage.testing === 'true') {
+            nextNotified = moment().add(1, 'minutes'); 
+          }
+          var hours = parseInt(weekdayIntervalTime.split(":")[0]);
+          var mins = parseInt(weekdayIntervalTime.split(":")[1]);
         	
-       		nextNotified = new Date(nextNotified);
-        	nextNotified.setHours(hours, mins, 0);
+          nextNotified = new Date(nextNotified);
+          nextNotified.setHours(hours, mins, 0);
 					
-       		if (nextNotified < Date.now()) {
-  					nextNotified.setDate(nextNotified.getDate() + 7);
-  					//console.log("here");
-  				};
+          if (nextNotified < Date.now()) {
+            nextNotified.setDate(nextNotified.getDate() + 7);
+            //console.log("here");
+          };
        		
-       		component.nextNotifiedDay = nextNotified;
-       		createNotification('tipsy-dayInterval', nextNotified, 7);
+          component.nextNotifiedDay = nextNotified;
+          createNotification('tipsy-dayInterval', nextNotified, 7);
        		
-       		moment().format('MMMM Do YYYY, h:mm:ss a');
-        	//component.$('.next').html(moment(nextNotified).calendar());
+          moment().format('MMMM Do YYYY, h:mm:ss a');
+          //component.$('.next').html(moment(nextNotified).calendar());
         	
-  				settings.weekdayInterval = weekdayInterval;
-      		settings.weekdayIntervalTime = weekdayIntervalTime;
+          settings.weekdayInterval = weekdayInterval;
+          settings.weekdayIntervalTime = weekdayIntervalTime;
       		
-      		settings.nextNotifiedDay = Number(component.nextNotifiedDay);
+          settings.nextNotifiedDay = Number(component.nextNotifiedDay);
       		
-  				return storage.set('settings', settings);
-  	  	}).catch(function(ex) {
-        	console.log(ex);
-        	console.log(ex.stack);
-      	});
-     } else {
-     	console.info("wrong type");
-     }
+          return storage.set('settings', settings);
+        }).catch(function(ex) {
+          console.log(ex);
+          console.log(ex.stack);
+      });
+    } else {
+      console.info("wrong type");
+    }
   },
 
   /**
-   * Updates the visual display of the template reflecting the data.
-   */
+  * Updates the visual display of the template reflecting the data.
+  */
   afterRender: function() {
     // Display the correct output.
     console.log('in afterrender');
-		if (this.intervalsEnabled === true) {
-			this.enableIntervals(this);
-			this.$('#intervalCheckbox').prop('checked', true);
-		} else if (this.intervalsEnabled === false){
-			this.disableIntervals(this, false);
-			this.disableDateInterval(this, false);
-			this.disableDayInterval(this, false);
-			storage.get('settings').then(function(settings) {
-  	 		settings.dayIntervalEnabled = false;
-  	 		settings.dateIntervalEnabled = false;
-  	 		return storage.set('settings', settings);
-  		}).catch(function(ex) {
-        	console.log(ex);
-        	console.log(ex.stack);
-    	});
-			this.$('#intervalCheckbox').prop('checked', false);
-		}
+    if (this.intervalsEnabled === true) {
+      this.enableIntervals(this);
+      this.$('#intervalCheckbox').prop('checked', true);
+    } else if (this.intervalsEnabled === false){
+      this.disableIntervals(this, false);
+      this.disableDateInterval(this, false);
+      this.disableDayInterval(this, false);
+      storage.get('settings').then(function(settings) {
+        settings.dayIntervalEnabled = false;
+        settings.dateIntervalEnabled = false;
+        return storage.set('settings', settings);
+      }).catch(function(ex) {
+        console.log(ex);
+        console.log(ex.stack);
+      });
+      this.$('#intervalCheckbox').prop('checked', false);
+    }
 		
-		if (this.dateIntervalEnabled === true) {
-			this.enableDateInterval(this, false);
-		} else if (this.dateIntervalEnabled === false) {
-			this.disableDateInterval(this, false);
-		}
+    if (this.dateIntervalEnabled === true) {
+      this.enableDateInterval(this, false);
+    } else if (this.dateIntervalEnabled === false) {
+      this.disableDateInterval(this, false);
+    }
 		
-		if (this.dayIntervalEnabled === true) {
-			this.enableDayInterval(this, false);
-		} else if (this.dayIntervalEnabled === false) {
-			this.disableDayInterval(this, false);
-		};
+    if (this.dayIntervalEnabled === true) {
+      this.enableDayInterval(this, false);
+    } else if (this.dayIntervalEnabled === false) {
+      this.disableDayInterval(this, false);
+    };
 
     this.$('#timeSpanNumber').val(this.timeSpanNumber || 1);
     this.$('#timeSpanType').val(this.timeSpanType || "1");
@@ -454,13 +453,13 @@ ReminderIntervalComponent.prototype = {
     var nextNotifiedDay = this.nextNotifiedDay;
 
     if (this.dateIntervalEnabled === false && this.dayIntervalEnabled === false) {
-    	this.$('.next').html("Never.");
+      this.$('.next').html("Never.");
     } 
     
     else if (!nextNotifiedDay && !nextNotifiedDate) {
     	//alert("hello");
-   	  var nextNotified = moment().add(1, 'days');
-   	  nextNotified = new Date(nextNotified);
+      var nextNotified = moment().add(1, 'days');
+      nextNotified = new Date(nextNotified);
       nextNotified.setHours(10, 0, 0);
       
       createNotification('tipsy-dateInterval', nextNotified, 1);
@@ -471,15 +470,15 @@ ReminderIntervalComponent.prototype = {
       
       this.$('.next').html(moment(nextNotified).calendar());
     } else if (!nextNotifiedDay && this.nextNotifiedDate) {
-    	this.$('.next').html(moment(nextNotifiedDate).calendar());
+      this.$('.next').html(moment(nextNotifiedDate).calendar());
     } else if (nextNotifiedDay && !nextNotifiedDate) {
       this.$('.next').html(moment(nextNotifiedDay).calendar());
     } else if (nextNotifiedDay && nextNotifiedDate) {
-    		if (nextNotifiedDay < nextNotifiedDate) {
-    			this.$('.next').html(moment(nextNotifiedDay).calendar());
-    		} else {
-    			this.$('.next').html(moment(nextNotifiedDate).calendar());
-    	}
+      if (nextNotifiedDay < nextNotifiedDate) {
+        this.$('.next').html(moment(nextNotifiedDay).calendar());
+      } else {
+        this.$('.next').html(moment(nextNotifiedDate).calendar());
+      }
     }
   }
 };
