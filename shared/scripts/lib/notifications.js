@@ -1,19 +1,6 @@
 import { environment } from './environment';
 import storage from './storage';
 
-export var toDays = [
-  // Daily.
-  1,
-  // Half weekly.
-  3.5,
-  // Weekly.
-  7,
-  // Bi-weekly.
-  14,
-  // Monthly.
-  30
-];
-
 /**
  * Schedule a new notification.
  *
@@ -40,6 +27,29 @@ export function create(name, when, days) {
   else if (environment === 'firefox') {
     self.port.emit('notification.set', when);
   }
+}
+
+export function clear(name) {
+	if (environment === 'chrome') {
+		chrome.alarms.clear(name);
+	}
+}
+
+export function get1(name) {
+	if (environment === 'chrome') {
+		return chrome.alarms.get;
+	}
+}
+
+export function get2(name, callback) { 
+	chrome.alarms.get(name, function(alarm) { callback(alarm); }
+	);
+}
+
+export function get(name) { 
+	return new Promise(function(resolve) { 
+		chrome.alarms.get(name, resolve); 
+	}); 
 }
 
 /**
