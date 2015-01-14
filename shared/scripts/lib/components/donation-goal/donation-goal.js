@@ -5,6 +5,13 @@ import storage from '../../storage';
 
 function DonationGoalComponent() {
   Component.prototype.constructor.apply(this, arguments);
+  var component = this;
+  
+  storage.get('settings').then(function(settings) {
+  
+    component.rateType = settings.rateType || 'browsingRate';
+    component.render();
+  });
 }
 
 DonationGoalComponent.prototype = {
@@ -19,8 +26,7 @@ DonationGoalComponent.prototype = {
   },
   
   rateSelected: function(ev) {
-    var component = this;
-    component.updateRateDescription(ev.target.id);
+    this.updateRateDescription(ev.target.id);
   },
   
   updateInterval: function(ev) {
@@ -54,16 +60,40 @@ DonationGoalComponent.prototype = {
       component.updateOwe(settings);
 
       return storage.set('settings', settings);
-    });
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+      });
   },
   
   updateRateDescription: function(id) {
+    var rateType;
+    var component = this;
   	if (id == "browsingRateRadio") {
-  	  this.$('.avgTime').text("browsing ");
+  	  this.$('.avgTime').text("If you spent 5 minutes browsing ");
+  	  rateType = 'browsingRate'
   	}
   	else if (id == "calendarRateRadio") {
-  	  this.$('.avgTime').text("on a page ");
+  	  this.$('.avgTime').text("After 5 minutes ");
+  	  rateType = 'calendarRate';
   	}
+  	
+  	storage.get('settings').then(function(settings) {
+  	  settings.rateType = rateType;
+  	  component.rateType = rateType;
+  	  return storage.set('settings', settings);
+  	}).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+      });
+  },
+  
+  updateRateDisplay: function(rateType) {
+  
+    var id = rateType + 'Radio';
+    this.$('#' + id).prop('checked', true);
+    this.updateRateDescription(id);
+
   },
 
   updateOwe: function(settings) {
@@ -87,6 +117,10 @@ DonationGoalComponent.prototype = {
         .attr('selected', true);
 
       component.updateOwe(settings);
+      settings.rateType = component.rateType;
+      component.updateRateDisplay(component.rateType);
+      return storage.set('settings', settings);
+      
     }).catch(function(ex) {
       console.log(ex);
     });
