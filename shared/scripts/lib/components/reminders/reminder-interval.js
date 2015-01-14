@@ -18,14 +18,46 @@ function ReminderIntervalComponent() {
 
   // Find the saved reminder settings.
   storage.get('settings').then(function(settings) {
-  
-    component.nextNotifiedDay = settings.nextNotifiedDay;
-    component.nextNotifiedDate = settings.nextNotifiedDate;
+    
+    var defaultDay;
+    var defaultDate;
+    
+    // take care of initial/default state
+    if (typeof settings.nextNotifiedDate === 'undefined') {
+
+      defaultDate = moment().add(1, 'days');
+      defaultDate = new Date(defaultDate);
+      defaultDate = defaultDate.setHours(10, 0, 0);
+      // FIXME: should realy use component.createNotification but is not available yet.
+      chrome.alarms.create('tipsy-dateInterval', {
+        when: Number(defaultDate),
+        periodInMinutes: 1 * 24 * 60
+      });
+    }
+    
+    if (typeof settings.nextNotifiedDay === 'undefined') {
+      var defaultDay = moment().day("Sunday");
+      defaultDay = new Date(defaultDay);
+      defaultDay = defaultDay.setHours(10, 0, 0);
+    
+      if (defaultDay < Date.now()) {
+        var day = moment(defaultDay).add(7, 'days');
+        defaultDay = day.valueOf();
+      };
+      // FIXME: should realy use component.createNotification but is not available yet.
+      chrome.alarms.create('tipsy-dayInterval', {
+        when: Number(defaultDay),
+        periodInMinutes: 7 * 24 * 60
+      });
+    }
+
+    component.nextNotifiedDay = settings.nextNotifiedDay || defaultDay;
+    component.nextNotifiedDate = settings.nextNotifiedDate || defaultDate;
     component.reminderLevel = settings.reminderLevel;
     
     component.timeSpanNumber = settings.timeSpanNumber;
     component.timeSpanType = settings.timeSpanType;
-    component.days = settings.days;
+    component.days = settings.days || 1;
     component.timeSpanTime = settings.timeSpanTime;
     
     component.weekdayInterval = settings.weekdayInterval;
@@ -48,8 +80,8 @@ function ReminderIntervalComponent() {
 		
 		// make sure that the notifcations that are set are gotten
     storage.get('settings').then(function(settings) {
-      nextNotifiedDay = moment(new Date(settings.nextNotifiedDay));
-      nextNotifiedDate = moment(new Date(settings.nextNotifiedDate));
+      nextNotifiedDay = moment(new Date(settings.nextNotifiedDay || component.nextNotifiedDay));
+      nextNotifiedDate = moment(new Date(settings.nextNotifiedDate || component.nextNotifiedDate));
  
       return Promise.all([
         getNotification('tipsy-dateInterval'),
@@ -202,6 +234,8 @@ ReminderIntervalComponent.prototype = {
     component.$('.dateType').prop('disabled', false);
     component.$("#dateCheckbox").prop('checked', true);
     component.$('.dateText').addClass('active');
+    
+    
     createNotification('tipsy-dateInterval', component.nextNotifiedDate, 
   											component.days);
     storage.get('settings').then(function(settings) {
@@ -334,7 +368,6 @@ ReminderIntervalComponent.prototype = {
 		
         if (prevDays !== days || prevTimeSpanTime !== timeSpanTime) {
         	
-        //console.info("next notif");
           var hours = parseInt(timeSpanTime.split(":")[0]);
           var mins = parseInt(timeSpanTime.split(":")[1]);
 
@@ -383,7 +416,6 @@ ReminderIntervalComponent.prototype = {
 					
           if (nextNotified < Date.now()) {
             nextNotified.setDate(nextNotified.getDate() + 7);
-            //console.log("here");
           };
        		
           component.nextNotifiedDay = nextNotified;
@@ -412,7 +444,7 @@ ReminderIntervalComponent.prototype = {
   */
   afterRender: function() {
     // Display the correct output.
-    console.log('in afterrender');
+    // console.log('in afterrender');
     if (this.intervalsEnabled === true) {
       this.enableIntervals(this);
       this.$('#intervalCheckbox').prop('checked', true);
@@ -463,7 +495,6 @@ ReminderIntervalComponent.prototype = {
       nextNotified.setHours(10, 0, 0);
       
       createNotification('tipsy-dateInterval', nextNotified, 1);
-      //console.log("hphph[] " + nextNotified);
       settings.nextNotifiedDate = nextNotified;
       
       
