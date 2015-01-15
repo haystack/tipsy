@@ -120,3 +120,27 @@ setTab();
 
 // Ensure that the tab is changed whenever the hash value is updated.
 window.addEventListener('hashchange', setTab, true);
+
+// Use a more precise formatter for huamanize.
+// https://github.com/moment/moment/issues/348#issuecomment-6535794
+moment.lang('precise-en', {
+  relativeTime : {
+    future : "in %s",
+    past : "%s ago",
+    // See: https://github.com/timrwood/moment/pull/232#issuecomment-4699806
+    s : "%d seconds",
+    m : "a minute",
+    mm : "%d minutes",
+    h : "an hour",
+    hh : "%d hours",
+    d : "a day",
+    dd : "%d days",
+    M : "a month",
+    MM : "%d months",
+    y : "a year",
+    yy : "%d years"
+  }
+});
+
+// Set this precise formatter globally.
+moment.lang('precise-en');
