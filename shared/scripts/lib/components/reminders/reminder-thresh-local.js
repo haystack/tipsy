@@ -5,6 +5,27 @@ import storage from '../../storage';
 
 function ReminderThreshLocalComponent() {
   Component.prototype.constructor.apply(this, arguments);
+  var span = this.$('.remindWhen');
+  var input = this.$('input[type=text]');
+  span.removeClass('active');
+  input.prop('disabled', true);
+  var component = this;
+  storage.get('settings').then(function(settings) {
+    
+    if (typeof settings.localThresholdReminderEnabled === 'undefined') {
+      settings.localThresholdReminderEnabled = true;
+    };
+    if (typeof settings.reminderThreshLocal === 'undefined') {
+      settings.reminderThreshLocal = '$10.00';
+    };
+
+    component.localThresholdReminderEnabled = settings.localThresholdReminderEnabled;
+    component.reminderThreshLocal = settings.reminderThreshLocal;
+  
+  }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+  }); 	
 }
 
 ReminderThreshLocalComponent.prototype = {
@@ -19,18 +40,25 @@ ReminderThreshLocalComponent.prototype = {
   
   selectedReminderThreshLocal: function(ev) {
     var input = this.$('input[type=text]');
-    var span = this.$('.remindWhen')
+    var span = this.$('.remindWhen');
     var isChecked = this.$('#threshLocalCheckbox').prop('checked');
-
+    
     if (isChecked) {
       input.prop('disabled', false);
-      var index = this.reminderLevel;
-      //console.log(this);
       span.addClass('active');
     } else if (!isChecked) {
-      span.removeClass('active')
+      span.removeClass('active');
   	  input.prop('disabled', true);
   	}
+  	
+  	// update the settings
+  	storage.get('settings').then(function(settings) {
+        settings.localThresholdReminderEnabled = isChecked;
+        return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+    });
   },
 
   filterInput: function(ev) {
@@ -47,22 +75,34 @@ ReminderThreshLocalComponent.prototype = {
 
     storage.get('settings').then(function(settings) {
       settings.reminderThreshLocal = currency;
-
-     // component.updateOwe(settings);
-
       return storage.set('settings', settings);
     });
   },
 
 
   afterRender: function() {
-    var component = this;
+    // clear the checkboxes first to prevent flashing
+    var span = this.$('.remindWhen');
     var input = this.$('input[type=text]');
-    //var select = this.$('select');
+    span.removeClass('active');
+  	input.prop('disabled', true);
+  	this.$('#threshLocalCheckbox').prop('checked', false);
+    var component = this;
 
+    var isSelected;
     storage.get('settings').then(function(settings) {
-      input.val(settings.reminderThreshLocal);
-
+      input.val(settings.reminderThreshLocal || component.reminderThreshLocal);
+      isSelected = settings.localThresholdReminderEnabled;
+      component.localThresholdReminderEnabled = isSelected;
+      if (isSelected === true || (typeof isSelected === 'undefined')) {
+        component.$('#threshLocalCheckbox').prop('checked', true);
+        component.selectedReminderThreshLocal(null);
+      } else if(isSelected === false) {
+        component.$('#threshLocalCheckbox').prop('checked', false);
+        component.selectedReminderThreshLocal(null);
+      }  else {
+        console.info('error reading if check selected from settings');
+      };
     }).catch(function(ex) {
       console.log(ex);
     });

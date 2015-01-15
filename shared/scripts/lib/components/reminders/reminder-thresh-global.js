@@ -5,6 +5,27 @@ import storage from '../../storage';
 
 function ReminderThreshGlobalComponent() {
   Component.prototype.constructor.apply(this, arguments);
+  var span = this.$('.remindWhen');
+  var input = this.$('input[type=text]');
+  span.removeClass('active');
+  input.prop('disabled', true);
+  var component = this;
+  storage.get('settings').then(function(settings) {
+    
+    if (typeof settings.globalThresholdReminderEnabled === 'undefined') {
+      settings.globalThresholdReminderEnabled = true;
+    };
+    if (typeof settings.reminderThreshGlobal === 'undefined') {
+      settings.reminderThreshGlobal = '$10.00';
+    };
+    
+    component.globalThresholdReminderEnabled = settings.globalThresholdReminderEnabled;
+    component.reminderThreshGlobal = settings.reminderThreshGlobal;
+  
+  }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+  });
 }
 
 ReminderThreshGlobalComponent.prototype = {
@@ -18,20 +39,26 @@ ReminderThreshGlobalComponent.prototype = {
   },
   
   selectedReminderThreshGlobal: function(ev) {  
-  
     var input = this.$('input[type=text]');
     var span = this.$('.remindWhen')
     var isChecked = this.$('#threshGlobalCheckbox').prop('checked');
 
     if (isChecked) {
       input.prop('disabled', false);
-      var index = this.reminderLevel;
-      //console.log(this);
       span.addClass('active');
     } else if (!isChecked) {
       span.removeClass('active')
   	  input.prop('disabled', true);
   	}
+  	
+  	// update the settings
+  	storage.get('settings').then(function(settings) {
+        settings.globalThresholdReminderEnabled = isChecked;
+        return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+    });  	
   },
 
   filterInput: function(ev) {
@@ -48,49 +75,34 @@ ReminderThreshGlobalComponent.prototype = {
 
     storage.get('settings').then(function(settings) {
       settings.reminderThreshGlobal = currency;
-
-     // component.updateOwe(settings);
-
       return storage.set('settings', settings);
     });
   },
-  
-  /*
-  updateRateDescription: function(id) {
-  	if (id == "browsingRateRadio") {
-  	  this.$('.avgTime').text("browsing ");
-  	}
-  	else if (id == "calendarRateRadio") {
-  	  this.$('.avgTime').text("on a page ");
-  	}
-  },
-  */
 
-/*
-  updateOwe: function(settings) {
-    var donationInterval = settings.donationInterval || 60;
-    var donationGoal = settings.donationGoal;
-    donationGoal = donationGoal ? +donationGoal.slice(1) : 0;
-
-    var est = donationGoal * (5 / donationInterval);
-
-    this.$('.owe').text('$' + est.toFixed(2));
-  },
-*/
 
   afterRender: function() {
-    var component = this;
+    // clear the checkboxes first to prevent flashing
+    var span = this.$('.remindWhen');
     var input = this.$('input[type=text]');
-    //var select = this.$('select');
+    span.removeClass('active');
+  	input.prop('disabled', true);
+  	this.$('#threshGlobalCheckbox').prop('checked', false);
+    var component = this;
 
+    var isSelected;
     storage.get('settings').then(function(settings) {
-      input.val(settings.reminderThreshGlobal);
-/*
-      select.find('[value=' + settings.donationInterval + ']')
-        .attr('selected', true);
-
-      component.updateOwe(settings);
-*/
+      input.val(settings.reminderThreshGlobal || component.reminderThreshGlobal);
+      isSelected = settings.globalThresholdReminderEnabled;
+      component.globalThresholdReminderEnabled = isSelected;
+      if (isSelected === true || (typeof isSelected === 'undefined')) {
+        component.$('#threshGlobalCheckbox').prop('checked', true);
+        component.selectedReminderThreshGlobal(null);
+      } else if(isSelected === false) {
+        component.$('#threshGlobalCheckbox').prop('checked', false);
+        component.selectedReminderThreshGlobal(null);
+      }  else {
+        console.info('error reading if check selected from settings');
+      };
     }).catch(function(ex) {
       console.log(ex);
     });
