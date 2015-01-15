@@ -36,14 +36,14 @@ function ReminderIntervalComponent() {
     }
     
     if (typeof settings.nextNotifiedDay === 'undefined') {
-      var defaultDay = moment().day("Sunday");
+      defaultDay = moment().day("Sunday");
       defaultDay = new Date(defaultDay);
       defaultDay = defaultDay.setHours(10, 0, 0);
     
       if (defaultDay < Date.now()) {
         var day = moment(defaultDay).add(7, 'days');
         defaultDay = day.valueOf();
-      };
+      }
       // FIXME: should realy use component.createNotification but is not available yet.
       chrome.alarms.create('tipsy-dayInterval', {
         when: Number(defaultDay),
@@ -190,11 +190,11 @@ ReminderIntervalComponent.prototype = {
   	 	
       if (component.dateIntervalEnabled) {
         component.enableDateInterval(component, true);
-      };
+      }
   	 	
       if (component.dayIntervalEnabled) {
         component.enableDayInterval(component, true);	 	
-      };
+      }
   	 	
       settings.intervalsEnabled = true;
       component.intervalsEnabled = true;
@@ -379,7 +379,7 @@ ReminderIntervalComponent.prototype = {
         	//console.log(nextNotified);
           moment().format('MMMM Do YYYY, h:mm:ss a');
 
-        };
+        }
         
         settings.timeSpanNumber = timeSpanNumber;
         settings.timeSpanType = timeSpanType;
@@ -416,7 +416,7 @@ ReminderIntervalComponent.prototype = {
 					
           if (nextNotified < Date.now()) {
             nextNotified.setDate(nextNotified.getDate() + 7);
-          };
+          }
        		
           component.nextNotifiedDay = nextNotified;
           createNotification('tipsy-dayInterval', nextNotified, 7);
@@ -473,12 +473,12 @@ ReminderIntervalComponent.prototype = {
       this.enableDayInterval(this, false);
     } else if (this.dayIntervalEnabled === false) {
       this.disableDayInterval(this, false);
-    };
+    }
 
     this.$('#timeSpanNumber').val(this.timeSpanNumber || 1);
     this.$('#timeSpanType').val(this.timeSpanType || "1");
     this.$('#timeSpanTime').val(this.timeSpanTime || "10:00");
-    this.$('#weekdayInterval').val(this.weekdayInterval || "Sunday")
+    this.$('#weekdayInterval').val(this.weekdayInterval || "Sunday");
     this.$('#weekdayIntervalTime').val(this.weekdayIntervalTime || "10:00");
     
     var nextNotifiedDate = this.nextNotifiedDate;
@@ -495,7 +495,7 @@ ReminderIntervalComponent.prototype = {
       nextNotified.setHours(10, 0, 0);
       
       createNotification('tipsy-dateInterval', nextNotified, 1);
-      settings.nextNotifiedDate = nextNotified;
+      
 
       this.$('.next').html(moment(nextNotified).calendar());
     } else if (!nextNotifiedDay && this.nextNotifiedDate) {

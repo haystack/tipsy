@@ -71,7 +71,7 @@ DonationGoalComponent.prototype = {
     var component = this;
   	if (id == "browsingRateRadio") {
   	  this.$('.avgTime').text("If you spent 5 minutes browsing ");
-  	  rateType = 'browsingRate'
+  	  rateType = 'browsingRate';
   	}
   	else if (id == "calendarRateRadio") {
   	  this.$('.avgTime').text("After 5 minutes ");

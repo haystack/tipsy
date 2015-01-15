@@ -14,10 +14,11 @@ function ReminderThreshGlobalComponent() {
     
     if (typeof settings.globalThresholdReminderEnabled === 'undefined') {
       settings.globalThresholdReminderEnabled = true;
-    };
+    }
+    
     if (typeof settings.reminderThreshGlobal === 'undefined') {
       settings.reminderThreshGlobal = '$10.00';
-    };
+    }
     
     component.globalThresholdReminderEnabled = settings.globalThresholdReminderEnabled;
     component.reminderThreshGlobal = settings.reminderThreshGlobal;
@@ -40,14 +41,14 @@ ReminderThreshGlobalComponent.prototype = {
   
   selectedReminderThreshGlobal: function(ev) {  
     var input = this.$('input[type=text]');
-    var span = this.$('.remindWhen')
+    var span = this.$('.remindWhen');
     var isChecked = this.$('#threshGlobalCheckbox').prop('checked');
 
     if (isChecked) {
       input.prop('disabled', false);
       span.addClass('active');
     } else if (!isChecked) {
-      span.removeClass('active')
+      span.removeClass('active');
   	  input.prop('disabled', true);
   	}
   	
@@ -102,7 +103,7 @@ ReminderThreshGlobalComponent.prototype = {
         component.selectedReminderThreshGlobal(null);
       }  else {
         console.info('error reading if check selected from settings');
-      };
+      }
     }).catch(function(ex) {
       console.log(ex);
     });

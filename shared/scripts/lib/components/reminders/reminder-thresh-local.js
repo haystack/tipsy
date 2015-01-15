@@ -14,10 +14,11 @@ function ReminderThreshLocalComponent() {
     
     if (typeof settings.localThresholdReminderEnabled === 'undefined') {
       settings.localThresholdReminderEnabled = true;
-    };
+    }
+    
     if (typeof settings.reminderThreshLocal === 'undefined') {
       settings.reminderThreshLocal = '$10.00';
-    };
+    }
 
     component.localThresholdReminderEnabled = settings.localThresholdReminderEnabled;
     component.reminderThreshLocal = settings.reminderThreshLocal;
@@ -102,7 +103,7 @@ ReminderThreshLocalComponent.prototype = {
         component.selectedReminderThreshLocal(null);
       }  else {
         console.info('error reading if check selected from settings');
-      };
+      }
     }).catch(function(ex) {
       console.log(ex);
     });
