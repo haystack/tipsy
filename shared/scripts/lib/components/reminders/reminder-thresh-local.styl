@@ -9,28 +9,29 @@ select, input[type=text]
   border-radius: 5px;
   box-shadow: 4px 1px rgba(224, 224, 224, 0.25);
   box-sizing border-box
-  width 50%
+  width 15%
 
   &:focus
     outline none
 
+  &:disabled
+     opacity 0.30
 
-input[type=radio]
-  background-color rgba(255, 249, 184, 0.65)
 
-select
-  width auto
-
-span.per
-  margin-left 20px
-  margin-right 20px
-  font-size 24px
-  font-weight bold
-  color #848484
-
-span.rates
+span.threshLocalCheckbox
   margin-left 10px
   margin-right 10px
   font-size 24px
   font-weight bold
   color #848484
+
+span.remindWhen
+  margin-left 10px
+  margin-right 10px
+  font-size 24px
+  font-weight bold
+  color #E0E0E0
+
+   
+  &.active
+      color #848484

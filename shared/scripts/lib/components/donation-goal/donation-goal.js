@@ -5,18 +5,30 @@ import storage from '../../storage';
 
 function DonationGoalComponent() {
   Component.prototype.constructor.apply(this, arguments);
+  var component = this;
+  
+  storage.get('settings').then(function(settings) {
+  
+    component.rateType = settings.rateType || 'browsingRate';
+    component.render();
+  });
 }
 
 DonationGoalComponent.prototype = {
   template: 'components/donation-goal/donation-goal.html',
 
   events: {
-    'keyup input': 'filterInput',
-    'blur input': 'formatAndSave',
-    'change input': 'formatAndSave',
+    'keyup input[type=text]': 'filterInput',
+    'blur input[type=text]': 'formatAndSave',
+    'change input[type=text]': 'formatAndSave',
+    'change input[type=radio]': 'rateSelected',
     'change select': 'updateInterval'
   },
-
+  
+  rateSelected: function(ev) {
+    this.updateRateDescription(ev.target.id);
+  },
+  
   updateInterval: function(ev) {
     var minutes = Number(ev.target.value);
     var component = this;
@@ -32,7 +44,7 @@ DonationGoalComponent.prototype = {
 
   filterInput: function(ev) {
     var val = ev.target.value.replace(/[^0-9.]/g, '');
-    this.$('input').val('$' + val);
+    this.$('input[type=text]').val('$' + val);
   },
 
   formatAndSave: function(ev) {
@@ -40,7 +52,7 @@ DonationGoalComponent.prototype = {
     var val = ev.target.value.replace(/[^0-9.]/g, '');
     var currency = '$' + parseFloat(val).toFixed(2);
 
-    this.$('input').val(currency);
+    this.$('input[type=text]').val(currency);
 
     storage.get('settings').then(function(settings) {
       settings.donationGoal = currency;
@@ -48,7 +60,40 @@ DonationGoalComponent.prototype = {
       component.updateOwe(settings);
 
       return storage.set('settings', settings);
-    });
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+      });
+  },
+  
+  updateRateDescription: function(id) {
+    var rateType;
+    var component = this;
+  	if (id == "browsingRateRadio") {
+  	  this.$('.avgTime').text("If you spent 5 minutes browsing ");
+  	  rateType = 'browsingRate';
+  	}
+  	else if (id == "calendarRateRadio") {
+  	  this.$('.avgTime').text("After 5 minutes ");
+  	  rateType = 'calendarRate';
+  	}
+  	
+  	storage.get('settings').then(function(settings) {
+  	  settings.rateType = rateType;
+  	  component.rateType = rateType;
+  	  return storage.set('settings', settings);
+  	}).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+      });
+  },
+  
+  updateRateDisplay: function(rateType) {
+  
+    var id = rateType + 'Radio';
+    this.$('#' + id).prop('checked', true);
+    this.updateRateDescription(id);
+
   },
 
   updateOwe: function(settings) {
@@ -63,7 +108,7 @@ DonationGoalComponent.prototype = {
 
   afterRender: function() {
     var component = this;
-    var input = this.$('input');
+    var input = this.$('input[type=text]');
     var select = this.$('select');
 
     storage.get('settings').then(function(settings) {
@@ -72,6 +117,10 @@ DonationGoalComponent.prototype = {
         .attr('selected', true);
 
       component.updateOwe(settings);
+      settings.rateType = component.rateType;
+      component.updateRateDisplay(component.rateType);
+      return storage.set('settings', settings);
+      
     }).catch(function(ex) {
       console.log(ex);
     });

@@ -1,0 +1,68 @@
+<h2>Choose your reminder</h2>
+
+<p class="info">
+  <i class="fa fa-info-circle"></i>
+  These are simple notifications, reminding you to check your donations page.
+</p>
+
+
+  <input id="intervalCheckbox" type="checkbox" name="rates" checked>
+  <label for="intervalCheckbox"><span class="intervalCheckbox">Interval Reminder:</span>
+</label>
+
+<p>
+  <div class="centered">
+    <span class="fixedIntervalReminder front active">Remind Me Every...</span>
+
+      <label for="fixedIntervalCheckbox">
+        <input id="dateCheckbox"  class="checks date" type="checkbox" name="rates" checked>
+        <select class="intervalCheck dateType" id="timeSpanNumber">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+        <select class="intervalCheck dateType" id="timeSpanType">
+          <option value="1">days</option>
+          <option value="7" selected>weeks</option>
+          <option value="30">months</option>
+        </select>
+        <span class="fixedIntervalReminder dateText active">at</span>
+        <input type="time" value="10:00" class="intervalCheck dateType" id="timeSpanTime">
+
+      <div class="pos">
+        <label for="dayWeekCheckbox">
+        <input id="dayWeekCheckbox" type="checkbox" class="checks day" name="rates" checked>
+        <select class="intervalCheck dayType" id="weekdayInterval">
+          <option value="Monday" selected>Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
+        </select>
+        <span class="fixedIntervalReminder dayText active">at</span>
+        <input type="time" value="10:00" class="intervalCheck dayType" id="weekdayIntervalTime">
+      </div>
+      
+  </div>
+</p>
+<p>
+  Your next reminder will trigger: <span class="next">{{ nextNotified|calendar }}.</span>
+</p>
+
+<!-- ><input name="interval" type="range" min="0" max="4" value="1" class="intervalRange">
+
+<output for="interval">
+  <span>Daily</span>
+  <span>Half-weekly</span>
+  <span>Weekly</span>
+  <span>Bi-weekly</span>
+  <span>Monthly</span>
+</output>
+
+<p>
+  Your next reminder will trigger: <span class="next">{{ nextNotified|calendar }}.</span>
+</p>
+--!>

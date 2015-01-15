@@ -54,6 +54,9 @@ input[type=range]
     border-radius 5px
     box-shadow 4px 1px rgba(224, 224, 224, 0.25)
 
+  &:disabled
+    opacity 0.30
+
 output
   display block
   width calc(100% - 30px)
@@ -82,3 +85,68 @@ output
 
     &:nth-child(5)
       right -7px
+   
+    &.active:disabled
+       color #FFFFFF
+span.intervalCheckbox
+  margin-left 10px
+  margin-right 10px
+  font-size 24px
+  font-weight bold
+  color #848484
+
+span.fixedIntervalReminder
+  margin-left 10px
+  margin-right 10px
+  font-size 24px
+  font-weight bold
+  color #E0E0E0
+
+  &.active
+      color #848484
+
+span.dateText, span.dayText
+  margin-left 10px
+  margin-right 10px
+  font-size 24px
+  font-weight bold
+  color #E0E0E0
+
+  &.active
+      color #848484
+
+div.pos
+  margin-left 244px
+  margin-right 10px
+
+select
+  padding 10px
+  font-size 24px
+  font-weight bold
+  color #5F5F5F
+  transition background linear .1s
+  background rgba(255, 249, 184, 0.65)
+  border: 2px solid #E0E0E0;
+  border-radius: 5px;
+  box-shadow: 4px 1px rgba(224, 224, 224, 0.25);
+  box-sizing border-box
+  width auto
+
+  &:disabled
+     opacity 0.30
+
+input[type=time]
+  padding 10px
+  font-size 24px
+  font-weight bold
+  color #5F5F5F
+  transition background linear .1s
+  background rgba(255, 249, 184, 0.65)
+  border: 2px solid #E0E0E0;
+  border-radius: 5px;
+  box-shadow: 4px 1px rgba(224, 224, 224, 0.25);
+  box-sizing border-box
+  width auto
+
+  &:disabled
+     opacity 0.30
