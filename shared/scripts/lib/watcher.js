@@ -62,9 +62,7 @@ if (environment === 'chrome') {
       }
 
       // If this tab is not already being tracked, start it.
-      if (!tabs[tabId]) {
-        start(tab);
-      }
+      start(tab);
 
       tabs.lastAccessed = tabId;
     });
@@ -72,7 +70,6 @@ if (environment === 'chrome') {
 
   // Monitor whenever the tab is updated to detect for url changes.
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
-    // If we are currently idle, do nothing.
     if (idle.isIdle) {
       return;
     }
