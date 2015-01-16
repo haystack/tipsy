@@ -23,6 +23,10 @@ export function initialize() {
  * @param {Object} tab - to monitor.
  */
 export function start(tab) {
+  if (tab && !tab.id) {
+    tab = tab.tab;
+  }
+
   // Ensure we're working with a tab object, which may or may not already
   // exist.
   var currentTab = tabs[tab.id] || {};
@@ -53,10 +57,12 @@ export function stop(tab) {
       return;
     }
 
+    // Ensure we're using a wrapped tab object.
+    console.log('STOP', tab.id, tabs[tab.id], tabs[tab.id].author);
+
     // Make sure we've started this tab, otherwise this is an invalid state.
     // Only work with HTTP links for now, omits weird `chrome://` urls.
     if (!tabs[tab.id].author || tab.url.indexOf('http') !== 0) {
-      delete tabs[tab.id];
       console.info('Stopped tracking: %s', tab.url);
       return;
     }
@@ -81,7 +87,6 @@ export function stop(tab) {
     // Write log updates back to the storage engine.
     return storage.set('log', log).then(function() {
       // Remove the tab from the list to monitor.
-      delete tabs[tab.id];
       console.info('Stopped tracking: %s', tab.url);
     });
   });
