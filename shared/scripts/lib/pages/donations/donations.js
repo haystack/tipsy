@@ -18,6 +18,23 @@ function DonationsPage() {
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
+  
+  // FIXME: put this in a better place, should really run only when tipsy is installed.
+  // Make sure that first time extension is run is known for calendar 
+  // rate calculation.
+  storage.get('settings').then(function(settings) {
+        if (typeof settings.timeStarted === 'undefined') {
+          settings.timeStarted = Date.now();
+        };
+        
+        if (typeof settings.totalPaid === 'undefined') {
+          settings.totalPaid = 0;
+        };
+        return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+    });
 }
 
 DonationsPage.prototype = {
@@ -201,20 +218,45 @@ DonationsPage.prototype = {
    * @return
    */
   calculate: function(settings, entry) {
+    var rateType = settings.rateType;
+        
     // Default to an hour.
     var donationInterval = settings.donationInterval || 60;
-
-    // Convert timespent to hours.
-    var timeSpent = entry.timeSpent / 1000 / 60 / donationInterval;
-
+    
     // The donation goal amount is saved as a currency string, so we want
     // to emulate the empty amount if nothing was set.
     var donationGoal = settings.donationGoal || '$0';
-    donationGoal = Number(donationGoal.slice(1));
+    
+    if (rateType === "browsingRate") {
 
-    // Assign the estimated amount to the entry item.
-    entry.estimatedAmount = (timeSpent * donationGoal).toFixed(2);
 
+      // Convert timespent to time unit selected.
+      var timeSpent = entry.timeSpent / 1000 / 60 / donationInterval;
+
+
+      donationGoal = Number(donationGoal.slice(1));
+
+      // Assign the estimated amount to the entry item.
+      entry.estimatedAmount = (timeSpent * donationGoal).toFixed(2);
+      
+    } else if (rateType === "calendarRate") {
+    
+      // get fraction of time spent for this author out of all others
+      var timeSpentFraction = settings.timeSpentAuthored / entry.timeSpent;
+      
+      var timeSinceBegin = Date.now() - settings.timeStarted;
+      
+      var unitAmount = (timeSinceBegin / 1000 / 60 / donationInterval) 
+                        *
+                        Number(donationGoal.slice(1))
+                        
+      var moneyOwed = timeSpentFraction * unitAmount - settings.totalPaid;
+
+      entry.estimatedAmount = moneyOwed.toFixed(2);
+      
+    } else {
+      console.error("No rate type set.");
+    }
     return entry;
   },
 

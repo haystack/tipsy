@@ -76,11 +76,22 @@ export function stop(tab) {
     if (tab.url.indexOf(host) > -1) {
       // Add the information necessary to render the log and payments
       // correctly.
+      var timeSpent = Date.now() - tabs[tab.id].accessTime;
+      // Add to time spent on authored sites
+      storage.get('settings').then(function(settings) {
+        var oldTime = settings.timeSpentAuthored || 0;
+        settings.timeSpentAuthored = oldTime + timeSpent;
+        return storage.set('settings', settings);
+      }).catch(function(ex) {
+        console.log(ex);
+        console.log(ex.stack);
+      });
+      
       log[host].push({
         author: tabs[tab.id].author,
         tab: tab,
         accessTime: tabs[tab.id].accessTime,
-        timeSpent: Date.now() - tabs[tab.id].accessTime
+        timeSpent: timeSpent
       });
     }
 
