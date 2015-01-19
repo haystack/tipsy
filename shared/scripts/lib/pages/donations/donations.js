@@ -247,7 +247,7 @@ DonationsPage.prototype = {
       
       var timeSinceBegin = Date.now() - settings.timeStarted;
       
-      var unitAmount = (timeSinceBegin / 1000 / 60 / donationInterval) * Number(donationGoal.slice(1))
+      var unitAmount = (timeSinceBegin / 1000 / 60 / donationInterval) * Number(donationGoal.slice(1));
                         
       var moneyOwed = timeSpentFraction * unitAmount - settings.totalPaid;
 
