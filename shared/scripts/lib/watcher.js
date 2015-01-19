@@ -9,7 +9,7 @@ import storage from './storage';
 // from the list.
 var idle = {
   // A good default threshold timeout.
-  seconds: 20,
+  seconds: 15,
 
   // Idle is a global concept.
   isIdle: false,
@@ -21,6 +21,8 @@ var idle = {
     if (this.isIdle === state) {
       return;
     }
+    
+    this.isIdle = state;
 
     // Always update the current tab based on the idle access.
     tabs.lastAccessed = tab.id;

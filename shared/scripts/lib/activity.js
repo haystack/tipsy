@@ -4,6 +4,8 @@ import { environment } from './environment';
 import storage from './storage';
 import { tabs } from './tabs';
 
+import DonationsPage from './pages/donations/donations';
+
 /**
  * This ensures that log is an object and not undefined, as the `storage#get`
  * call defaults to an empty object if it was not previously set.
@@ -75,18 +77,20 @@ export function stop(tab) {
     // Never push an entry in that does not contain the host.
     if (tab.url.indexOf(host) > -1) {
       // Add the information necessary to render the log and payments
-      // correctly.
+      // correctly.z
       var timeSpent = Date.now() - tabs[tab.id].accessTime;
-      // Add to time spent on authored sites
-      storage.get('settings').then(function(settings) {
-        var oldTime = settings.timeSpentAuthored || 0;
-        settings.timeSpentAuthored = oldTime + timeSpent;
-        return storage.set('settings', settings);
-      }).catch(function(ex) {
-        console.log(ex);
-        console.log(ex.stack);
-      });
       
+      if (tabs[tab.id].author.list.length >= 1) {
+        storage.get('settings').then(function(settings) {
+          var oldTime = settings.timeSpentAuthored || 0;
+          settings.timeSpentAuthored = oldTime + timeSpent;
+          return storage.set('settings', settings);
+        }).catch(function(ex) {
+          console.log(ex);
+          console.log(ex.stack);
+        });
+      }
+
       log[host].push({
         author: tabs[tab.id].author,
         tab: tab,
@@ -103,5 +107,8 @@ export function stop(tab) {
       delete tabs[tab.id].accessTime;
       delete tabs[tab.id].tab;
     });
-  });
+  }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+    });
 }

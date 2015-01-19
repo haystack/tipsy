@@ -22,7 +22,7 @@ function ReminderThreshGlobalComponent() {
     
     component.globalThresholdReminderEnabled = settings.globalThresholdReminderEnabled;
     component.reminderThreshGlobal = settings.reminderThreshGlobal;
-  
+    return storage.set('settings', settings);
   }).catch(function(ex) {
       console.log(ex);
       console.log(ex.stack);
@@ -76,6 +76,7 @@ ReminderThreshGlobalComponent.prototype = {
 
     storage.get('settings').then(function(settings) {
       settings.reminderThreshGlobal = currency;
+      settings.globalReminded = false;
       return storage.set('settings', settings);
     });
   },
@@ -91,10 +92,12 @@ ReminderThreshGlobalComponent.prototype = {
     var component = this;
 
     var isSelected;
+    
     storage.get('settings').then(function(settings) {
       input.val(settings.reminderThreshGlobal || component.reminderThreshGlobal);
       isSelected = settings.globalThresholdReminderEnabled;
       component.globalThresholdReminderEnabled = isSelected;
+      
       if (isSelected === true || (typeof isSelected === 'undefined')) {
         component.$('#threshGlobalCheckbox').prop('checked', true);
         component.selectedReminderThreshGlobal(null);

@@ -53,6 +53,25 @@ export function get(name) {
 }
 
 /**
+ * Allows to create notification manually, used for thresholdreminders
+ */
+export function notify(name, type, amount) {
+  
+  if (environment === 'chrome') {
+    chrome.notifications.create(name, {
+      type: 'basic',
+      iconUrl: '../img/logo64.png',
+      title: 'Tipsy',
+      message: 'Time to donate! You have reached your '+ type + ' threshold with an amount of $' + amount + '.'
+    }, function unhandledCallback() {});
+  } else if (environment === 'firefox') {
+    //TODO implement me
+    console.error('Threshold notification for Firefox not yet implemented.');
+  }
+}
+ 
+ 
+/**
  * Listens for Chrome alarms to trigger the next notification.
  */
 export function listen(worker) {
