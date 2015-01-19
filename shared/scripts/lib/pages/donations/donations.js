@@ -26,11 +26,11 @@ function DonationsPage() {
   storage.get('settings').then(function(settings) {
         if (typeof settings.timeStarted === 'undefined') {
           settings.timeStarted = Date.now();
-        };
+        }
         
         if (typeof settings.totalPaid === 'undefined') {
           settings.totalPaid = 0;
-        };
+        }
         return storage.set('settings', settings);
     }).catch(function(ex) {
       console.log(ex);
@@ -247,9 +247,7 @@ DonationsPage.prototype = {
       
       var timeSinceBegin = Date.now() - settings.timeStarted;
       
-      var unitAmount = (timeSinceBegin / 1000 / 60 / donationInterval) 
-                        *
-                        Number(donationGoal.slice(1))
+      var unitAmount = (timeSinceBegin / 1000 / 60 / donationInterval) * Number(donationGoal.slice(1))
                         
       var moneyOwed = timeSpentFraction * unitAmount - settings.totalPaid;
 
@@ -311,9 +309,7 @@ DonationsPage.prototype = {
         
         storage.get('settings').then(function(settings) {
 
-          if (settings.reminderThreshLocal 
-              && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1)))
-              && !settings.localReminded)  {
+          if (settings.reminderThreshLocal && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1))) && !settings.localReminded)  {
             notify('tipsy-thersh-local', 'local', amount.toString());
             settings.localReminded = true;
           }
@@ -327,9 +323,7 @@ DonationsPage.prototype = {
     
     storage.get('settings').then(function(settings) {
 
-      if (settings.reminderThreshGlobal 
-          && (totalOwed >= parseFloat(settings.reminderThreshGlobal.slice(1))) 
-          && !settings.globalReminded) {
+      if (settings.reminderThreshGlobal && (totalOwed >= parseFloat(settings.reminderThreshGlobal.slice(1))) && !settings.globalReminded) {
         notify('tipsy-thresh-global', 'global', totalOwed.toString());
         settings.globalReminded = true;
       }
