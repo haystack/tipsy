@@ -21,7 +21,7 @@ function DonationsPage() {
   storage.onChange(this.renderTable.bind(this));
   
   // FIXME: put this in a better place, should really run only when tipsy is installed.
-  // Make sure that first time extension is run is known for calendar 
+  // Makes sure that first time extension is run is known for calendar 
   // rate calculation.
   storage.get('settings').then(function(settings) {
         if (typeof settings.timeStarted === 'undefined') {

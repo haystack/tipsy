@@ -4,8 +4,6 @@ import { environment } from './environment';
 import storage from './storage';
 import { tabs } from './tabs';
 
-import DonationsPage from './pages/donations/donations';
-
 /**
  * This ensures that log is an object and not undefined, as the `storage#get`
  * call defaults to an empty object if it was not previously set.
@@ -76,8 +74,7 @@ export function stop(tab) {
 
     // Never push an entry in that does not contain the host.
     if (tab.url.indexOf(host) > -1) {
-      // Add the information necessary to render the log and payments
-      // correctly.z
+      // Add the information necessary to render the log and payments correctly
       var timeSpent = Date.now() - tabs[tab.id].accessTime;
       
       if (tabs[tab.id].author.list.length >= 1) {

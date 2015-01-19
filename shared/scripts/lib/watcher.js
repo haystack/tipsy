@@ -9,7 +9,7 @@ import storage from './storage';
 // from the list.
 var idle = {
   // A good default threshold timeout.
-  seconds: 15,
+  seconds: 20,
 
   // Idle is a global concept.
   isIdle: false,
