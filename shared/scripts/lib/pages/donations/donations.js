@@ -2,6 +2,7 @@
 
 import Component from '../../component';
 import storage from '../../storage';
+import {notify as notify} from '../../notifications';
 import { inject as injectDwolla } from '../../processors/dwolla';
 import { inject as injectPaypal } from '../../processors/paypal';
 
@@ -18,6 +19,23 @@ function DonationsPage() {
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
+  
+  // FIXME: put this in a better place, should really run only when tipsy is installed.
+  // Makes sure that first time extension is run is known for calendar 
+  // rate calculation.
+  storage.get('settings').then(function(settings) {
+        if (typeof settings.timeStarted === 'undefined') {
+          settings.timeStarted = Date.now();
+        }
+        
+        if (typeof settings.totalPaid === 'undefined') {
+          settings.totalPaid = 0;
+        }
+        return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+    });
 }
 
 DonationsPage.prototype = {
@@ -201,20 +219,43 @@ DonationsPage.prototype = {
    * @return
    */
   calculate: function(settings, entry) {
+    var rateType = settings.rateType;
+        
     // Default to an hour.
     var donationInterval = settings.donationInterval || 60;
-
-    // Convert timespent to hours.
-    var timeSpent = entry.timeSpent / 1000 / 60 / donationInterval;
-
+    
     // The donation goal amount is saved as a currency string, so we want
     // to emulate the empty amount if nothing was set.
     var donationGoal = settings.donationGoal || '$0';
-    donationGoal = Number(donationGoal.slice(1));
+    
+    if (rateType === "browsingRate") {
 
-    // Assign the estimated amount to the entry item.
-    entry.estimatedAmount = (timeSpent * donationGoal).toFixed(2);
 
+      // Convert timespent to time unit selected.
+      var timeSpent = entry.timeSpent / 1000 / 60 / donationInterval;
+
+
+      donationGoal = Number(donationGoal.slice(1));
+
+      // Assign the estimated amount to the entry item.
+      entry.estimatedAmount = (timeSpent * donationGoal).toFixed(2);
+      
+    } else if (rateType === "calendarRate") {
+    
+      // get fraction of time spent for this author out of all others
+      var timeSpentFraction = entry.timeSpent / settings.timeSpentAuthored;
+      
+      var timeSinceBegin = Date.now() - settings.timeStarted;
+      
+      var unitAmount = (timeSinceBegin / 1000 / 60 / donationInterval) * Number(donationGoal.slice(1));
+                        
+      var moneyOwed = timeSpentFraction * unitAmount - settings.totalPaid;
+
+      entry.estimatedAmount = moneyOwed.toFixed(2);
+      
+    } else {
+      console.error("No rate type set.");
+    }
     return entry;
   },
 
@@ -232,7 +273,8 @@ DonationsPage.prototype = {
 
       window.alert('You will now be redirected to the payment site.');
     });
-
+    
+    var totalOwed = 0;
     // Inject payment information for each entry.
     this.$('tr.entry').each(function() {
       var $this = $(this);
@@ -243,10 +285,12 @@ DonationsPage.prototype = {
       var payment = $this.find('.payment');
       var dwollaToken = $this.data('dwolla');
       var paypalToken = $this.data('paypal');
-
+      
+      var isPayment = false;
       // Hide the no processors text.
       if (dwollaToken || paypalToken) {
         payment.empty();
+        isPayment = true;
       }
 
       // Only inject if the author has dwolla.
@@ -258,8 +302,37 @@ DonationsPage.prototype = {
       if (paypalToken) {
         $this.data().paypal = injectPaypal(payment, amount, paypalToken);
       }
-    });
+      
+      if (isPayment) {
+        var amountNum = parseFloat(amount);
+        totalOwed += amountNum;
+        
+        storage.get('settings').then(function(settings) {
 
+          if (settings.reminderThreshLocal && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1))) && !settings.localReminded)  {
+            notify('tipsy-thersh-local', 'local', amount.toString());
+            settings.localReminded = true;
+          }
+        
+        }).catch(function(ex) {
+          console.log(ex);
+          console.log(ex.stack);
+        });
+      }
+    });
+    
+    storage.get('settings').then(function(settings) {
+
+      if (settings.reminderThreshGlobal && (totalOwed >= parseFloat(settings.reminderThreshGlobal.slice(1))) && !settings.globalReminded) {
+        notify('tipsy-thresh-global', 'global', totalOwed.toString());
+        settings.globalReminded = true;
+      }
+      return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+    });
+    
     // Enable table sorting.
     this.tablesort = new Tablesort(this.$('table')[0], {
       descending: true

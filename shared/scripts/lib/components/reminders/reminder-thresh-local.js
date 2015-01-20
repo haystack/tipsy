@@ -22,7 +22,7 @@ function ReminderThreshLocalComponent() {
 
     component.localThresholdReminderEnabled = settings.localThresholdReminderEnabled;
     component.reminderThreshLocal = settings.reminderThreshLocal;
-  
+    return storage.set('settings', settings);
   }).catch(function(ex) {
       console.log(ex);
       console.log(ex.stack);
@@ -76,6 +76,7 @@ ReminderThreshLocalComponent.prototype = {
 
     storage.get('settings').then(function(settings) {
       settings.reminderThreshLocal = currency;
+      settings.localReminded = false;
       return storage.set('settings', settings);
     });
   },

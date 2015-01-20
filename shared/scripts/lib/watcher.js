@@ -21,6 +21,8 @@ var idle = {
     if (this.isIdle === state) {
       return;
     }
+    
+    this.isIdle = state;
 
     // Always update the current tab based on the idle access.
     tabs.lastAccessed = tab.id;

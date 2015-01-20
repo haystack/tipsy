@@ -74,13 +74,25 @@ export function stop(tab) {
 
     // Never push an entry in that does not contain the host.
     if (tab.url.indexOf(host) > -1) {
-      // Add the information necessary to render the log and payments
-      // correctly.
+      // Add the information necessary to render the log and payments correctly
+      var timeSpent = Date.now() - tabs[tab.id].accessTime;
+      
+      if (tabs[tab.id].author.list.length >= 1) {
+        storage.get('settings').then(function(settings) {
+          var oldTime = settings.timeSpentAuthored || 0;
+          settings.timeSpentAuthored = oldTime + timeSpent;
+          return storage.set('settings', settings);
+        }).catch(function(ex) {
+          console.log(ex);
+          console.log(ex.stack);
+        });
+      }
+
       log[host].push({
         author: tabs[tab.id].author,
         tab: tab,
         accessTime: tabs[tab.id].accessTime,
-        timeSpent: Date.now() - tabs[tab.id].accessTime
+        timeSpent: timeSpent
       });
     }
 
@@ -92,5 +104,8 @@ export function stop(tab) {
       delete tabs[tab.id].accessTime;
       delete tabs[tab.id].tab;
     });
-  });
+  }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
+    });
 }
