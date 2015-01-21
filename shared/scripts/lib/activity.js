@@ -77,10 +77,22 @@ export function stop(tab) {
       // Add the information necessary to render the log and payments correctly
       var timeSpent = Date.now() - tabs[tab.id].accessTime;
       
+      //FIXME: make sure we only add authored that have payment option
       if (tabs[tab.id].author.list.length >= 1) {
         storage.get('settings').then(function(settings) {
           var oldTime = settings.timeSpentAuthored || 0;
           settings.timeSpentAuthored = oldTime + timeSpent;
+          
+          // Makes sure that first time extension notices a site that
+          // has author we know when that was for rate calculation and prediction.
+          if (typeof settings.timeStarted === 'undefined') {
+            settings.timeStarted = Date.now();
+          }
+        
+          if (typeof settings.totalPaid === 'undefined') {
+            settings.totalPaid = 0;
+          }
+          
           return storage.set('settings', settings);
         }).catch(function(ex) {
           console.log(ex);
@@ -107,5 +119,5 @@ export function stop(tab) {
   }).catch(function(ex) {
       console.log(ex);
       console.log(ex.stack);
-    });
+  });
 }

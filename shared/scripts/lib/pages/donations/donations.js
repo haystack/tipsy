@@ -19,6 +19,7 @@ function DonationsPage() {
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
+  /*
   
   // FIXME: put this in a better place, should really run only when tipsy is installed.
   // Makes sure that first time extension is run is known for calendar 
@@ -36,6 +37,7 @@ function DonationsPage() {
       console.log(ex);
       console.log(ex.stack);
     });
+  */
 }
 
 DonationsPage.prototype = {
@@ -198,7 +200,8 @@ DonationsPage.prototype = {
       // Condense into a single array.
       var condensed = calculated.reduce(function(memo, current) {
         // Make sure there is author information.
-        if (current.author.list.length) {
+        //console.log(current + " " + component.hasPaymentInfo(current));
+        if (component.hasPaymentInfo(current)) {
           memo.push(current);
         }
 
@@ -209,6 +212,26 @@ DonationsPage.prototype = {
     }, this);
 
     return entries;
+  },
+  
+  hasPaymentInfo: function(entry) {
+    if (entry.author) {
+      if (entry.author.list) {
+        if (entry.author.list[0]) {
+          if (entry.author.list[0].bitcoin || entry.author.list[0].dwolla || entry.author.list[0].paypal || entry.author.list[0].stripe) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   },
 
   /**
