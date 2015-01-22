@@ -92,7 +92,7 @@ DonationGoalComponent.prototype = {
           var estimateTwoWeeks = 20160 * estimatePerMin;
           component.$('.avgTime').text("Based on your browsing activity since " + moment(settings.timeStarted).fromNow() + ", after 2 weeks you would be ecouraged to pay a total of $" + estimateTwoWeeks.toFixed(2).toString()  +".");
         } else {
-            component.$('.avgTime').text("Not enough data yet to give you a meaningful estimate.")
+            component.$('.avgTime').text("Not enough data yet to give you a meaningful estimate.");
         }
       } else if (rateType == 'calendarRate') {
         component.$('.avgTime').text("");
