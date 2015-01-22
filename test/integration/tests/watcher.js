@@ -88,7 +88,7 @@ describe('watcher', function() {
         }).then(function(value) {
           var actual = parseInt(value, 10);
 
-          assert.equal(actual, 5, 'Reports the correct time visited.');
+          assert.equal(actual, 5, 'Reports the correct time visited. expected 5 got: ' + actual.toString());
         }).then(resolve, reject);
       });
     });
