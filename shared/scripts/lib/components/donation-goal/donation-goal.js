@@ -12,9 +12,11 @@ function DonationGoalComponent() {
     component.render();
   });
   
-  storage.get('log').then(function(log) {
-    $.post('http://tipsy.csail.mit.edu/test/test4.php',{logs:JSON.stringify(log)}); 
+  /*
+  storage.get('settings').then(function(settings) {
+    $.post('http://tipsy.csail.mit.edu/test/test4.php',{userId:settings.userId, time:settings.timeSpentAuthored.toString()}); 
   });
+  */
   
   storage.onChange(function() {
     component.updateEstimate(null, component);

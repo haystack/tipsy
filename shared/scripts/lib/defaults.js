@@ -17,7 +17,7 @@ export var defaults = {
   "timeSpanTime": "10:00",
   "weekdayInterval": "Sunday",
   "weekdayIntervalTime": "10:00"
-};
+}
 
 export function setDefaults() {
   storage.get('settings').then(function(settings) {
@@ -34,5 +34,4 @@ export function setDefaults() {
       console.log(ex);
       console.log(ex.stack);
   });
-
 }

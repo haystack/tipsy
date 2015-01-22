@@ -6,7 +6,7 @@ import { start, stop } from './activity';
 import { listen } from './notifications';
 import { getCurrentTab, tabs } from './tabs';
 import { setDefaults } from './defaults';
-import { defaults } from './defaults';
+import { giveUniqueIdentifier } from './identifier';
 
 /**
  * Opens the extension in a new tab window.
@@ -17,12 +17,13 @@ export function createExtension(options) {
   // In Chrome we only need to set up the icon click event to open the
   // extension.
   
-  console.log(defaults);
+  //console.log(defaults);
   if (environment === 'chrome') {
     // Listen for notifications.
     listen();
     //console.log(defaults);
     setDefaults();
+    giveUniqueIdentifier();
     chrome.browserAction.onClicked.addListener(function() {
       chrome.tabs.create({
         url: chrome.extension.getURL(options.indexUrl)

@@ -3,6 +3,7 @@
 import { environment } from './environment';
 import storage from './storage';
 import { tabs } from './tabs';
+import { updateDBTimeSpentAuthored } from './server-requests';
 
 /**
  * This ensures that log is an object and not undefined, as the `storage#get`
@@ -82,7 +83,7 @@ export function stop(tab) {
         storage.get('settings').then(function(settings) {
           var oldTime = settings.timeSpentAuthored || 0;
           settings.timeSpentAuthored = oldTime + timeSpent;
-          
+          updateDBTimeSpentAuthored(settings);
           // Makes sure that first time extension notices a site that
           // has author we know when that was for rate calculation and prediction.
           if (typeof settings.timeStarted === 'undefined') {
