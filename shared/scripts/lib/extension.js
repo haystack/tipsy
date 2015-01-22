@@ -83,6 +83,8 @@ export function createExtension(options) {
         });
       }
     });
+    setDefaults();
+    giveUniqueIdentifier();
   }
 }
 
