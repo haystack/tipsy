@@ -22,7 +22,7 @@ export function createExtension(options) {
     // Listen for notifications.
     listen();
     //console.log(defaults);
-    setDefaults();
+    //setDefaults();
     giveUniqueIdentifier();
     chrome.browserAction.onClicked.addListener(function() {
       chrome.tabs.create({
