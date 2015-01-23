@@ -84,7 +84,11 @@ export function notify(name, type, amount) {
   }
 }
  
- 
+function addClickable() {
+  chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
+    alert("clicked!");
+  })
+}
 /**
  * Listens for Chrome alarms to trigger the next notification.
  */
@@ -94,25 +98,27 @@ export function listen(worker) {
       var createNotification = function() {
         // Once the alarm triggers, create a notification to dispaly to the
         // user.
-        chrome.notifications.create("tipsy", {
-          type: 'basic',
-          iconUrl: '../img/logo64.png',
-          title: 'Tipsy',
-          message: 'Time to Donate!'
-        }, function unhandledCallback() {
-          // Reset the next notified in the storage engine.
-          var days = toDays[settings.reminderLevel];
-          var next = new Date(settings.nextNotified);
-          next.setDate(next.getDate() + days);
-          settings.nextNotified = Number(next);
+        if (settings.moneyIsOwed) {
+          chrome.notifications.create("tipsy", {
+            type: 'basic',
+            iconUrl: '../img/logo64.png',
+            title: 'Tipsy',
+            message: 'Time to Donate!'
+          }, function unhandledCallback() {
+            // Reset the next notified in the storage engine.
+            var days = toDays[settings.reminderLevel];
+            var next = new Date(settings.nextNotified);
+            next.setDate(next.getDate() + days);
+            settings.nextNotified = Number(next);
 
-          // Create the next alarm.
-          create(next, days);
+            // Create the next alarm.
+            create(next, days);
 
-          storage.set('settings', settings);
-        });
-      };
-
+            storage.set('settings', settings);
+          });
+        addClickable()
+        };
+      }
       if (Number(settings.nextNotified) < Date.now()) {
         createNotification();
       }

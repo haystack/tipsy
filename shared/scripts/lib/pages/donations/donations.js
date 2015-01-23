@@ -328,10 +328,14 @@ DonationsPage.prototype = {
       
       if (isPayment) {
         var amountNum = parseFloat(amount);
+        
         totalOwed += amountNum;
         
         storage.get('settings').then(function(settings) {
-
+          // let notifications know there is money to pay
+          if (amountNum > 0) {
+            settings.moneyIsOwed = true;
+          }
           if (settings.reminderThreshLocal && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1))) && !settings.localReminded)  {
             notify('tipsy-thersh-local', 'local', amount.toString());
             settings.localReminded = true;
