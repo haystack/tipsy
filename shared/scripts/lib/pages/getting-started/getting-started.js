@@ -3,6 +3,7 @@
 import Component from '../../component';
 import storage from '../../storage';
 import { select } from '../../dom';
+import { setDefaults } from '../../defaults'
 import DonationGoalComponent from '../../components/donation-goal/donation-goal';
 import ReminderIntervalComponent from '../../components/reminders/reminder-interval';
 import ReminderThreshLocalComponent from '../../components/reminders/reminder-thresh-local';
@@ -13,6 +14,7 @@ function GettingStartedPage() {
 
   // Ensure that next is correctly bound.
   this.next = this.next.bind(this);
+  setDefaults();
 }
 
 GettingStartedPage.prototype = {
