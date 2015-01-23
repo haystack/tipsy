@@ -78,6 +78,9 @@ ReminderThreshLocalComponent.prototype = {
       settings.reminderThreshLocal = currency;
       settings.localReminded = false;
       return storage.set('settings', settings);
+    }).catch(function(ex) {
+      console.log(ex);
+      console.log(ex.stack);
     });
   },
 

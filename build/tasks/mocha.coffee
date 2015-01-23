@@ -18,7 +18,8 @@ module.exports = ->
         'test/integration/setup.js'
         'test/integration/extension-driver.js'
         'firefox-extension/test/configure.js'
-        'test/integration/tests/**/*.js'
+        'test/integration/tests/basic.js'
+        #'test/integration/tests/**/*.js'
       ]
 
     'shared':
