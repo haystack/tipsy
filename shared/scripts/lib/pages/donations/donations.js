@@ -335,12 +335,14 @@ DonationsPage.prototype = {
           // let notifications know there is money to pay
           if (amountNum > 0) {
             settings.moneyIsOwed = true;
+            storage.set('settings', settings);
           }
           if (settings.reminderThreshLocal && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1))) && !settings.localReminded)  {
             notify('tipsy-thersh-local', 'local', amount.toString());
             settings.localReminded = true;
+            storage.set('settings', settings);
           }
-        
+          
         }).catch(function(ex) {
           console.log(ex);
           console.log(ex.stack);

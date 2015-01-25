@@ -3,9 +3,10 @@
 import storage from './storage';
 
 export var defaults = {
-
+  "intervalsEnables" : true,
   "dateIntervalEnabled": true,
   "dayIntervalEnabled": true,
+  "days": 1,
   //"days": 1,  day interval reminder days
   "donationGoal": "$0.01", 
   "donationInterval": 1, // donationInterval in minutes
@@ -18,8 +19,7 @@ export var defaults = {
   "timeSpanType": "1", // in days, 1, 7 or 30
   "timeSpanTime": "10:00",
   "weekdayInterval": "Sunday",
-  "weekdayIntervalTime": "10:00",
-  "moneyIsOwed": true
+  "weekdayIntervalTime": "10:00"
 };
 
 export function setDefaults() {
