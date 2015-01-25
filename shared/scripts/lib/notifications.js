@@ -49,17 +49,6 @@ export function clear(name) {
 	}
 }
 
-export function get1(name) {
-	if (environment === 'chrome') {
-		return chrome.alarms.get;
-	}
-}
-
-export function get2(name, callback) { 
-	chrome.alarms.get(name, function(alarm) { callback(alarm); }
-	);
-}
-
 export function get(name) { 
 	return new Promise(function(resolve) { 
 		chrome.alarms.get(name, resolve); 
@@ -95,7 +84,7 @@ function addClickable() {
 export function listen(worker) {
   if (environment === 'chrome') {
     storage.get('settings').then(function(settings) {
-      var createNotification = function() {
+      var createNotification = function(name) {
         // Once the alarm triggers, create a notification to dispaly to the
         // user.
         if (settings.moneyIsOwed) {
@@ -113,7 +102,7 @@ export function listen(worker) {
             settings.nextNotified = Number(next);
   
             // Create the next alarm.
-            create('tipsy', next, days);
+            create(name, next, days);
 
             storage.set('settings', settings);
           });
@@ -124,8 +113,8 @@ export function listen(worker) {
         createNotification();
       }
 
-      chrome.alarms.onAlarm.addListener(function() {
-        createNotification();
+      chrome.alarms.onAlarm.addListener(function(alarm) {
+        createNotification(alarm.name);
       });
     });
   }
