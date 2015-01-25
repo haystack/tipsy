@@ -85,7 +85,7 @@ export function notify(name, type, amount) {
 }
  
 function addClickable() {
-  chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
+  chrome.notifications.onClicked.addListener(function(notificationId, buttonIndex) {
     alert("clicked!");
   })
 }
@@ -99,6 +99,7 @@ export function listen(worker) {
         // Once the alarm triggers, create a notification to dispaly to the
         // user.
         if (settings.moneyIsOwed) {
+          console.log('creating');
           chrome.notifications.create("tipsy", {
             type: 'basic',
             iconUrl: '../img/logo64.png',
@@ -110,9 +111,9 @@ export function listen(worker) {
             var next = new Date(settings.nextNotified);
             next.setDate(next.getDate() + days);
             settings.nextNotified = Number(next);
-
+  
             // Create the next alarm.
-            create(next, days);
+            create('tipsy', next, days);
 
             storage.set('settings', settings);
           });
