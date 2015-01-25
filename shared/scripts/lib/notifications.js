@@ -106,9 +106,9 @@ export function listen(worker) {
 
             storage.set('settings', settings);
           });
-        addClickable()
-        };
-      }
+          addClickable();
+        }
+      };
       if (Number(settings.nextNotified) < Date.now()) {
         createNotification();
       }
