@@ -215,6 +215,12 @@ DonationsPage.prototype = {
   },
   
   hasPaymentInfo: function(entry) {
+    return (entry.author && entry.author.list && entry.author.list[0] && 
+            (entry.author.list[0].bitcoin || entry.author.list[0].dwolla || 
+             entry.author.list[0].paypal || entry.author.list[0].stripe));
+  },
+  
+  /*
     if (entry.author) {
       if (entry.author.list) {
         if (entry.author.list[0]) {
@@ -233,6 +239,7 @@ DonationsPage.prototype = {
       return false;
     }
   },
+  */
 
   /**
    * Calculates the estimated amount per entry.
