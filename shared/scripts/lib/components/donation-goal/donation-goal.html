@@ -1,25 +1,24 @@
-<h2>Set a donation goal</h2>
+<h2>Set a contribution goal</h2>
 
 <p class="info">
   <i class="fa fa-info-circle"></i>
 
-  Choose a rate type that you want Tipsy to use when calculating the donation. 
+  Choose a rate type that you want Tipsy to use when calculating your contribution. 
 </p>
 <p class ="centered">
   <label for="browsingRateRadio">
     <input id="browsingRateRadio" type="radio" name="rates" value="browsingRate" checked>
-      <span class="rates">Browsing Rate:</span>Have the rate apply to your browsing time only.
+      <span class="rates">Browsing Rate:</span>Per <span class="rateDescription" id="browsingRateDescription"></span> that you spend actually browsing.
   </label><br>
   <label for="calendarRateRadio">
     <input id="calendarRateRadio" type="radio" name="rates" value="calendarRate" >
-      <span class="rates">Calendar Rate:</span>Have the rate apply per calendar time.
+      <span class="rates">Calendar Rate:</span> Per <span class="rateDescription" id="calendarRateDescription"></span> (regardless of how much you browse).
   </label>
 </p>
 
 <p class="info">
   <i class="fa fa-info-circle"></i>
-
-  donations will be calculated from the following rate amount.
+  contributions will be calculated from the following rate amount.
 </p>
 
 <!-- Will only be centered in Getting Started. -->
@@ -30,6 +29,9 @@
     <option value="1">Minute</option>
     <option value="60" selected>Hour</option>
     <option value="1440">Day</option>
+    <option value="10080">Week</option>
+    <option value="43829.1">Month</option>
+    <option value="525949">Year</option>
   </select>
 </div>
 

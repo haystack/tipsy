@@ -299,52 +299,63 @@ DonationsPage.prototype = {
     
     var totalOwed = 0;
     // Inject payment information for each entry.
-    this.$('tr.entry').each(function() {
-      var $this = $(this);
-      // Extract the estimated value.
-      var amount = $this.find('.amount').val().slice(1);
+    
+    var component_1 = this;
+    storage.get('settings').then(function(settings) {
+    
+      component_1.$('tr.entry').each(function() {
+        var component = this;
+        var $component = $(component);
+        // Extract the estimated value.
+        var amount = $component.find('.amount').val().slice(1);
 
-      // The payment container.
-      var payment = $this.find('.payment');
-      var dwollaToken = $this.data('dwolla');
-      var paypalToken = $this.data('paypal');
+        // The payment container.
+        var payment = $component.find('.payment');
+        var dwollaToken = $component.data('dwolla');
+        var paypalToken = $component.data('paypal');
       
-      var isPayment = false;
-      // Hide the no processors text.
-      if (dwollaToken || paypalToken) {
-        payment.empty();
-        isPayment = true;
-      }
+        var isPayment = false;
+        // Hide the no processors text.
+        if (dwollaToken || paypalToken) {
+          payment.empty();
+          isPayment = true;
+        }
 
-      // Only inject if the author has dwolla.
-      if (dwollaToken) {
-        $this.data().dwolla = injectDwolla(payment, amount, dwollaToken);
-      }
+        // Only inject if the author has dwolla.
+        if (dwollaToken) {
+          $component.data().dwolla = injectDwolla(payment, amount, dwollaToken);
+        }
 
-      // Only inject if the author has paypal.
-      if (paypalToken) {
-        $this.data().paypal = injectPaypal(payment, amount, paypalToken);
-      }
+        // Only inject if the author has paypal.
+        if (paypalToken) {
+          $component.data().paypal = injectPaypal(payment, amount, paypalToken);
+        }
       
-      if (isPayment) {
-        var amountNum = parseFloat(amount);
-        totalOwed += amountNum;
+        if (isPayment) {
+          var amountNum = parseFloat(amount);
         
-        storage.get('settings').then(function(settings) {
-
+          totalOwed += amountNum;
+        
+          //storage.get('settings').thenfunction(settings) 
+          // let notifications know there is money to pay
+          if (amountNum > 0) {
+            settings.moneyIsOwed = true;
+            //storage.set('settings', settings);
+          }
           if (settings.reminderThreshLocal && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1))) && !settings.localReminded)  {
             notify('tipsy-thersh-local', 'local', amount.toString());
             settings.localReminded = true;
+
           }
-        
-        }).catch(function(ex) {
-          console.log(ex);
-          console.log(ex.stack);
-        });
-      }
-    });
+        } 
+      });
+      //return storage.set('settings', settings);
+    //}).catch(function(ex) {
+      //console.log(ex);
+      //console.log(ex.stack);;
+    //});
     
-    storage.get('settings').then(function(settings) {
+    //storage.get('settings').thenfunction(settings) 
 
       if (settings.reminderThreshGlobal && (totalOwed >= parseFloat(settings.reminderThreshGlobal.slice(1))) && !settings.globalReminded) {
         notify('tipsy-thresh-global', 'global', totalOwed.toString());
