@@ -75,8 +75,8 @@ export function notify(name, type, amount) {
  
 function addClickable() {
   chrome.notifications.onClicked.addListener(function(notificationId, buttonIndex) {
-    alert("clicked!");
-  })
+    chrome.tabs.create({url:"chrome-extension://akpjccbkjifcbgmmpknfiiodieboaenp/html/index.html#donations"});
+  });
 }
 /**
  * Listens for Chrome alarms to trigger the next notification.
