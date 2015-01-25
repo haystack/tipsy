@@ -2,6 +2,7 @@
 
 import Component from '../../component';
 import storage from '../../storage';
+import { intervals } from '../../defaults';
 
 function DonationGoalComponent() {
   Component.prototype.constructor.apply(this, arguments);
@@ -145,6 +146,8 @@ DonationGoalComponent.prototype = {
     var est = donationGoal * (5 / donationInterval);
 
     this.$('.owe').text('$' + est.toFixed(2));
+    
+    this.$('.rateDescription').text(intervals[donationInterval]);
   },
 
   afterRender: function() {

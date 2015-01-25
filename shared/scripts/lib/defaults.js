@@ -34,7 +34,16 @@ export function setDefaults() {
     }
     return storage.set('settings', settings);
   }).catch(function(ex) {
-      console.log(ex);
-      console.log(ex.stack);
+    console.log(ex);
+    console.log(ex.stack);
   });
 }
+
+export var intervals = {
+  1: 'minute',
+  60: 'hour',
+  1440: 'day',
+  10080: 'week',
+  43829.1: 'month',
+  525949: 'year'
+};

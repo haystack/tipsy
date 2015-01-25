@@ -145,7 +145,9 @@ LogPage.prototype = {
    */
   filter: function(entry) {
     var authorCount = entry.entries.filter(function(entry) {
-      return entry.author && entry.author.list.length;
+      return entry.author && entry.author.list.length &&
+      (entry.author.list[0].bitcoin || entry.author.list[0].dwolla || 
+       entry.author.list[0].paypal || entry.author.list[0].stripe);
     }).length;
 
     // Attach the number of authors to the entry, now that it's calculated.
