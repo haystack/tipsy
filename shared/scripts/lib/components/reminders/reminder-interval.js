@@ -242,7 +242,7 @@ ReminderIntervalComponent.prototype = {
     }).then(function(alarms) {
       var dateIntervalAlarm = alarms[0];
       var daysInMS = component.days * 86400000;
-      if ((dateIntervalAlarm.scheduledTime) != (component.nextNotifiedDate + daysInMS)) {
+      if (!dateIntervalAlarm || (dateIntervalAlarm.scheduledTime) != (component.nextNotifiedDate + daysInMS)) {
         createNotification('tipsy-dateInterval', component.nextNotifiedDate, component.days);
       }
     });
@@ -292,7 +292,7 @@ ReminderIntervalComponent.prototype = {
     }).then(function(alarms) {
       var dayIntervalAlarm = alarms[0];
       var sevenDaysInMS = 7 * 86400000;
-      if ((dayIntervalAlarm.scheduledTime) != (component.nextNotifiedDay + sevenDaysInMS)) {
+      if (!dayIntervalAlarm || (dayIntervalAlarm.scheduledTime) != (component.nextNotifiedDay + sevenDaysInMS)) {
         createNotification('tipsy-dayInterval', component.nextNotifiedDay, 7);
       }
     });
