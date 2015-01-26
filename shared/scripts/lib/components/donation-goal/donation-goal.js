@@ -133,9 +133,9 @@ DonationGoalComponent.prototype = {
   disableOtherRate: function(rateType, component) {
     var other;
     if (rateType == "browsingRate") {
-      var other = "calendarRate";     
+      other = "calendarRate";     
     } else if (rateType == "calendarRate") {
-      var other = "browsingRate";
+      other = "browsingRate";
     }
     
     component.$('#' + other + 'Goal').prop('disabled', true);
