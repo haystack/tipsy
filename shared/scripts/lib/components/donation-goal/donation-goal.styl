@@ -1,5 +1,5 @@
 select, input[type=text]
-  padding 10px
+  padding 5px
   font-size 24px
   font-weight bold
   color #5F5F5F
@@ -9,10 +9,13 @@ select, input[type=text]
   border-radius: 5px;
   box-shadow: 4px 1px rgba(224, 224, 224, 0.25);
   box-sizing border-box
-  width 50%
+  width 8%
 
   &:focus
     outline none
+
+  &:disabled
+     opacity 0.30
 
 
 input[type=radio]
@@ -21,12 +24,18 @@ input[type=radio]
 select
   width auto
 
+  &:disabled
+     opacity 0.30
+
 span.per
-  margin-left 20px
-  margin-right 20px
+  margin-left 10px
+  margin-right 10px
   font-size 24px
   font-weight bold
-  color #848484
+  color #E0E0E0
+
+  &.active
+      color #848484
 
 span.rates
   margin-left 10px

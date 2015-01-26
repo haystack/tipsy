@@ -250,16 +250,17 @@ DonationsPage.prototype = {
    */
   calculate: function(settings, entry) {
     var rateType = settings.rateType;
-        
-    // Default to an hour.
-    var donationInterval = settings.donationInterval || 60;
+    var donationInterval;
+    var donationGoal;
     
     // The donation goal amount is saved as a currency string, so we want
     // to emulate the empty amount if nothing was set.
-    var donationGoal = settings.donationGoal || '$0';
+    // var donationGoal = settings.donationGoal || '$0';
     
     if (rateType === "browsingRate") {
-
+    
+      donationInterval = settings.donationIntervalBrowsingRate || 60;
+      donationGoal = settings.donationGoalBrowsingRate || '$0';
 
       // Convert timespent to time unit selected.
       var timeSpent = entry.timeSpent / 1000 / 60 / donationInterval;
@@ -272,6 +273,9 @@ DonationsPage.prototype = {
       
     } else if (rateType === "calendarRate") {
     
+      donationInterval = settings.donationIntervalCalendarRate || 60;     
+      donationGoal = settings.donationGoalCalendarRate || '$0';
+      
       // get fraction of time spent for this author out of all others
       var timeSpentFraction = entry.timeSpent / settings.timeSpentAuthored;
       
