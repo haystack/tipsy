@@ -8,8 +8,10 @@ export var defaults = {
   "dayIntervalEnabled": true,
   "days": 1,
   //"days": 1,  day interval reminder days
-  "donationGoal": "$0.01", 
-  "donationInterval": 1, // donationInterval in minutes
+  "donationGoalBrowsingRate": "$0.01",
+  "donationGoalCalendarRate": "$0.01",
+  "donationIntervalCalendarRate": 1440, // donationInterval in minutes
+  "donationIntervalBrowsingRate": 60,
   "globalThresholdReminderEnabled": true,
   "localThresholdReminderEnabled": true,
   "rateType": "browsingRate", // "calendarRate or browsingRate"
@@ -29,7 +31,7 @@ export function setDefaults() {
         //console.log("set " + key);
         settings[key] = defaults[key];
       } else {
-        console.log(key + " already there");
+        //console.log(key + " already there");
       }
     }
     return storage.set('settings', settings);
@@ -44,6 +46,6 @@ export var intervals = {
   60: 'hour',
   1440: 'day',
   10080: 'week',
-  43829.1: 'month',
+  43200: 'month',
   525949: 'year'
 };
