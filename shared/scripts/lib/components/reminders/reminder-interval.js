@@ -50,7 +50,13 @@ function ReminderIntervalComponent() {
         periodInMinutes: 7 * 24 * 60
       });
     }
-
+    
+    if (settings.nextNotifiedDay < Date.now()) {
+      var temp = new Date(settings.nextNotifiedDay);
+      temp.setDate(temp.getDate() + 7);
+      settings.nextNotifiedDay = temp.valueOf();
+    }
+    
     component.nextNotifiedDay = settings.nextNotifiedDay || defaultDay;
     component.nextNotifiedDate = settings.nextNotifiedDate || defaultDate;
     component.reminderLevel = settings.reminderLevel;
@@ -70,6 +76,8 @@ function ReminderIntervalComponent() {
 	
     // Re-render with these new values set.
     component.render();
+    
+    return storage.set('settings', settings);
   });
 
   // Whenever the storage engine is updated, do a quick check for updating
@@ -293,7 +301,7 @@ ReminderIntervalComponent.prototype = {
       var dayIntervalAlarm = alarms[0];
       var sevenDaysInMS = 7 * 86400000;
       if (!dayIntervalAlarm || (dayIntervalAlarm.scheduledTime) != (component.nextNotifiedDay + sevenDaysInMS)) {
-        var temp;
+
         if (component.nextNotifiedDay && (component.nextNotifiedDay < Date.now())) {
           var temp = new Date(component.nextNotifiedDay);
           temp.setDate(temp.getDate() + 7);
