@@ -293,17 +293,23 @@ ReminderIntervalComponent.prototype = {
       var dayIntervalAlarm = alarms[0];
       var sevenDaysInMS = 7 * 86400000;
       if (!dayIntervalAlarm || (dayIntervalAlarm.scheduledTime) != (component.nextNotifiedDay + sevenDaysInMS)) {
+        var temp;
+        if (component.nextNotifiedDay && (component.nextNotifiedDay < Date.now())) {
+          var temp = new Date(component.nextNotifiedDay);
+          temp.setDate(temp.getDate() + 7);
+          component.nextNotifiedDay = temp.valueOf();
+        }
         createNotification('tipsy-dayInterval', component.nextNotifiedDay, 7);
+        storage.get('settings').then(function(settings) {
+          settings.dayIntervalEnabled = true;
+          settings.nextNotifiedDay = component.nextNotifiedDay;
+          if (all) settings.intervalsEnabled = true;
+          return storage.set('settings', settings);
+        }).catch(function(ex) {
+          console.log(ex);
+          console.log(ex.stack);
+        });
       }
-    });
-    //createNotification('tipsy-dayInterval', component.nextNotifiedDay, 7);
-    storage.get('settings').then(function(settings) {
-      settings.dayIntervalEnabled = true;
-      if (all) settings.intervalsEnabled = true;
-      return storage.set('settings', settings);
-    }).catch(function(ex) {
-      console.log(ex);
-      console.log(ex.stack);
     });
   },
 
