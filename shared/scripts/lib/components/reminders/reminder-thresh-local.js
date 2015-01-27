@@ -24,8 +24,8 @@ function ReminderThreshLocalComponent() {
     component.reminderThreshLocal = settings.reminderThreshLocal;
     return storage.set('settings', settings);
   }).catch(function(ex) {
-      console.log(ex);
-      console.log(ex.stack);
+    console.log(ex);
+    console.log(ex.stack);
   }); 	
 }
 
@@ -110,6 +110,7 @@ ReminderThreshLocalComponent.prototype = {
       }
     }).catch(function(ex) {
       console.log(ex);
+      console.log(ex.stack);
     });
   }
 };
