@@ -28,7 +28,7 @@ export var defaults = {
 export function setDefaults() {
   storage.get('settings').then(function(settings) {
     for (var key in defaults) {
-      if (!settings[key]) {
+      if (typeof settings[key] == 'undefined') {
         //console.log("set " + key);
         settings[key] = defaults[key];
       } else {
