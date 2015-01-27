@@ -8,6 +8,7 @@ import DonationGoalComponent from '../../components/donation-goal/donation-goal'
 import ReminderIntervalComponent from '../../components/reminders/reminder-interval';
 import ReminderThreshLocalComponent from '../../components/reminders/reminder-thresh-local';
 import ReminderThreshGlobalComponent from '../../components/reminders/reminder-thresh-global';
+import UserAgreementComponent from '../../components/user-agreement/user-agreement';
 
 function GettingStartedPage() {
   Component.prototype.constructor.apply(this, arguments);
@@ -70,6 +71,7 @@ GettingStartedPage.prototype = {
     new ReminderIntervalComponent(select('set-reminder-interval', this.el)).render();
     new ReminderThreshLocalComponent(select('set-reminder-thresh-local', this.el)).render();
     new ReminderThreshGlobalComponent(select('set-reminder-thresh-global', this.el)).render();
+    new UserAgreementComponent(select('set-user-agreement', this.el)).render();
 
     setTimeout(function() {
       select('form', this.el).classList.add('fade');

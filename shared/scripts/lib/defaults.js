@@ -21,13 +21,14 @@ export var defaults = {
   "timeSpanType": "1", // in days, 1, 7 or 30
   "timeSpanTime": "10:00",
   "weekdayInterval": "Sunday",
-  "weekdayIntervalTime": "10:00"
+  "weekdayIntervalTime": "10:00",
+  "userAgrees": true
 };
 
 export function setDefaults() {
   storage.get('settings').then(function(settings) {
     for (var key in defaults) {
-      if (!settings[key]) {
+      if (typeof settings[key] == 'undefined') {
         //console.log("set " + key);
         settings[key] = defaults[key];
       } else {

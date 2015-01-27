@@ -115,7 +115,7 @@ DonationGoalComponent.prototype = {
           
           //TODO choose a good timespan
           var estimateTwoWeeks = 20160 * estimatePerMin;
-          component.$('.avgTime').html("Based on your browsing activity since " + moment(settings.timeStarted).fromNow() + ", after 2 weeks you would be ecouraged to pay a total of <strong>$" + estimateTwoWeeks.toFixed(2).toString()  +"</strong>.");
+          component.$('.avgTime').html("Based on your browsing activity since " + moment(settings.timeStarted).fromNow() + ", after 2 weeks you are estimated to pay a total of <strong>$" + estimateTwoWeeks.toFixed(2).toString()  +"</strong>.");
         } else {
             component.$('.avgTime').html("Not enough data yet to give you a meaningful estimate.");
         }
