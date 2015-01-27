@@ -322,8 +322,10 @@ DonationsPage.prototype = {
 
         // The payment container.
         var payment = $component.find('.payment');
-        var dwollaToken = $component.data('dwolla');
-        var paypalToken = $component.data('paypal');
+        //console.log($component);
+        //console.log($component.attr('data-dwolla'));
+        var dwollaToken = $component.attr('data-dwolla');
+        var paypalToken = $component.attr('data-paypal');
       
         var isPayment = false;
         // Hide the no processors text.
