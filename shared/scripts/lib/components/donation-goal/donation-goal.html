@@ -1,28 +1,37 @@
-<h2>Set a donation goal</h2>
+<h2>Set a contribution goal</h2>
 
 <p class="info">
   <i class="fa fa-info-circle"></i>
-
-  Choose a rate type that you want Tipsy to use when calculating the donation. 
+  Choose a rate that you want Tipsy to use when calculating your contribution. 
 </p>
 <p class ="centered">
   <label for="browsingRateRadio">
     <input id="browsingRateRadio" type="radio" name="rates" value="browsingRate" checked>
-      <span class="rates">Browsing Rate:</span>Have the rate apply to your browsing time only.
+  		<input type="text" id="browsingRateGoal" placeholder="$0.00"> 
+  		<span class="per browsingRateText">per</span> 
+  		<select id="browsingRateInterval">
+    		<option value="1">Minute</option>
+    		<option value="60" selected>Hour</option>
+    		<option value="1440">Day</option>
+  		</select>
+  	  <span class="per browsingRateText">spent on a webpage.</span>
   </label><br>
+  
+  
   <label for="calendarRateRadio">
     <input id="calendarRateRadio" type="radio" name="rates" value="calendarRate" >
-      <span class="rates">Calendar Rate:</span>Have the rate apply per calendar time.
+      <input type="text" id="calendarRateGoal" placeholder="$0.00"> 
+      <span class="per calendarRateText">per calendar</span> 
+      <select id="calendarRateInterval">
+    	  <option value="60">Hour</option>
+    	  <option value="1440" selected>Day</option>
+    	  <option value="10080">Week</option>
+    	  <option value="43200">Month</option>
+  	  </select>
   </label>
 </p>
-
-<p class="info">
-  <i class="fa fa-info-circle"></i>
-
-  donations will be calculated from the following rate amount.
-</p>
-
 <!-- Will only be centered in Getting Started. -->
+<!--
 <div class="centered">
   <input type="text" placeholder="$0.00"> <span class="per">per</span>
 
@@ -30,10 +39,14 @@
     <option value="1">Minute</option>
     <option value="60" selected>Hour</option>
     <option value="1440">Day</option>
+    <option value="10080">Week</option>
+    <option value="43829.1">Month</option>
+    <option value="525949">Year</option>
   </select>
 </div>
+-->
 
 <p class="notes">
   <!-- Display average time spent and what that would amount to. -->
-  <span class="avgTime"></span> <!--you would be encouraged to donate: <strong class="owe"></strong>!-->
+  Estimate: <span class="avgTime"></span> <!--you would be encouraged to donate: <strong class="owe"></strong>!-->
 </p>

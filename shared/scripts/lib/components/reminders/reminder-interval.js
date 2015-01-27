@@ -50,7 +50,13 @@ function ReminderIntervalComponent() {
         periodInMinutes: 7 * 24 * 60
       });
     }
-
+    
+    if (settings.nextNotifiedDay < Date.now()) {
+      var temp = new Date(settings.nextNotifiedDay);
+      temp.setDate(temp.getDate() + 7);
+      settings.nextNotifiedDay = temp.valueOf();
+    }
+    
     component.nextNotifiedDay = settings.nextNotifiedDay || defaultDay;
     component.nextNotifiedDate = settings.nextNotifiedDate || defaultDate;
     component.reminderLevel = settings.reminderLevel;
@@ -70,6 +76,8 @@ function ReminderIntervalComponent() {
 	
     // Re-render with these new values set.
     component.render();
+    
+    return storage.set('settings', settings);
   });
 
   // Whenever the storage engine is updated, do a quick check for updating
@@ -235,9 +243,18 @@ ReminderIntervalComponent.prototype = {
     component.$("#dateCheckbox").prop('checked', true);
     component.$('.dateText').addClass('active');
     
-    
-    createNotification('tipsy-dateInterval', component.nextNotifiedDate, 
-  											component.days);
+    storage.get('settings').then(function(settings) {
+      return Promise.all([
+        getNotification('tipsy-dateInterval')
+       ]);
+    }).then(function(alarms) {
+      var dateIntervalAlarm = alarms[0];
+      var daysInMS = component.days * 86400000;
+      if (!dateIntervalAlarm || (dateIntervalAlarm.scheduledTime) != (component.nextNotifiedDate + daysInMS)) {
+        createNotification('tipsy-dateInterval', component.nextNotifiedDate, component.days);
+      }
+    });
+
     storage.get('settings').then(function(settings) {
       settings.dateIntervalEnabled = true;
       if (all) settings.intervalsEnabled = true;
@@ -275,14 +292,32 @@ ReminderIntervalComponent.prototype = {
     component.$('.dayType').prop('disabled', false);
     component.$('.dayText').addClass('active');
     component.$("#dayWeekCheckbox").prop('checked', true);
-    createNotification('tipsy-dayInterval', component.nextNotifiedDay, 7);
+    
     storage.get('settings').then(function(settings) {
-      settings.dayIntervalEnabled = true;
-      if (all) settings.intervalsEnabled = true;
-      return storage.set('settings', settings);
-    }).catch(function(ex) {
-      console.log(ex);
-      console.log(ex.stack);
+      return Promise.all([
+        getNotification('tipsy-dayInterval')
+       ]);
+    }).then(function(alarms) {
+      var dayIntervalAlarm = alarms[0];
+      var sevenDaysInMS = 7 * 86400000;
+      if (!dayIntervalAlarm || (dayIntervalAlarm.scheduledTime) != (component.nextNotifiedDay + sevenDaysInMS)) {
+
+        if (component.nextNotifiedDay && (component.nextNotifiedDay < Date.now())) {
+          var temp = new Date(component.nextNotifiedDay);
+          temp.setDate(temp.getDate() + 7);
+          component.nextNotifiedDay = temp.valueOf();
+        }
+        createNotification('tipsy-dayInterval', component.nextNotifiedDay, 7);
+        storage.get('settings').then(function(settings) {
+          settings.dayIntervalEnabled = true;
+          settings.nextNotifiedDay = component.nextNotifiedDay;
+          if (all) settings.intervalsEnabled = true;
+          return storage.set('settings', settings);
+        }).catch(function(ex) {
+          console.log(ex);
+          console.log(ex.stack);
+        });
+      }
     });
   },
 
