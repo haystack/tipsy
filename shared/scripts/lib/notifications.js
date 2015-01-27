@@ -67,6 +67,7 @@ export function notify(name, type, amount) {
       title: 'Tipsy',
       message: 'Time to donate! You have reached your '+ type + ' threshold with an amount of $' + amount + '.'
     }, function unhandledCallback() {});
+    addClickable();
   } else if (environment === 'firefox') {
     //TODO implement me
     console.error('Threshold notification for Firefox not yet implemented.');

@@ -11,7 +11,7 @@ export var defaults = {
   "donationGoalBrowsingRate": "$0.01",
   "donationGoalCalendarRate": "$0.01",
   "donationIntervalCalendarRate": 1440, // donationInterval in minutes
-  "donationIntervalBrowsingRate": 60,
+  "donationIntervalBrowsingRate": 1,
   "globalThresholdReminderEnabled": true,
   "localThresholdReminderEnabled": true,
   "rateType": "browsingRate", // "calendarRate or browsingRate"

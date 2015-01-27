@@ -19,7 +19,7 @@ export function inject($el, amount, token) {
       'src': src,
       'data-key': token,
       'data-redirect': redirect,
-      'data-label': 'Donate with Dwolla',
+      'data-label': 'Pay with Dwolla',
       'data-name': 'Tipsy',
       'data-description': 'Tipsy',
       'data-amount': amount,
