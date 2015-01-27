@@ -53,7 +53,7 @@ UserAgreementComponent.prototype = {
         console.error('user agreement not set');
       }
       
-      component.updateUserAgreement(component.userAgrees)
+      component.updateUserAgreement(component.userAgrees);
     
     }).catch(function(ex) {
       console.log(ex);
