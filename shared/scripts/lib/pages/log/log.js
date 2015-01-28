@@ -61,7 +61,7 @@ LogPage.prototype = {
    */
   formatAccessTime: function(val) {
     var date = new Date(val.accessTime);
-    return moment(date).format("hA - ddd, MMM Do, YYYY");
+    return moment(date).format("h:mmA - ddd, MMM Do, YYYY");
   },
 
   afterRender: function() {

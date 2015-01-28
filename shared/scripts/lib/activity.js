@@ -100,13 +100,15 @@ export function stop(tab) {
           console.log(ex.stack);
         });
       }
-
-      log[host].push({
-        author: tabs[tab.id].author,
-        tab: tab,
-        accessTime: tabs[tab.id].accessTime,
-        timeSpent: timeSpent
-      });
+      // make sure that the tab was finished loading before it stopped
+      if (typeof tabs[tab.id].accessTime != 'undefined') { 
+        log[host].push({
+          author: tabs[tab.id].author,
+          tab: tab,
+          accessTime: tabs[tab.id].accessTime,
+          timeSpent: timeSpent
+        });
+      }
     }
 
     // Write log updates back to the storage engine.
