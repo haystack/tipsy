@@ -61,7 +61,7 @@ LogPage.prototype = {
    */
   formatAccessTime: function(val) {
     var date = new Date(val.accessTime);
-    return moment(date).format("hA - ddd, MMM Do, YYYY");
+    return moment(date).format("h:mmA - ddd, MMM Do, YYYY");
   },
 
   afterRender: function() {
@@ -104,7 +104,7 @@ LogPage.prototype = {
       var index = Number(tr.data('key'));
 
       // Only render the current entry.
-      if (tr.is('.active')) {
+      if (tr.is('.active') && component.data.entries[index]) {
         tr.after(template.render({ entry: component.data.entries[index] }));
 
         // Enable table sorting.

@@ -95,7 +95,7 @@ if (environment === 'chrome') {
   chrome.tabs.onRemoved.addListener(function(tabId, changeInfo) {
     var currentAccessed = tabs[tabId];
 
-    if (currentAccessed && currentAccessed.tab.url !== changeInfo.url) {
+    if (currentAccessed && currentAccessed.tab && currentAccessed.tab.url !== changeInfo.url) {
       stop(currentAccessed.tab);
     }
   });
