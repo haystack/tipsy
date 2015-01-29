@@ -80,7 +80,9 @@ export function stop(tab) {
       var timeSpent = Date.now() - tabs[tab.id].accessTime;
 
       //FIXME: make sure we only add authored that have payment option
-      if (tabs[tab.id].author.list.length >= 1) {
+      var list = tabs[tab.id].author.list;
+      if (list.length >= 1 && (list[0].bitcoin || list[0].dwolla || 
+             list[0].paypal || list[0].stripe)) {
         storage.get('settings').then(function(settings) {
           var oldTime = settings.timeSpentAuthored || 0;
           settings.timeSpentAuthored = oldTime + timeSpent;
@@ -101,9 +103,6 @@ export function stop(tab) {
           console.log(ex.stack);
         });
       }
-      
-      // update the daysVisited if necessary
-
     
       // make sure that the tab was finished loading before it stopped
       if (typeof tabs[tab.id].accessTime != 'undefined') { 
@@ -113,7 +112,8 @@ export function stop(tab) {
           accessTime: tabs[tab.id].accessTime,
           timeSpent: timeSpent
         });
-        
+              
+        // update the daysVisited if necessary
         if (log[host][0]['daysVisited']) {
           var lastTimeVisited = new Date(log[host][log[host].length-1].accessTime);
           var now = new Date();
@@ -124,7 +124,6 @@ export function stop(tab) {
             log[host][0]['daysVisited'] = log[host][0]['daysVisited'] + 1;
           }
         } else {
-          console.log(log[host]);
           log[host].unshift({'daysVisited':1});
         } 
       }

@@ -173,10 +173,13 @@ DonationsPage.prototype = {
 
           // Check if this url was already added.
           memo.forEach(function(entry) {
-            // If there is already an entry with the same url, update it.
-            if (entry.tab.url === current.tab.url) {
-              entry.timeSpent += current.timeSpent;
-              isUpdated = true;
+            // make sure it's not the daysVisited
+            if (entry.tab) {
+              // If there is already an entry with the same url, update it.
+              if (entry.tab.url === current.tab.url) {
+                entry.timeSpent += current.timeSpent;
+                isUpdated = true;
+              }
             }
           });
 
@@ -219,27 +222,6 @@ DonationsPage.prototype = {
             (entry.author.list[0].bitcoin || entry.author.list[0].dwolla || 
              entry.author.list[0].paypal || entry.author.list[0].stripe));
   },
-  
-  /*
-    if (entry.author) {
-      if (entry.author.list) {
-        if (entry.author.list[0]) {
-          if (entry.author.list[0].bitcoin || entry.author.list[0].dwolla || entry.author.list[0].paypal || entry.author.list[0].stripe) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  },
-  */
 
   /**
    * Calculates the estimated amount per entry.
