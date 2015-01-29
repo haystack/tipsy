@@ -119,9 +119,9 @@ export function stop(tab) {
           var now = new Date();
           var isSameDay = (lastTimeVisited.getDate() == now.getDate() &&
                           lastTimeVisited.getMonth() == now.getMonth() &&
-                          slastTimeVisited.getFullYear() == now.getFullYear());
+                          lastTimeVisited.getFullYear() == now.getFullYear());
           if (!isSameDay) {
-            log[host][0].daysVisited = log[host][0].daysVisited. + 1;
+            log[host][0].daysVisited = log[host][0].daysVisited + 1;
           }
         } else {
           log[host].unshift({'daysVisited':1});
