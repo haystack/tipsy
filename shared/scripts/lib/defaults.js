@@ -7,7 +7,6 @@ export var defaults = {
   'dateIntervalEnabled': true,
   'dayIntervalEnabled': true,
   'days': 1,
-  //'days': 1,  day interval reminder days
   'donationGoalBrowsingRate': '$0.01',
   'donationGoalCalendarRate': '$0.01',
   'donationIntervalCalendarRate': 1440, // donationInterval in minutes
@@ -30,10 +29,8 @@ export function setDefaults() {
   storage.get('settings').then(function(settings) {
     for (var key in defaults) {
       if (typeof settings[key] == 'undefined') {
-        //console.log('set ' + key);
         settings[key] = defaults[key];
       } else {
-        //console.log(key + ' already there');
       }
     }
     return storage.set('settings', settings);
