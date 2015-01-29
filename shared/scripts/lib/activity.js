@@ -114,14 +114,14 @@ export function stop(tab) {
         });
               
         // update the daysVisited if necessary
-        if (log[host][0]['daysVisited']) {
+        if (log[host][0].daysVisited) {
           var lastTimeVisited = new Date(log[host][log[host].length-1].accessTime);
           var now = new Date();
-          var isSameDay = (lastTimeVisited.getDate() == now.getDate() 
-            && lastTimeVisited.getMonth() == now.getMonth()
-            && lastTimeVisited.getFullYear() == now.getFullYear());
+          var isSameDay = (lastTimeVisited.getDate() == now.getDate() &&
+                          lastTimeVisited.getMonth() == now.getMonth() &&
+                          slastTimeVisited.getFullYear() == now.getFullYear());
           if (!isSameDay) {
-            log[host][0]['daysVisited'] = log[host][0]['daysVisited'] + 1;
+            log[host][0].daysVisited = log[host][0].daysVisited. + 1;
           }
         } else {
           log[host].unshift({'daysVisited':1});
