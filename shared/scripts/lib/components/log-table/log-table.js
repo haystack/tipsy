@@ -16,7 +16,8 @@ LogTableComponent.prototype = {
     'keyLength',
     'hasAuthor',
     'findLast',
-    'formatAccessTime'
+    'formatAccessTime',
+    'getDays'
   ],
 
   /**
@@ -27,7 +28,7 @@ LogTableComponent.prototype = {
    * @return
    */
   timeSpent: function(val, isValue) {
-    var time = moment.duration(val.reduce(function(prev, current) {
+    var time = moment.duration(val.slice(1,val.length).reduce(function(prev, current) {
       return prev + current.timeSpent;
     }, 0), 'milliseconds');
 
@@ -78,6 +79,10 @@ LogTableComponent.prototype = {
    */
   findLast: function(val) {
     return val[val.length - 1];
+  },
+  
+  getDays: function(val) {
+    return val[0]['daysVisited'];
   },
 
   /**

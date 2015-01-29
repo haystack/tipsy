@@ -105,6 +105,8 @@ LogPage.prototype = {
 
       // Only render the current entry.
       if (tr.is('.active') && component.data.entries[index]) {
+        //console.log('index ' + index);
+        //console.log(component.data.entries);
         tr.after(template.render({ entry: component.data.entries[index] }));
 
         // Enable table sorting.
