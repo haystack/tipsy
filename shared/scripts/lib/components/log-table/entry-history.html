@@ -11,6 +11,7 @@
 
       <tbody>
         {%each entry.entries as visit%}
+        {%if visit.tab%}
           <tr>
             <td class="url"><a href="{{visit.tab.url}}" target="_blank">{{visit.tab.url}}</a></td>
             <td>
@@ -27,6 +28,7 @@
 
             <td data-sort="{{visit|formatAccessTime 'true'}}">{{visit|formatAccessTime}}</td>
           </tr>
+          {%endif%}
         {%endeach%}
       </tbody>
     </table>

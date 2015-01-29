@@ -4,6 +4,7 @@
       <th>Domain</th>
       <th>Author</th>
       <th>Visit count</th>
+      <th>Days with visit</th>
       <th>Time spent</th>
       <th>Last time visited</th>
     </tr>
@@ -12,7 +13,7 @@
   <tbody>
   {%if not entries.length%}
     <tr>
-      <td colspan="5">No log items to display.</td>
+      <td colspan="6">No log items to display.</td>
     </tr>
   {%else%}
     {%each entries as entry key%}
@@ -28,6 +29,7 @@
         {%endif%}
       </td>
       <td>{{entry.entries.length}}</td>
+      <td data-sort="{{entry.entries|getDays 'true'}}" class="getDays">{{entry.entries|getDays}}</td>
       <td data-sort="{{entry.entries|timeSpent 'true'}}" class="timeSpent">{{entry.entries|timeSpent}}</td>
       <td data-sort="{{entry.entries|findLast|formatAccessTime 'true'}}">{{entry.entries|findLast|formatAccessTime}}</td>
     </tr>
