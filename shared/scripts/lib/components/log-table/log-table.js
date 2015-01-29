@@ -81,6 +81,12 @@ LogTableComponent.prototype = {
     return val[val.length - 1];
   },
   
+  /**
+  * getDays
+  *
+  * @param val
+  * @ return the amount of days visited
+  */
   getDays: function(val) {
     return val[0]['daysVisited'];
   },
