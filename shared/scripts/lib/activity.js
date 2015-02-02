@@ -108,7 +108,7 @@ export function stop(tab) {
       if (typeof tabs[tab.id].accessTime != 'undefined') { 
       
         // update the daysVisited if necessary
-        if (log[host][0].daysVisited) {
+        if (log[host][0] && log[host][0].daysVisited) {
           var lastTimeVisited = new Date(log[host][log[host].length-1].accessTime);
           var now = new Date();
           var isSameDay = (lastTimeVisited.getDate() == now.getDate() &&
