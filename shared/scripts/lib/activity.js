@@ -106,13 +106,7 @@ export function stop(tab) {
     
       // make sure that the tab was finished loading before it stopped
       if (typeof tabs[tab.id].accessTime != 'undefined') { 
-        log[host].push({
-          author: tabs[tab.id].author,
-          tab: tab,
-          accessTime: tabs[tab.id].accessTime,
-          timeSpent: timeSpent
-        });
-              
+      
         // update the daysVisited if necessary
         if (log[host][0].daysVisited) {
           var lastTimeVisited = new Date(log[host][log[host].length-1].accessTime);
@@ -126,6 +120,14 @@ export function stop(tab) {
         } else {
           log[host].unshift({'daysVisited':1});
         } 
+        
+        // add to log
+        log[host].push({
+          author: tabs[tab.id].author,
+          tab: tab,
+          accessTime: tabs[tab.id].accessTime,
+          timeSpent: timeSpent
+        });
       }
     }
 
