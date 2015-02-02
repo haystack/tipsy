@@ -4,12 +4,13 @@ import { environment } from './environment';
 import { start, stop } from './activity';
 import { getCurrentTab, tabs } from './tabs';
 import storage from './storage';
+import { defaults } from './defaults';
 
 // Tracks the current pages open in tabs.  Whenever a tab is closed, remove
 // from the list.
 var idle = {
   // A good default threshold timeout.
-  seconds: 20,
+  seconds: defaults.idle,
 
   // Idle is a global concept.
   isIdle: false,
