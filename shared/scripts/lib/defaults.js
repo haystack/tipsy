@@ -22,7 +22,8 @@ export var defaults = {
   'weekdayInterval': 'Sunday',
   'weekdayIntervalTime': '10:00',
   'userAgrees': true,
-  'idle': 20
+  'idle': 20,
+  'estimate': {'minutes': 20160, 'amount': '2', 'type': 'weeks'}
 };
 
 export function setDefaults() {
