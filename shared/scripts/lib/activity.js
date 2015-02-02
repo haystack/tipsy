@@ -51,6 +51,7 @@ export function start(tab) {
 export function stop(tab) {
   // Open access to the current log so that we can append the latest tab entry
   // into it.
+
   return storage.get('log').then(function(log) {
     // If we stop on a non-tab or do not have a notion of this tab, simply
     // return, it's not being tracked.
@@ -77,9 +78,11 @@ export function stop(tab) {
     if (tab.url.indexOf(host) > -1) {
       // Add the information necessary to render the log and payments correctly
       var timeSpent = Date.now() - tabs[tab.id].accessTime;
-      
+
       //FIXME: make sure we only add authored that have payment option
-      if (tabs[tab.id].author.list.length >= 1) {
+      var list = tabs[tab.id].author.list;
+      if (list.length >= 1 && (list[0].bitcoin || list[0].dwolla || 
+             list[0].paypal || list[0].stripe)) {
         storage.get('settings').then(function(settings) {
           var oldTime = settings.timeSpentAuthored || 0;
           settings.timeSpentAuthored = oldTime + timeSpent;
@@ -100,8 +103,25 @@ export function stop(tab) {
           console.log(ex.stack);
         });
       }
+    
       // make sure that the tab was finished loading before it stopped
       if (typeof tabs[tab.id].accessTime != 'undefined') { 
+      
+        // update the daysVisited if necessary
+        if (log[host][0] && log[host][0].daysVisited) {
+          var lastTimeVisited = new Date(log[host][log[host].length-1].accessTime);
+          var now = new Date();
+          var isSameDay = (lastTimeVisited.getDate() == now.getDate() &&
+                          lastTimeVisited.getMonth() == now.getMonth() &&
+                          lastTimeVisited.getFullYear() == now.getFullYear());
+          if (!isSameDay) {
+            log[host][0].daysVisited = log[host][0].daysVisited + 1;
+          }
+        } else {
+          log[host].unshift({'daysVisited':1});
+        } 
+        
+        // add to log
         log[host].push({
           author: tabs[tab.id].author,
           tab: tab,
