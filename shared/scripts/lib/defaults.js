@@ -21,7 +21,7 @@ export var defaults = {
   'timeSpanTime': '10:00',
   'weekdayInterval': 'Sunday',
   'weekdayIntervalTime': '10:00',
-  'userAgrees': true,
+  'userAgrees': false,
   'idle': 20,
   'estimate': {'minutes': 20160, 'amount': '2', 'type': 'weeks'}
 };
