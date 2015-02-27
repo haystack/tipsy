@@ -1,4 +1,7 @@
 table
+  word-wrap break-word
+  table-layout fixed
+
   td:not(:first-child)
     max-width 150px
     overflow hidden
@@ -12,9 +15,6 @@ table
     font-size 80%
 
   td
-    text-overflow ellipsis
-    white-space nowrap
-
     .relative
       position relative
 
@@ -33,12 +33,6 @@ table
 
       .url
         width 500px
-
-        a
-          width 725px
-          overflow hidden
-          display inline-block
-          text-overflow ellipsis
 
     &.has-author
       td
