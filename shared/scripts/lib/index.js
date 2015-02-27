@@ -39,51 +39,56 @@ function setTab() {
   // When opening the extension without a hash determine where to route based
   // on if the end user has already configured the getting started page or not.
   if (!hash) {
-    if (location.search) {
-      params = deparam(location.search.slice(1));
-
-      delete window.localStorage.url;
-      delete window.localStorage.host;
-
-      // Coerce to an array, since error sometimes comes back as an array.
-      if ([].concat(params.error).indexOf('failure') > -1) {
-        // Remove the query string from the url.
-        history.replaceState({}, "", location.href.split("?")[0]);
-
-        // Display the error.
-        window.alert(params.error_description);
-
-        // Redirect to donations.
-        location.href = '#donations';
-
-        return;
-      }
-
-      // Otherwise we can assume the payment was successful.  We can now
-      // remove all the items from the storage.
-      storage.get('settings').then(function(settings) {
-        storage.get('log').then(function(resp) {
-          // Filter out these items.
-          resp[host] = resp[host].filter(function(entry) {
-            return entry.tab.url !== url;
-          });
-
-          return storage.set('log', resp).then(function() {
-            // Remove the query string from the url.
-            history.replaceState({}, "", location.href.split("?")[0]);
-
-            // Redirect to donations.
-            location.href = '#donations';
-          });
-        });
+    if (!location.search) {
+      return storage.get('settings').then(function(settings) {
+        // Update the hash fragment to change pages.
+        location.href = settings.showLog ? '#donations' : '#getting-started';
       });
+    }
+
+    params = deparam(location.search.slice(1));
+
+    delete window.localStorage.url;
+    delete window.localStorage.host;
+
+    // Coerce to an array, since error sometimes comes back as an array.
+    if ([].concat(params.error).indexOf('failure') > -1) {
+      // Remove the query string from the url.
+      history.replaceState({}, "", location.href.split("?")[0]);
+
+      // Display the error.
+      window.alert(params.error_description);
+
+      // Redirect to donations.
+      location.href = '#donations';
 
       return;
     }
 
-    storage.get('settings').then(function(settings) {
-      // Update the hash fragment to change pages.
-      location.href = settings.showLog ? '#donations' : '#getting-started';
+    // Otherwise we can assume the payment was successful.  We can now
+    // remove all the items from the storage.
+    return storage.get('settings').then(function(settings) {
+      storage.get('log').then(function(resp) {
+        // Filter out these items.
+        resp[host] = resp[host].filter(function(entry) {
+          return entry.tab.url !== url;
+        });
+
+        return storage.set('log', resp).then(function() {
+          // Remove the query string from the url.
+          history.replaceState({}, "", location.href.split("?")[0]);
+
+          // Display a success message.
+          window.alert('Payment of ' + params.amount + ' to ' + params.email +
+            ' was successful');
+
+          // Redirect to donations.
+          location.href = '#donations';
+        });
+      });
+    }).catch(function() {
+      window.alert('Potential error removing the donation, please manually' +
+        'update');
     });
   }
   else {
