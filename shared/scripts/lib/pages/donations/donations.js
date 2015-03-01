@@ -20,15 +20,15 @@ function DonationsPage() {
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
   /*
-  
+
   // FIXME: put this in a better place, should really run only when tipsy is installed.
-  // Makes sure that first time extension is run is known for calendar 
+  // Makes sure that first time extension is run is known for calendar
   // rate calculation.
   storage.get('settings').then(function(settings) {
         if (typeof settings.timeStarted === 'undefined') {
           settings.timeStarted = Date.now();
         }
-        
+
         if (typeof settings.totalPaid === 'undefined') {
           settings.totalPaid = 0;
         }
@@ -45,8 +45,8 @@ DonationsPage.prototype = {
 
   events: {
     'keyup input': 'filterInput',
-    'blur input': 'formatAndSave',
-    'change input': 'formatAndSave',
+    'blur .amount': 'formatAndSave',
+    'change .amount': 'formatAndSave',
     'click .remove': 'remove'
   },
 
@@ -216,10 +216,10 @@ DonationsPage.prototype = {
 
     return entries;
   },
-  
+
   hasPaymentInfo: function(entry) {
-    return (entry.author && entry.author.list && entry.author.list[0] && 
-            (entry.author.list[0].bitcoin || entry.author.list[0].dwolla || 
+    return (entry.author && entry.author.list && entry.author.list[0] &&
+            (entry.author.list[0].bitcoin || entry.author.list[0].dwolla ||
              entry.author.list[0].paypal || entry.author.list[0].stripe));
   },
 
@@ -234,13 +234,13 @@ DonationsPage.prototype = {
     var rateType = settings.rateType;
     var donationInterval;
     var donationGoal;
-    
+
     // The donation goal amount is saved as a currency string, so we want
     // to emulate the empty amount if nothing was set.
     // var donationGoal = settings.donationGoal || '$0';
-    
+
     if (rateType === "browsingRate") {
-    
+
       donationInterval = settings.donationIntervalBrowsingRate || 60;
       donationGoal = settings.donationGoalBrowsingRate || '$0';
 
@@ -252,23 +252,23 @@ DonationsPage.prototype = {
 
       // Assign the estimated amount to the entry item.
       entry.estimatedAmount = (timeSpent * donationGoal).toFixed(2);
-      
+
     } else if (rateType === "calendarRate") {
-    
-      donationInterval = settings.donationIntervalCalendarRate || 60;     
+
+      donationInterval = settings.donationIntervalCalendarRate || 60;
       donationGoal = settings.donationGoalCalendarRate || '$0';
-      
+
       // get fraction of time spent for this author out of all others
       var timeSpentFraction = entry.timeSpent / settings.timeSpentAuthored;
-      
+
       var timeSinceBegin = Date.now() - settings.timeStarted;
-      
+
       var unitAmount = (timeSinceBegin / 1000 / 60 / donationInterval) * Number(donationGoal.slice(1));
-                        
+
       var moneyOwed = timeSpentFraction * unitAmount - settings.totalPaid;
 
       entry.estimatedAmount = moneyOwed.toFixed(2);
-      
+
     } else {
       console.error("No rate type set.");
     }
@@ -289,13 +289,13 @@ DonationsPage.prototype = {
 
       window.alert('You will now be redirected to the payment site.');
     });
-    
+
     var totalOwed = 0;
     // Inject payment information for each entry.
-    
+
     var component_1 = this;
     storage.get('settings').then(function(settings) {
-    
+
       component_1.$('tr.entry').each(function() {
         var component = this;
         var $component = $(component);
@@ -304,11 +304,12 @@ DonationsPage.prototype = {
 
         // The payment container.
         var payment = $component.find('.payment');
+
         //console.log($component);
         //console.log($component.attr('data-dwolla'));
         var dwollaToken = $component.attr('data-dwolla');
         var paypalToken = $component.attr('data-paypal');
-      
+
         var isPayment = false;
         // Hide the no processors text.
         if (dwollaToken || paypalToken) {
@@ -325,13 +326,13 @@ DonationsPage.prototype = {
         if (paypalToken) {
           $component.data().paypal = injectPaypal(payment, amount, paypalToken);
         }
-      
+
         if (isPayment) {
           var amountNum = parseFloat(amount);
-        
+
           totalOwed += amountNum;
-        
-          //storage.get('settings').thenfunction(settings) 
+
+          //storage.get('settings').thenfunction(settings)
           // let notifications know there is money to pay
           if (amountNum > 0) {
             settings.moneyIsOwed = true;
@@ -342,15 +343,15 @@ DonationsPage.prototype = {
             settings.localReminded = true;
 
           }
-        } 
+        }
       });
       //return storage.set('settings', settings);
     //}).catch(function(ex) {
       //console.log(ex);
       //console.log(ex.stack);;
     //});
-    
-    //storage.get('settings').thenfunction(settings) 
+
+    //storage.get('settings').thenfunction(settings)
 
       if (settings.reminderThreshGlobal && (totalOwed >= parseFloat(settings.reminderThreshGlobal.slice(1))) && !settings.globalReminded) {
         notify('tipsy-thresh-global', 'global', totalOwed.toString());
@@ -361,7 +362,7 @@ DonationsPage.prototype = {
       console.log(ex);
       console.log(ex.stack);
     });
-    
+
     // Enable table sorting.
     this.tablesort = new Tablesort(this.$('table')[0], {
       descending: true

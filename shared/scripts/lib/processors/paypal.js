@@ -1,8 +1,9 @@
 'use strict';
 
 export function inject($el, amount, email) {
-  var redirect = 'http://97.107.132.235:9999?redirect=' +
-    encodeURIComponent(location.href.split('#')[0]);
+  var base = 'http://tbranyen.com:9999/redirect/';
+  var root = base + encodeURIComponent(location.href.split('#')[0]);
+  var redirect = [root, email, amount].join('/');
 
   var form = $('<form>').attr({
     name: '_xclick',
@@ -41,7 +42,12 @@ export function inject($el, amount, email) {
 
   return {
     update: function(amount) {
-      hidden.amount.attr('value', amount.slice(1));
+      hidden.amount.attr('value', amount);
+
+      // Update the redirect as well.
+      var redirect = [root, email, amount].join('/');
+      hidden.return.attr('value', redirect);
+      hidden.cancel_return.attr('value', redirect);
     }
   };
 }
