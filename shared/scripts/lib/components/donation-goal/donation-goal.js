@@ -2,7 +2,7 @@
 
 import Component from '../../component';
 import storage from '../../storage';
-import { intervals } from '../../defaults';
+import { intervals, defaults } from '../../defaults';
 
 function DonationGoalComponent() {
   Component.prototype.constructor.apply(this, arguments);
@@ -113,9 +113,8 @@ DonationGoalComponent.prototype = {
           var fracSpent = timeSpent / timeSpan;
           var estimatePerMin = fracSpent * parseFloat(settings.donationGoalBrowsingRate.slice(1)) / settings.donationIntervalBrowsingRate; // per minute
           
-          //TODO choose a good timespan
-          var estimateTwoWeeks = 20160 * estimatePerMin;
-          component.$('.avgTime').html("Based on your browsing activity since " + moment(settings.timeStarted).fromNow() + ", after 2 weeks you are estimated to pay a total of <strong>$" + estimateTwoWeeks.toFixed(2).toString()  +"</strong>.");
+          var estimate = defaults.estimate.minutes * estimatePerMin;
+          component.$('.avgTime').html("Based on your browsing activity since " + moment(settings.timeStarted).fromNow() + ", after "+ defaults.estimate.amount + " " + defaults.estimate.type + " you are estimated to pay a total of <strong>$" + estimate.toFixed(2).toString()  +"</strong>.");
         } else {
             component.$('.avgTime').html("Not enough data yet to give you a meaningful estimate.");
         }
@@ -152,11 +151,9 @@ DonationGoalComponent.prototype = {
     var rateType;
     var component = this;
   	if (id == 'browsingRateRadio') {
-  	  //this.$('.avgTime').text("If you spent 5 minutes browsing ");
   	  rateType = 'browsingRate';
   	}
   	else if (id == "calendarRateRadio") {
-  	  //this.$('.avgTime').text("After 5 minutes ");
   	  rateType = 'calendarRate';
   	}
   	component.disableOtherRate(rateType, component);
@@ -180,20 +177,6 @@ DonationGoalComponent.prototype = {
 
   },
 
-/*
-  updateOwe: function(settings) {
-    var donationInterval = settings.donationInterval || 60;
-    var donationGoal = settings.donationGoal;
-    donationGoal = donationGoal ? +donationGoal.slice(1) : 0;
-
-    var est = donationGoal * (5 / donationInterval);
-
-    this.$('.owe').text('$' + est.toFixed(2));
-    
-    this.$('.rateDescription').text(intervals[donationInterval]);
-  },
-*/
-
   afterRender: function() {
     var component = this;
     var inputBrowsingRate = this.$('#browsingRateGoal');
@@ -205,16 +188,12 @@ DonationGoalComponent.prototype = {
       inputBrowsingRate.val(settings.donationGoalBrowsingRate);
       inputCalendarRate.val(settings.donationGoalCalendarRate);
       
-      //select.find('[value=' + settings.donationInterval + ']')
-        //.attr('selected', true);
-
-      //component.updateOwe(settings);
       settings.rateType = component.rateType;
-      //if (component.rateType == "browsingRate") {
+
         selectBrowsingRate.find('[value=' + settings.donationIntervalBrowsingRate.toString() + ']').attr('selected', true);     
-      //} else if (component.rateType == "calendarRate") {
+
         selectCalendarRate.find('[value=' + settings.donationIntervalCalendarRate.toString() + ']').attr('selected', true);   
-      //}
+
       
       component.updateRateDisplay(component.rateType);
       return storage.set('settings', settings);

@@ -3,36 +3,35 @@
 import storage from './storage';
 
 export var defaults = {
-  "intervalsEnables" : true,
-  "dateIntervalEnabled": true,
-  "dayIntervalEnabled": true,
-  "days": 1,
-  //"days": 1,  day interval reminder days
-  "donationGoalBrowsingRate": "$0.01",
-  "donationGoalCalendarRate": "$0.01",
-  "donationIntervalCalendarRate": 1440, // donationInterval in minutes
-  "donationIntervalBrowsingRate": 1,
-  "globalThresholdReminderEnabled": true,
-  "localThresholdReminderEnabled": true,
-  "rateType": "browsingRate", // "calendarRate or browsingRate"
-  "reminderThreshGlobal": "$10.00",
-  "reminderThreshLocal": "$10.00",
-  "timeSpanNumber": "1",
-  "timeSpanType": "1", // in days, 1, 7 or 30
-  "timeSpanTime": "10:00",
-  "weekdayInterval": "Sunday",
-  "weekdayIntervalTime": "10:00",
-  "userAgrees": true
+  'intervalsEnables' : true,
+  'dateIntervalEnabled': true,
+  'dayIntervalEnabled': true,
+  'days': 1,
+  'donationGoalBrowsingRate': '$0.01',
+  'donationGoalCalendarRate': '$0.01',
+  'donationIntervalCalendarRate': 1440, // donationInterval in minutes
+  'donationIntervalBrowsingRate': 1,
+  'globalThresholdReminderEnabled': true,
+  'localThresholdReminderEnabled': true,
+  'rateType': 'browsingRate', // 'calendarRate or browsingRate'
+  'reminderThreshGlobal': '$10.00',
+  'reminderThreshLocal': '$10.00',
+  'timeSpanNumber': '1',
+  'timeSpanType': '1', // in days, 1, 7 or 30
+  'timeSpanTime': '10:00',
+  'weekdayInterval': 'Sunday',
+  'weekdayIntervalTime': '10:00',
+  'userAgrees': false,
+  'idle': 20,
+  'estimate': {'minutes': 20160, 'amount': '2', 'type': 'weeks'}
 };
 
 export function setDefaults() {
   storage.get('settings').then(function(settings) {
     for (var key in defaults) {
       if (typeof settings[key] == 'undefined') {
-        //console.log("set " + key);
         settings[key] = defaults[key];
       } else {
-        //console.log(key + " already there");
       }
     }
     return storage.set('settings', settings);

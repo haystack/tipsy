@@ -8,7 +8,6 @@ import DonationGoalComponent from '../../components/donation-goal/donation-goal'
 import ReminderIntervalComponent from '../../components/reminders/reminder-interval';
 import ReminderThreshLocalComponent from '../../components/reminders/reminder-thresh-local';
 import ReminderThreshGlobalComponent from '../../components/reminders/reminder-thresh-global';
-import UserAgreementComponent from '../../components/user-agreement/user-agreement';
 
 function GettingStartedPage() {
   Component.prototype.constructor.apply(this, arguments);
@@ -26,7 +25,8 @@ GettingStartedPage.prototype = {
   events: {
     'click .skip': 'skipConfiguration',
     'click .next': 'next',
-    'click .previous': 'previous'
+    'click .previous': 'previous',
+    'click .track' : 'track'
   },
 
   // Determines which direction to go into.
@@ -44,6 +44,20 @@ GettingStartedPage.prototype = {
       // Redirect the user to the log page after clicking skip.
       location.hash = '#donations';
     });
+  },
+  
+  track: function(ev) {
+    ev.stopPropagation();
+    storage.get('settings').then(function(settings) {
+      settings.userAgrees = true;
+      settings.showLog = true;
+      storage.set('settings', settings);
+
+      // Redirect the user to the log page after clicking skip.
+      location.hash = '#donations';
+    });
+    ev.preventDefault();
+    this.move(++this.state);
   },
 
   previous: function(ev) {
@@ -71,7 +85,6 @@ GettingStartedPage.prototype = {
     new ReminderIntervalComponent(select('set-reminder-interval', this.el)).render();
     new ReminderThreshLocalComponent(select('set-reminder-thresh-local', this.el)).render();
     new ReminderThreshGlobalComponent(select('set-reminder-thresh-global', this.el)).render();
-    new UserAgreementComponent(select('set-user-agreement', this.el)).render();
 
     setTimeout(function() {
       select('form', this.el).classList.add('fade');

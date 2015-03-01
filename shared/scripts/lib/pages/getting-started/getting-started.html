@@ -5,7 +5,7 @@
       <h2>welcome to tipsy,</h2>
       <div class="leader">Where you help support authors for their online content!</div>
 
-      <hr>
+      <hr class="first">
       <p>
         <button class="skip">Skip configuration</button> <strong>or</strong> <button class="next">Get started!</button>
       </p>
@@ -13,7 +13,7 @@
     <li>
       <set-donation-goal></set-donation-goal>
 
-      <hr>
+      <hr class="first">
       <p>
         <button class="skip">Skip remaining</button>
         <button class="previous">Previous step</button>
@@ -32,12 +32,16 @@
       </p>
     </li>
     <li>
-      <set-user-agreement></set-user-agreement>
+    <div class="userAgreement">
+    <p>
+      <h3>Do you want to help improve Tipsy by sending completely anonymous information? 
+      Tipsy will no be able to identify you in any way from this information.</h3>
       <hr>
-      <p>
         <button class="previous">Previous step</button>
-        <button class="skip next">Complete configuration!</button>
+        <button class="skip next notrack">No, complete configuration.</button>
+        <button class="track">Yes and complete configuration!</button>
       </p>
+      </div>
     </li>
   </ol>
 </form>

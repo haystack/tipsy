@@ -15,7 +15,7 @@ strong
   color #333
   padding-right 18px
 
-hr
+hr.first
   padding-top 60px
 
 h2
@@ -23,6 +23,11 @@ h2
   color #CCC
   font-size 200%
   font-weight normal
+
+h3
+  font-size 24px
+  font-weight bold
+  color #848484
 
 p
   display block
@@ -58,14 +63,27 @@ form
     padding-left 17px
     border-radius 30px
     margin-right 20px
-
+    
+    
+    &.notrack
+      background #661500 !important
+      color #FFF
+      
+      &:hover
+        background #A64D4D !important
+        
     &.next
       background #75C276
       color #FFF
 
       &:hover
         background #99DB9A
+     &.track
+      background #75C276
+      color #FFF
 
+      &:hover
+        background #99DB9A
     &:hover
       background #FCFCFC
 
@@ -74,8 +92,8 @@ ol
   counter-reset li-counter -1
   position relative
   width 100%
-  display table-cell
-  vertical-align middle
+  //display table-cell
+  //vertical-align middle
   height 100%
 
   li
@@ -113,6 +131,7 @@ ol
       display block
       padding 15px
       margin 0 auto
+      margin-top: 35px
 
       &:before
         content ''
@@ -120,3 +139,6 @@ ol
         width 75px
         height 75px
         display block
+        
+div.userAgreement
+  margin-top: 200px
