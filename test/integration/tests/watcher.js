@@ -1,6 +1,12 @@
 'use strict';
+var Promise = require('promise');
 
 describe('watcher', function() {
+  // Within a certain amount of seconds.
+  var within = function(actual, expected, seconds) {
+    return Math.abs(actual - expected) <= seconds;
+  };
+
   it('can get basic page activity', function() {
     this.timeout(20000);
 
@@ -64,33 +70,40 @@ describe('watcher', function() {
     this.timeout(20000);
 
     var driver = this.extensionDriver;
+    var delay = Date.now() + 5000;
 
     return driver.get('http://reddit.com/').then(function() {
-      return new Promise(function(resolve, reject) {
-        return driver.wait(function(prev) {
-          return Date.now() - prev > 5000;
-        }, Date.now())
-        .then(function() {
-          return driver.navigate('html/index.html#log')
-        })
-        .then(function() {
-          return driver.refresh();
-        })
-        .then(function() {
-          return driver.click('.show.author');
-        })
-        .then(function() {
-          return driver.execute(function() {
-            var tr =  document.querySelector('[data-host="reddit.com"]');
-            if (!tr) { return; }
-            return tr.querySelector('.timeSpent').innerHTML;
-          });
-        }).then(function(value) {
-          var actual = parseInt(value, 10);
-
-          assert.equal(actual, 5, 'Reports the correct time visited. expected 5 got: ' + actual.toString());
-        }).then(resolve, reject);
+      return new Promise(function(resolve) {
+        setTimeout(resolve, 5000);
       });
+    })
+    .then(function() {
+      return driver.navigate('html/index.html#log')
+    })
+    .then(function() {
+      return driver.refresh();
+    })
+    .then(function() {
+      return driver.click('.show.author');
+    })
+    .then(function() {
+      return driver.wait(function() {
+        var tr =  document.querySelector('[data-host="reddit.com"]');
+        if (!tr) { return; }
+        return tr.querySelector('.timeSpent').innerHTML;
+      });
+    })
+    .then(function() {
+      return driver.execute(function() {
+        var tr =  document.querySelector('[data-host="reddit.com"]');
+        if (!tr) { return; }
+        return tr.querySelector('.timeSpent').innerHTML;
+      });
+    }).then(function(value) {
+      var actual = parseInt(value, 10);
+
+      assert.ok(within(actual, 5, 2), 'Reports the correct time visited' +
+        ' within two seconds. expected 5 got: ' + actual.toString());
     });
   });
 });
