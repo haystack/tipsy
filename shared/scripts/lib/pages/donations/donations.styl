@@ -24,11 +24,13 @@ p
   margin-bottom 0
 
 p.info
-  width calc(100% - 56px)
+  width 100%
 
 table
-  width calc(100% - 56px)
+  //width calc(100% - 56px)
   margin-top 14px
+  word-wrap break-word
+  table-layout fixed
 
   th
     font-size 80%
@@ -37,14 +39,9 @@ table
     .relative
       position relative
 
-    &:first-child
-      max-width 340px
-      text-overflow ellipsis
-      white-space nowrap
-      overflow hidden
-
-    &:last-child
+    &:last-child div
       min-width 300px
+      display inline
 
     .remove
       position absolute

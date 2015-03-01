@@ -38,13 +38,11 @@
           <td>{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
           <td>
-            <div class="relative">
-              <div class="payment">
-                No payment processors provided by this page.
-              </div>
-
-              <button class="remove pure-button">&#10007;</button>
+            <div class="payment">
+              No payment processors provided by this page.
             </div>
+
+            <button class="remove pure-button">&#10007;</button>
           </td>
         </tr>
           {%endeach%}

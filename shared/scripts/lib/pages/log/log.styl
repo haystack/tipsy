@@ -23,8 +23,14 @@ p.info
       content 'Hide'
 
 .entry-history
+  table
+    table-layout fixed
+    word-wrap: break-word;
+
   table > tr > td
     background-color #FFF !important
+    overflow hidden
+    text-overflow ellipsis
 
 input.hide-no-author, input.hide-has-author
   -webkit-appearance none
