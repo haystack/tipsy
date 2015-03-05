@@ -113,7 +113,7 @@ if (!domains[messageBody.hostname]) {
   });
   
 } else {
-  var newArray = []
+  var newArray = [];
   newArray[0] = domains[messageBody.hostname];
   var author = newArray;
   

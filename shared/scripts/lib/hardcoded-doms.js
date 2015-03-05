@@ -1,4 +1,4 @@
-'use-strict'
+'use-strict';
 
 export var domains = {
   'theyeshivaworld.com' : {'name': 'Philippe',
