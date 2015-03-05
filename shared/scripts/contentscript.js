@@ -2,6 +2,7 @@
 
 import { environment } from './lib/environment';
 import { selectAll } from './lib/dom';
+import { domains } from './lib/hardcoded-doms';
 
 /**
  * Allows communication between content script and background script.
@@ -90,24 +91,34 @@ var messageBody = {
 
 // Iterate over all links and filter down to the last link that contains the
 // correct metadata.
-messageBody.list = links.filter(function(link) {
-  return link.rel === 'author';
-}).map(function(link) {
-  var author = {};
 
-  // Personal identification.
-  author.name = link.getAttribute('name');
-  author.href = link.getAttribute('href');
-  author.gravatar = link.getAttribute('gravatar');
+if (!domains[messageBody.hostname]) {
 
-  // Payment information.
-  author.dwolla = link.getAttribute('dwolla');
-  author.bitcoin = link.getAttribute('bitcoin');
-  author.paypal = link.getAttribute('paypal');
-  author.stripe = link.getAttribute('stripe');
+  messageBody.list = links.filter(function(link) {
+    return link.rel === 'author';
+  }).map(function(link) {
+    var author = {};
 
-  return author;
-});
+    // Personal identification.
+    author.name = link.getAttribute('name');
+    author.href = link.getAttribute('href');
+    author.gravatar = link.getAttribute('gravatar');
+
+   // Payment information.
+    author.dwolla = link.getAttribute('dwolla') || link.getAttribute('data-dwolla');
+    author.bitcoin = link.getAttribute('bitcoin') || link.getAttribute('data-bitcoin');
+    author.paypal = link.getAttribute('paypal') || link.getAttribute('data-paypal'); 
+    author.stripe = link.getAttribute('stripe') || link.getAttribute('data-stripe');
+    return author;
+  });
+  
+} else {
+  var newArray = [];
+  newArray[0] = domains[messageBody.hostname];
+  var author = newArray;
+  
+  messageBody.list = [author];
+}
 
 // Send this message body back to the extension.
 postMessage({
