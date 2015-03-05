@@ -101,11 +101,10 @@ messageBody.list = links.filter(function(link) {
   author.gravatar = link.getAttribute('gravatar');
 
   // Payment information.
-  author.dwolla = link.getAttribute('dwolla');
-  author.bitcoin = link.getAttribute('bitcoin');
-  author.paypal = link.getAttribute('paypal');
-  author.stripe = link.getAttribute('stripe');
-
+  author.dwolla = link.getAttribute('dwolla') || link.getAttribute('data-dwolla');
+  author.bitcoin = link.getAttribute('bitcoin') || link.getAttribute('data-bitcoin');
+  author.paypal = link.getAttribute('paypal') || link.getAttribute('data-paypal'); 
+  author.stripe = link.getAttribute('stripe') || link.getAttribute('data-stripe'); 
   return author;
 });
 

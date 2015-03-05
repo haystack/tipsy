@@ -306,7 +306,7 @@ DonationsPage.prototype = {
         var payment = $component.find('.payment');
 
         //console.log($component);
-        //console.log($component.attr('data-dwolla'));
+        //console.log($component);
         var dwollaToken = $component.attr('data-dwolla');
         var paypalToken = $component.attr('data-paypal');
 
