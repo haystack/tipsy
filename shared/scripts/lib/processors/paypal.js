@@ -1,9 +1,12 @@
 'use strict';
 
 export function inject($el, amount, email) {
-  var base = 'http://tipsy.csail.mit.edu/redirect/';
-  var root = base + encodeURIComponent(location.href.split('#')[0]);
-  var redirect = [root, email, amount].join('/');
+  var root = 'http://tipsy.csail.mit.edu/redirect';
+  var base = location.href.split('#')[0];
+  base = base.replace(/\//g, '$');
+  base = encodeURIComponent(base);
+
+  var redirect = [root, base, email, amount].join('/');
 
   var form = $('<form>').attr({
     name: '_xclick',
@@ -24,7 +27,7 @@ export function inject($el, amount, email) {
     currency_code: 'USD',
     item_name: 'Tispy',
     return: redirect,
-    cancel_return: redirect
+    cancel_return: redirect + '/cancel'
   };
 
   // Convert all hidden to inputs.
@@ -45,9 +48,9 @@ export function inject($el, amount, email) {
       hidden.amount.attr('value', amount);
 
       // Update the redirect as well.
-      var redirect = [root, email, amount].join('/');
+      var redirect = [root, base, email, amount].join('/');
       hidden.return.attr('value', redirect);
-      hidden.cancel_return.attr('value', redirect);
+      hidden.cancel_return.attr('value', redirect + '/cancel');
     }
   };
 }

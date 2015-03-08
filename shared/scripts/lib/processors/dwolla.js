@@ -1,10 +1,12 @@
 'use strict';
 
 export function inject($el, amount, token) {
+  var root = 'http://tipsy.csail.mit.edu/redirect';
   var base = location.href.split('#')[0];
-  var redirect = 'http://tipsy.csail.mit.edu/redirect/' +
-    encodeURIComponent(base) + '/' + 'Dwolla user' + '/' + amount;
+  base = base.replace(/\//g, '$');
+  base = encodeURIComponent(base);
 
+  var redirect = [root, base, 'Dwolla user', amount].join('/');
   var src = 'https://www.dwolla.com/scripts/button.min.js';
 
   // If we're in testing, swap the token with our test account.
@@ -33,6 +35,10 @@ export function inject($el, amount, token) {
   return {
     update: function(amount) {
       script.next('a.d-btn').attr('data-amount', amount.slice(1));
+
+      // Update the redirect as well.
+      var redirect = [root, base, 'Dwolla user', amount].join('/');
+      script.next('a.d-btn').attr('data-redirect', redirect);
     }
   };
 }
