@@ -4,3 +4,4 @@
 /chrome-extension/dist
 /firefox-extension/dist
 /cjs
+/test/coverage
