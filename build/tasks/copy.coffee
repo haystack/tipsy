@@ -7,7 +7,7 @@ module.exports = ->
 
   npmDeps = [
     'node_modules/jquery/dist/*',
-    'node_modules/purecss/*',
+    'node_modules/purecss/build/*',
     'node_modules/combyne/dist/*'
     'node_modules/moment/min/*'
     'node_modules/tablesort/*'

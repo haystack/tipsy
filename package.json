@@ -10,8 +10,8 @@
     "build-chrome": "grunt chrome-extension",
     "build-firefox": "grunt firefox-extension",
     "test": "grunt && grunt coverage && grunt shell:s3",
-    "test-chrome": "grunt mochaTest:chrome-extension",
-    "test-firefox": "grunt mochaTest:firefox-extension",
+    "test-chrome": "grunt chrome-extension mochaTest:chrome-extension",
+    "test-firefox": "grunt firefox-extension mochaTest:firefox-extension",
     "postinstall": "npm dedupe && grunt mozilla-addon-sdk && npm run python2",
     "python2": "grunt shell:python2",
     "cjs": "compile-modules convert -f commonjs shared/scripts/**/*.js -o cjs/"
