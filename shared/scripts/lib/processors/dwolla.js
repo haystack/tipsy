@@ -2,7 +2,7 @@
 
 export function inject($el, amount, token) {
   var base = location.href.split('#')[0];
-  var redirect = 'http://tbranyen.com:9999/redirect/' +
+  var redirect = 'http://tipsy.csail.mit.edu/redirect/' +
     encodeURIComponent(base) + '/' + 'Dwolla user' + '/' + amount;
 
   var src = 'https://www.dwolla.com/scripts/button.min.js';

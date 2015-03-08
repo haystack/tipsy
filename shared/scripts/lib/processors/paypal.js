@@ -1,7 +1,7 @@
 'use strict';
 
 export function inject($el, amount, email) {
-  var base = 'http://tbranyen.com:9999/redirect/';
+  var base = 'http://tipsy.csail.mit.edu/redirect/';
   var root = base + encodeURIComponent(location.href.split('#')[0]);
   var redirect = [root, email, amount].join('/');
 
