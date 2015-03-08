@@ -68,10 +68,10 @@ function setTab() {
     // Otherwise we can assume the payment was successful.  We can now
     // remove all the items from the storage.
     return storage.get('settings').then(function(settings) {
-      storage.get('log').then(function(resp) {
+      return storage.get('log').then(function(resp) {
         // Filter out these items.
         resp[host] = resp[host].filter(function(entry) {
-          return entry.tab.url !== url;
+          return entry.tab && entry.tab.url !== url;
         });
 
         return storage.set('log', resp).then(function() {
@@ -87,8 +87,11 @@ function setTab() {
         });
       });
     }).catch(function() {
-      window.alert('Potential error removing the donation, please manually' +
-        'update');
+      // Remove the query string from the url.
+      history.replaceState({}, "", location.href.split("?")[0]);
+
+      // Redirect to donations.
+      location.href = '#donations';
     });
   }
   else {
