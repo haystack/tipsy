@@ -1,7 +1,7 @@
 'use strict';
 
 var chrome = require('selenium-webdriver/chrome');
-var chromeDriver = require('selenium-chromedriver');
+var chromeDriver = require('chromedriver');
 
 ExtensionDriver.prototype.navigate = function(url) {
   return this._driver.get('chrome-extension://' + this._id + '/' + url);

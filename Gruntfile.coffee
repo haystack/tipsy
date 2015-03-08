@@ -7,10 +7,18 @@ module.exports = ->
     'firefox-extension'
   ]
 
+  @registerTask 'coverage', [
+    'env:coverage'
+    'instrument'
+    'test'
+    'storeCoverage'
+    'makeReport'
+  ]
+
   @registerTask 'test', [
-    'default'
     'mochaTest:firefox-extension'
     'mochaTest:chrome-extension'
+    'mochaTest:shared'
   ]
 
   @registerTask 'chrome-extension', [
