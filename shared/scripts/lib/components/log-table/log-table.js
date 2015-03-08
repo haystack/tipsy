@@ -17,8 +17,19 @@ LogTableComponent.prototype = {
     'hasAuthor',
     'findLast',
     'formatAccessTime',
-    'getDays'
+    'getDays',
+    'fixOffByOne'
   ],
+
+  /**
+   * Fixes a bug where daysVisited object counts as an entry addition.
+   *
+   * @param val
+   * @return
+   */
+  fixOffByOne: function(val) {
+    return Number(val) - 1;
+  },
 
   /**
    * timeSpent
@@ -80,7 +91,7 @@ LogTableComponent.prototype = {
   findLast: function(val) {
     return val[val.length - 1];
   },
-  
+
   /**
   * getDays
   *

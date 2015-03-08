@@ -2,7 +2,7 @@
 
 import Component from '../../component';
 import storage from '../../storage';
-import {notify as notify} from '../../notifications';
+import calculate from '../../utils/calculate';
 import { inject as injectDwolla } from '../../processors/dwolla';
 import { inject as injectPaypal } from '../../processors/paypal';
 
@@ -19,25 +19,6 @@ function DonationsPage() {
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
-  /*
-
-  // FIXME: put this in a better place, should really run only when tipsy is installed.
-  // Makes sure that first time extension is run is known for calendar
-  // rate calculation.
-  storage.get('settings').then(function(settings) {
-        if (typeof settings.timeStarted === 'undefined') {
-          settings.timeStarted = Date.now();
-        }
-
-        if (typeof settings.totalPaid === 'undefined') {
-          settings.totalPaid = 0;
-        }
-        return storage.set('settings', settings);
-    }).catch(function(ex) {
-      console.log(ex);
-      console.log(ex.stack);
-    });
-  */
 }
 
 DonationsPage.prototype = {
@@ -193,7 +174,7 @@ DonationsPage.prototype = {
         }, [])
         // Calculate the estimated amount for each entry.
         .map(function(entry) {
-          return component.calculate(settings, entry);
+          return calculate(settings, entry);
         })
         // Ensure we're only working with estimated amounts greater than `0`.
         .filter(function(entry) {
@@ -223,58 +204,6 @@ DonationsPage.prototype = {
              entry.author.list[0].paypal || entry.author.list[0].stripe));
   },
 
-  /**
-   * Calculates the estimated amount per entry.
-   *
-   * @param settings
-   * @param entry
-   * @return
-   */
-  calculate: function(settings, entry) {
-    var rateType = settings.rateType;
-    var donationInterval;
-    var donationGoal;
-
-    // The donation goal amount is saved as a currency string, so we want
-    // to emulate the empty amount if nothing was set.
-    // var donationGoal = settings.donationGoal || '$0';
-
-    if (rateType === "browsingRate") {
-
-      donationInterval = settings.donationIntervalBrowsingRate || 60;
-      donationGoal = settings.donationGoalBrowsingRate || '$0';
-
-      // Convert timespent to time unit selected.
-      var timeSpent = entry.timeSpent / 1000 / 60 / donationInterval;
-
-
-      donationGoal = Number(donationGoal.slice(1));
-
-      // Assign the estimated amount to the entry item.
-      entry.estimatedAmount = (timeSpent * donationGoal).toFixed(2);
-
-    } else if (rateType === "calendarRate") {
-
-      donationInterval = settings.donationIntervalCalendarRate || 60;
-      donationGoal = settings.donationGoalCalendarRate || '$0';
-
-      // get fraction of time spent for this author out of all others
-      var timeSpentFraction = entry.timeSpent / settings.timeSpentAuthored;
-
-      var timeSinceBegin = Date.now() - settings.timeStarted;
-
-      var unitAmount = (timeSinceBegin / 1000 / 60 / donationInterval) * Number(donationGoal.slice(1));
-
-      var moneyOwed = timeSpentFraction * unitAmount - settings.totalPaid;
-
-      entry.estimatedAmount = moneyOwed.toFixed(2);
-
-    } else {
-      console.error("No rate type set.");
-    }
-    return entry;
-  },
-
   filter: function(entry) {
     return entry.author && entry.author.list.length;
   },
@@ -290,7 +219,6 @@ DonationsPage.prototype = {
       window.alert('You will now be redirected to the payment site.');
     });
 
-    var totalOwed = 0;
     // Inject payment information for each entry.
 
     var component_1 = this;
@@ -305,16 +233,12 @@ DonationsPage.prototype = {
         // The payment container.
         var payment = $component.find('.payment');
 
-        //console.log($component);
-        //console.log($component);
         var dwollaToken = $component.attr('data-dwolla');
         var paypalToken = $component.attr('data-paypal');
 
-        var isPayment = false;
         // Hide the no processors text.
         if (dwollaToken || paypalToken) {
           payment.empty();
-          isPayment = true;
         }
 
         // Only inject if the author has dwolla.
@@ -327,36 +251,8 @@ DonationsPage.prototype = {
           $component.data().paypal = injectPaypal(payment, amount, paypalToken);
         }
 
-        if (isPayment) {
-          var amountNum = parseFloat(amount);
-
-          totalOwed += amountNum;
-
-          //storage.get('settings').thenfunction(settings)
-          // let notifications know there is money to pay
-          if (amountNum > 0) {
-            settings.moneyIsOwed = true;
-            //storage.set('settings', settings);
-          }
-          if (settings.reminderThreshLocal && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1))) && !settings.localReminded)  {
-            notify('tipsy-thersh-local', 'local', amount.toString());
-            settings.localReminded = true;
-
-          }
-        }
       });
-      //return storage.set('settings', settings);
-    //}).catch(function(ex) {
-      //console.log(ex);
-      //console.log(ex.stack);;
-    //});
 
-    //storage.get('settings').thenfunction(settings)
-
-      if (settings.reminderThreshGlobal && (totalOwed >= parseFloat(settings.reminderThreshGlobal.slice(1))) && !settings.globalReminded) {
-        notify('tipsy-thresh-global', 'global', totalOwed.toString());
-        settings.globalReminded = true;
-      }
       return storage.set('settings', settings);
     }).catch(function(ex) {
       console.log(ex);
