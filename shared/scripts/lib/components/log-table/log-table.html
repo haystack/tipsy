@@ -28,7 +28,7 @@
           No author information
         {%endif%}
       </td>
-      <td>{{entry.entries.length}}</td>
+      <td>{{entry.entries.length|fixOffByOne}}</td>
       <td data-sort="{{entry.entries|getDays 'true'}}" class="getDays">{{entry.entries|getDays}}</td>
       <td data-sort="{{entry.entries|timeSpent 'true'}}" class="timeSpent">{{entry.entries|timeSpent}}</td>
       <td data-sort="{{entry.entries|findLast|formatAccessTime 'true'}}">{{entry.entries|findLast|formatAccessTime}}</td>

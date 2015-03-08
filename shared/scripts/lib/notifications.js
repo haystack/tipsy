@@ -1,6 +1,6 @@
 import { environment } from './environment';
 import storage from './storage';
-
+import calculate from './utils/calculate';
 
 export var toDays = [
   // Daily.
@@ -14,7 +14,7 @@ export var toDays = [
   // Monthly.
   30
 ];
- 
+
 /**
  * Schedule a new notification.
  *
@@ -49,17 +49,17 @@ export function clear(name) {
 	}
 }
 
-export function get(name) { 
-	return new Promise(function(resolve) { 
-		chrome.alarms.get(name, resolve); 
-	}); 
+export function get(name) {
+	return new Promise(function(resolve) {
+		chrome.alarms.get(name, resolve);
+	});
 }
 
 /**
  * Allows to create notification manually, used for thresholdreminders
  */
 export function notify(name, type, amount) {
-  
+
   if (environment === 'chrome') {
     chrome.notifications.create(name, {
       type: 'basic',
@@ -73,12 +73,64 @@ export function notify(name, type, amount) {
     console.error('Threshold notification for Firefox not yet implemented.');
   }
 }
- 
+
 function addClickable() {
   chrome.notifications.onClicked.addListener(function(notificationId, buttonIndex) {
     chrome.tabs.create({url:chrome.extension.getURL('html/index.html')});
   });
 }
+
+/**
+ * Polls and runs threshold logic on the background thread to avoid the need
+ * for being in the extension to get notifications.
+ */
+function pollForNotifications() {
+  Promise.all([
+    storage.get('settings'),
+    storage.get('log')
+  ]).then(function(resp) {
+    var settings = resp[0];
+    var log = resp[1];
+    var totalOwed = 0;
+
+    // Iterate all visited pages.
+    Object.keys(log).forEach(function(domain) {
+      // Filter down to those with valid payment information.
+      log[domain].filter(function(item) {
+        // Has a valid author list.
+        if (item && item.author && item.author.list.length) {
+          return item.author.list.some(function(item) {
+            return item.bitcoin || item.dwolla || item.paypal;
+          });
+        }
+      }).forEach(function(hasPaymentInfo) {
+        // Don't modify the existing object.
+        var internal = Object.create(hasPaymentInfo);
+        var calculated = calculate(settings, internal);
+        var amountNum = parseFloat(calculated.estimatedAmount);
+
+        totalOwed += amountNum;
+
+        // let notifications know there is money to pay
+        if (amountNum > 0) {
+          settings.moneyIsOwed = true;
+        }
+        if (settings.reminderThreshLocal && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1))) && !settings.localReminded)  {
+          notify('tipsy-thersh-local', 'local', amountNum.toFixed(2));
+          settings.localReminded = true;
+        }
+      });
+    });
+
+    if (settings.reminderThreshGlobal && (totalOwed >= parseFloat(settings.reminderThreshGlobal.slice(1))) && !settings.globalReminded) {
+      notify('tipsy-thresh-global', 'global', totalOwed.toFixed(2));
+      settings.globalReminded = true;
+    }
+  }).catch(function(ex) {
+    console.log(ex, ex.message);
+  });
+}
+
 /**
  * Listens for Chrome alarms to trigger the next notification.
  */
@@ -101,7 +153,7 @@ export function listen(worker) {
             var next = new Date(settings.nextNotified);
             next.setDate(next.getDate() + days);
             settings.nextNotified = Number(next);
-  
+
             // Create the next alarm.
             create(name, next, days);
 
@@ -118,6 +170,10 @@ export function listen(worker) {
         createNotification(alarm.name);
       });
     });
+
+    // Check for notifications and then poll every hour.
+    pollForNotifications();
+    setInterval(pollForNotifications, 3600000);
   }
 
   else if (environment === 'firefox') {
