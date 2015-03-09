@@ -51,20 +51,28 @@ DonationsPage.prototype = {
   },
 
   remove: function(ev) {
-    var row = $(ev.currentTarget).closest('tr').data();
-    var host = row.host;
-    var url = row.url;
+  
+    if (confirm('Are you sure you want to remove this entry from your contributions? This action cannot be undone.')) {
+  
+      var row = $(ev.currentTarget).closest('tr').data();
+      var host = row.host;
+      var url = row.url;
 
-    storage.get('settings').then(function(settings) {
-      storage.get('log').then(function(resp) {
-        // Filter out these items.
-        resp[host] = resp[host].filter(function(entry) {
-          return entry.tab.url !== url;
+      storage.get('settings').then(function(settings) {
+        storage.get('log').then(function(resp) {
+          // Filter out these items.
+          resp[host] = resp[host].filter(function(entry) {
+            if (entry.tab) {
+              return entry.tab.url !== url;
+            } else {
+              return entry
+            }
+          });
+
+          return storage.set('log', resp);
         });
-
-        return storage.set('log', resp);
       });
-    });
+    }
   },
 
   /**

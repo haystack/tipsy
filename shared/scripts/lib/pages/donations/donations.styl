@@ -44,10 +44,11 @@ table
       display inline
 
     .remove
-      position absolute
-      top 50%
-      right -75px
-      margin-top -16px
+      //position absolute
+      position relative
+      //top 50%
+      right -140px
+      //margin-top -16px
 
   tr
     &:hover
@@ -65,3 +66,18 @@ table
 form[name=_xclick]
   display inline-block
   margin-right 5px
+  
+  
+.tooltip 
+    display: inline;
+    position: relative;
+
+
+.tooltip:hover:after 
+    color: #c00;
+    text-decoration: none;
+
+
+
+
+
