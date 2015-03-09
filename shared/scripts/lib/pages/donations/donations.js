@@ -52,7 +52,7 @@ DonationsPage.prototype = {
 
   remove: function(ev) {
   
-    if (confirm('Are you sure you want to remove this entry from your contributions? This action cannot be undone.')) {
+    if (window.confirm('Are you sure you want to remove this entry from your contributions? This action cannot be undone.')) {
   
       var row = $(ev.currentTarget).closest('tr').data();
       var host = row.host;
@@ -65,7 +65,7 @@ DonationsPage.prototype = {
             if (entry.tab) {
               return entry.tab.url !== url;
             } else {
-              return entry
+              return entry;
             }
           });
 
