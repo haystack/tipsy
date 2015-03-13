@@ -163,7 +163,8 @@ DonationsPage.prototype = {
           // Check if this url was already added.
           memo.forEach(function(entry) {
             // make sure it's not the daysVisited
-            if (entry.tab) {
+
+            if (entry.tab && !entry.paid) {
               // If there is already an entry with the same url, update it.
               if (entry.tab.url === current.tab.url) {
                 entry.timeSpent += current.timeSpent;
@@ -192,7 +193,6 @@ DonationsPage.prototype = {
       // Condense into a single array.
       var condensed = calculated.reduce(function(memo, current) {
         // Make sure there is author information.
-        //console.log(current + " " + component.hasPaymentInfo(current));
         if (component.hasPaymentInfo(current)) {
           memo.push(current);
         }
@@ -213,7 +213,7 @@ DonationsPage.prototype = {
   },
 
   filter: function(entry) {
-    return entry.author && entry.author.list.length;
+    return entry.author && entry.author.list.length && !entry.paid;
   },
 
   afterRender: function() {

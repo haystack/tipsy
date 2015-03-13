@@ -70,14 +70,21 @@ function setTab() {
     return storage.get('settings').then(function(settings) {
       return storage.get('log').then(function(resp) {
         // Filter out these items.
-        resp[host] = resp[host].filter(function(entry) {
-          return entry.tab && entry.tab.url !== url;
+
+        resp[host].map(function(entry) {
+          if (entry.tab && entry.tab.url === url) {
+            entry.paid = true;
+          }
         });
 
         return storage.set('log', resp).then(function() {
           // Remove the query string from the url.
           history.replaceState({}, "", location.href.split("?")[0]);
-
+      
+          var amount = Number(params.amount.slice(1));
+          settings.totalPaid = settings.totalPaid + amount;
+          storage.set('settings', settings);
+          
           // Display a success message.
           window.alert('Payment of ' + params.amount + ' to ' + params.email +
             ' was successful');

@@ -126,7 +126,8 @@ export function stop(tab) {
           author: tabs[tab.id].author,
           tab: tab,
           accessTime: tabs[tab.id].accessTime,
-          timeSpent: timeSpent
+          timeSpent: timeSpent,
+          paid: false
         });
       }
     }

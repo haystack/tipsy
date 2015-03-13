@@ -116,8 +116,7 @@ if (!domains[messageBody.hostname]) {
   var newArray = [];
   newArray[0] = domains[messageBody.hostname];
   var author = newArray;
-  
-  messageBody.list = [author];
+  messageBody.list = author;
 }
 
 // Send this message body back to the extension.
