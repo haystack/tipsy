@@ -137,10 +137,14 @@ DonationsPage.prototype = {
         }
         component.data.hidden = component.hidden;
         component.data.entries = entries;
-        console.log("After", entries);
         // This page hasn't been officially rendered yet.
         if (component.__rendered__) {
           component.render();
+        }
+            
+        var tableSize = $('.pure-table tbody tr').length;
+        if (tableSize <=1 ){
+          $('#text').html("Nobody to pay yet, get browsing!");
         }
       }).catch(function(ex) {
         console.log(ex);
@@ -328,11 +332,7 @@ DonationsPage.prototype = {
       descending: true
 
     });
-    
-    tableSize = $('.pure-table tbody tr').length;
-    if (tableSize <=1 ){
-      $('#text').html("Nobody to pay yet, get browsing!");
-    }
+
   }
 };
 
