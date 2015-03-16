@@ -51,21 +51,21 @@ DonationsPage.prototype = {
     if (Number(a.estimatedAmount) < Number(b.estimatedAmount)) {
       return 1;
     }
-    return 0    
+    return 0;    
   },
   
   toggleHidden: function(ev) {
     this.hidden = !this.hidden;
     if (this.hidden === true) {
-      $(".hide").text("Show more")
+      $(".hide").text("Show more");
     } else if (this.hidden === false) {
-      $(".hide").text("Hide")      
+      $(".hide").text("Hide")  ;    
     }
     //this.renderTable();
     if (this.hidden) {
-      $(".hidden").hide()
+      $(".hidden").hide();
     } else {
-      $(".hidden").show()
+      $(".hidden").show();
     } 
   },
 
@@ -127,7 +127,7 @@ DonationsPage.prototype = {
         entries = entries.sort(component.sorter);
         var ents = entries;
         if (component.hidden) {
-          var sortedNums = ents.map(function(o) {return Number(o.estimatedAmount)});
+          var sortedNums = ents.map(function(o) {return Number(o.estimatedAmount);});
           for (var i = 0; i < entries.length; i++) {
             if (sortedNums.indexOf(Number(entries[i].estimatedAmount)) >= defaults.maxDonationsTableSize) {
               entries[i].hidden = true;
@@ -329,7 +329,7 @@ DonationsPage.prototype = {
 
     });
     
-    var tableSize = $('.pure-table tbody tr').length;
+    tableSize = $('.pure-table tbody tr').length;
     if (tableSize <=1 ){
       $('#text').html("Nobody to pay yet, get browsing!");
     }
