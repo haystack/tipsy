@@ -271,9 +271,10 @@ DonationsPage.prototype = {
     }
     */
     var tableSize = $('.pure-table tbody tr').length;
-    //console.log($(this))
-    if (tableSize > 5) {
-      // find min
+    if (tableSize <= defaults.maxDonationsTableSize) {
+      $("#moreButton").hide() ;
+    } else  {
+      $("#moreButton").show();
     }
     
     
