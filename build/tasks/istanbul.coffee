@@ -4,7 +4,7 @@ module.exports = ->
   @loadNpmTasks 'grunt-istanbul'
 
   # Inject the Istanbul Traceur version to provide proper ES6 coverage.
-  task = require.cache[require.resolve('grunt-istanbul/node_modules/istanbul')]
+  task = require.cache[require.resolve('istanbul')]
   task.exports.Instrumenter = istanbulTraceur.Instrumenter
 
   @config 'instrument',
