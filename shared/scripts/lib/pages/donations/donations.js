@@ -5,6 +5,7 @@ import storage from '../../storage';
 import calculate from '../../utils/calculate';
 import { inject as injectDwolla } from '../../processors/dwolla';
 import { inject as injectPaypal } from '../../processors/paypal';
+import { defaults } from '../../defaults';
 
 function DonationsPage() {
   Component.prototype.constructor.apply(this, arguments);
@@ -16,6 +17,8 @@ function DonationsPage() {
 
   // Always attempt to render the inner table.
   this.renderTable();
+  
+  this.hidden = true;
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
@@ -28,7 +31,8 @@ DonationsPage.prototype = {
     'keyup input': 'filterInput',
     'blur .amount': 'formatAndSave',
     'change .amount': 'formatAndSave',
-    'click .remove': 'remove'
+    'click .remove': 'remove',
+    'click .hide': 'toggleHidden',
   },
 
   filters: [
@@ -38,6 +42,31 @@ DonationsPage.prototype = {
 
   or: function(one, other) {
     return one || other;
+  },
+  
+  sorter: function(a, b) {
+    if (Number(a.estimatedAmount) > Number(b.estimatedAmount)) {
+      return -1;
+    }
+    if (Number(a.estimatedAmount) < Number(b.estimatedAmount)) {
+      return 1;
+    }
+    return 0;    
+  },
+  
+  toggleHidden: function(ev) {
+    this.hidden = !this.hidden;
+    if (this.hidden === true) {
+      $(".hide").text("Show more");
+    } else if (this.hidden === false) {
+      $(".hide").text("Hide")  ;    
+    }
+    //this.renderTable();
+    if (this.hidden) {
+      $(".hidden").hide();
+    } else {
+      $(".hidden").show();
+    } 
   },
 
   /**
@@ -95,11 +124,27 @@ DonationsPage.prototype = {
 
         return filteredAndSorted;
       }).then(function(entries) {
-        component.data.entries = entries;
+        entries = entries.sort(component.sorter);
+        var ents = entries;
+        if (component.hidden) {
+          var sortedNums = ents.map(function(o) {return Number(o.estimatedAmount);});
+          for (var i = 0; i < entries.length; i++) {
+            if (sortedNums.indexOf(Number(entries[i].estimatedAmount)) >= defaults.maxDonationsTableSize) {
+              entries[i].hidden = true;
+            }
+          }
 
+        }
+        component.data.hidden = component.hidden;
+        component.data.entries = entries;
         // This page hasn't been officially rendered yet.
         if (component.__rendered__) {
           component.render();
+        }
+            
+        var tableSize = $('.pure-table tbody tr').length;
+        if (tableSize <=1 ){
+          $('#text').html("Nobody to pay yet, get browsing!");
         }
       }).catch(function(ex) {
         console.log(ex);
@@ -110,7 +155,8 @@ DonationsPage.prototype = {
 
   serialize: function() {
     return {
-      entries: this.data.entries
+      entries: this.data.entries,
+      hidden: this.data.hidden
     };
   },
 
@@ -163,7 +209,7 @@ DonationsPage.prototype = {
           // Check if this url was already added.
           memo.forEach(function(entry) {
             // make sure it's not the daysVisited
-
+            entry.host = key;
             if (entry.tab && !entry.paid) {
               // If there is already an entry with the same url, update it.
               if (entry.tab.url === current.tab.url) {
@@ -217,6 +263,21 @@ DonationsPage.prototype = {
   },
 
   afterRender: function() {
+    /*
+   if (this.hidden === true) {
+      $(".hide").text("Show more")
+    } else if (this.hidden === false) {
+      $(".hide").text("Hide")      
+    }
+    */
+    var tableSize = $('.pure-table tbody tr').length;
+    if (tableSize <= defaults.maxDonationsTableSize) {
+      $("#moreButton").hide() ;
+    } else  {
+      $("#moreButton").show();
+    }
+    
+    
     this.$('.payment').on('mouseup', function(ev) {
       var tr = $(ev.currentTarget).closest('tr').data();
 
@@ -270,7 +331,9 @@ DonationsPage.prototype = {
     // Enable table sorting.
     this.tablesort = new Tablesort(this.$('table')[0], {
       descending: true
+
     });
+
   }
 };
 

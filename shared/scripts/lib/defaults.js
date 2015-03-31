@@ -23,6 +23,7 @@ export var defaults = {
   'weekdayIntervalTime': '10:00',
   'userAgrees': false,
   'idle': 20,
+  'maxDonationsTableSize': 3,
   'estimate': {'minutes': 20160, 'amount': '2', 'type': 'weeks'}
 };
 
