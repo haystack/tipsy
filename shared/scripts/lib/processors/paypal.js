@@ -16,7 +16,7 @@ export function inject($el, amount, email) {
 
   // Add in the PayPal donate button.
   form.append('<input type="image" ' +
-    'src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_LG.gif" ' +
+    'src="https://www.paypalobjects.com/en_US/i/logo/PayPal_mark_60x38.gif" ' +
     'border="0" name="submit" alt="Donate with PayPal">');
 
   // These are required hidden fields.
