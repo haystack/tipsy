@@ -129,7 +129,7 @@ DonationsPage.prototype = {
         if (component.hidden) {
           var sortedNums = ents.map(function(o) {return Number(o.estimatedAmount);});
           for (var i = 0; i < entries.length; i++) {
-            if (sortedNums.indexOf(Number(entries[i].estimatedAmount)) >= defaults.maxDonationsTableSize) {
+            if (sortedNums.indexOf(Number(entries[i].estimatedAmount)) > defaults.maxDonationsTableSize) {
               entries[i].hidden = true;
             }
           }
