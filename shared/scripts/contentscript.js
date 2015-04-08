@@ -146,7 +146,7 @@ if (messageBody.list.length == 0) {
     }
     
     if (diff > ms * Number(amount)) {
-      shouldRenew == true
+      shouldRenew == true;
     }    
   }
   
@@ -160,7 +160,7 @@ if (messageBody.list.length == 0) {
       localStorage.setItem(document.domain, info);
     }
   } else {
-    info = localStorage.getItem(document.domain)
+    info = localStorage.getItem(document.domain);
   }
   if (info != null) {
     var splitted = info.split("\n");
@@ -173,8 +173,8 @@ if (messageBody.list.length == 0) {
     for (var i =  0; i < tipsyInfo.length; i++) {
       if (tipsyInfo[i].length > 1) {
         var entry = tipsyInfo[i].split(" ");
-        var urlPrefix = entry[0]
-        var paymentInfos = entry[1]
+        var urlPrefix = entry[0];
+        var paymentInfos = entry[1];
         var author = entry[2];
 
         var currentPrefix = document.documentURI.substring(document.documentURI.indexOf(document.domain) + document.domain.length + 1, document.documentURI.length);
@@ -193,9 +193,9 @@ if (messageBody.list.length == 0) {
               var splitEntry = splittedProcessors[j].split("=");
               switch(splitEntry[0]){
                 case "paypal":
-                  newArray[0].paypal = splitEntry[1]
+                  newArray[0].paypal = splitEntry[1];
                 case "dwolla":
-                  newArray[0].dwolla = splitEntry[1]
+                  newArray[0].dwolla = splitEntry[1];
               }
            }
            
@@ -210,9 +210,10 @@ if (messageBody.list.length == 0) {
   }
 }
 
-
-console.log(document.domain)
+/*
 console.log(messageBody)
+*/
+
 // Send this message body back to the extension.
 postMessage({
   name: 'author',
