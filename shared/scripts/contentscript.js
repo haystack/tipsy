@@ -120,7 +120,7 @@ if (!domains[messageBody.hostname]) {
 }
 
 // if nothing, check for tipsy.txt
-if (messageBody.list.length == 0) {
+if (messageBody.list.length === 0) {
 
   var info = localStorage.getItem(document.domain);
   var cacheDuration;
@@ -146,7 +146,7 @@ if (messageBody.list.length == 0) {
     }
     
     if (diff > ms * Number(amount)) {
-      shouldRenew == true;
+      shouldRenew = true;
     }    
   }
   
@@ -164,9 +164,6 @@ if (messageBody.list.length == 0) {
   }
   if (info != null) {
     var splitted = info.split("\n");
-    var name;
-    var paypal;
-    var dwolla;
     
     var newArray = [];
     var tipsyInfo = splitted.slice(3,splitted.length);
@@ -179,7 +176,7 @@ if (messageBody.list.length == 0) {
 
         var currentPrefix = document.documentURI.substring(document.documentURI.indexOf(document.domain) + document.domain.length + 1, document.documentURI.length);
         
-         if (currentPrefix == " " || currentPrefix == "") {
+         if (currentPrefix === " " || currentPrefix === "") {
            currentPrefix = "*";
          }
          
@@ -194,6 +191,7 @@ if (messageBody.list.length == 0) {
               switch(splitEntry[0]){
                 case "paypal":
                   newArray[0].paypal = splitEntry[1];
+                  break;
                 case "dwolla":
                   newArray[0].dwolla = splitEntry[1];
               }
