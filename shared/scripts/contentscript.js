@@ -153,8 +153,11 @@ if (messageBody.list.length === 0) {
   if (info == null || shouldRenew) {
     var req = new XMLHttpRequest();  
     req.open('GET', "/tipsy.txt", false);   
+    try {
       req.send(null);  
-
+    } catch(e) {
+      console.log("tipsy could not make request");
+    }
     if (req.status == 200) {  
       info = Date.now().toString() + "\n" + req.responseText;
       localStorage.setItem(document.domain, info);
