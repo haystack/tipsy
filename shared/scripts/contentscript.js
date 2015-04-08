@@ -119,6 +119,100 @@ if (!domains[messageBody.hostname]) {
   messageBody.list = author;
 }
 
+// if nothing, check for tipsy.txt
+if (messageBody.list.length == 0) {
+
+  var info = localStorage.getItem(document.domain);
+  var cacheDuration;
+  var amount;
+  var unit;
+  
+  var shouldRenew = false;
+  if (info != null) {
+    cacheDuration = info.split("\n")[2];
+    console.log("dur ", cacheDuration);
+    cacheDuration = cacheDuration.split(" ");
+    amount = cacheDuration[0];
+    unit = cacheDuration[1];
+    
+    var diff = Date.now() - Number(info[0]);
+    var ms;
+    if (unit == 'h') {
+      ms = 3600000;
+    } else if (unit == 'd') {
+      ms = 86400000;
+    } else if (unit == 'w') {
+      ms = 604800000;
+    }
+    
+    if (diff > ms * Number(amount)) {
+      shouldRenew == true
+    }    
+  }
+  
+  if (info == null || shouldRenew) {
+    var req = new XMLHttpRequest();  
+    req.open('GET', "/tipsy.txt", false);   
+      req.send(null);  
+
+    if (req.status == 200) {  
+      info = Date.now().toString() + "\n" + req.responseText;
+      localStorage.setItem(document.domain, info);
+    }
+  } else {
+    info = localStorage.getItem(document.domain)
+  }
+  if (info != null) {
+    var splitted = info.split("\n");
+    var name;
+    var paypal;
+    var dwolla;
+    
+    var newArray = [];
+    var tipsyInfo = splitted.slice(3,splitted.length);
+    for (var i =  0; i < tipsyInfo.length; i++) {
+      if (tipsyInfo[i].length > 1) {
+        var entry = tipsyInfo[i].split(" ");
+        var urlPrefix = entry[0]
+        var paymentInfos = entry[1]
+        var author = entry[2];
+
+        var currentPrefix = document.documentURI.substring(document.documentURI.indexOf(document.domain) + document.domain.length + 1, document.documentURI.length);
+        
+         if (currentPrefix == " " || currentPrefix == "") {
+           currentPrefix = "*";
+         }
+         
+         if (currentPrefix == urlPrefix) {
+           if (!newArray[0]) {
+             newArray[0] = {};
+           }
+           
+           var splittedProcessors = paymentInfos.split("|");
+           for (var j = 0; j < splittedProcessors.length; j++) {
+              var splitEntry = splittedProcessors[j].split("=");
+              switch(splitEntry[0]){
+                case "paypal":
+                  newArray[0].paypal = splitEntry[1]
+                case "dwolla":
+                  newArray[0].dwolla = splitEntry[1]
+              }
+           }
+           
+           if (author && author.length > 1) {
+             newArray[0].name = author;
+           }
+         }
+      }
+    }
+   var author = newArray;
+   messageBody.list = author;
+  }
+}
+
+
+console.log(document.domain)
+console.log(messageBody)
 // Send this message body back to the extension.
 postMessage({
   name: 'author',
