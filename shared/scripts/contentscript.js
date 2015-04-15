@@ -123,6 +123,7 @@ if (!domains[messageBody.hostname]) {
 if (messageBody.list.length === 0) {
 
   var info = localStorage.getItem(document.domain);
+  //console.log("info: ",info)
   var cacheDuration;
   var amount;
   var unit;
@@ -130,7 +131,6 @@ if (messageBody.list.length === 0) {
   var shouldRenew = false;
   if (info != null) {
     cacheDuration = info.split("\n")[2];
-    console.log("dur ", cacheDuration);
     cacheDuration = cacheDuration.split(" ");
     amount = cacheDuration[0];
     unit = cacheDuration[1];
@@ -153,10 +153,12 @@ if (messageBody.list.length === 0) {
   if (info == null || shouldRenew) {
     var req = new XMLHttpRequest();  
     req.open('GET', "/tipsy.txt", false);   
+    //console.log("req:", req);
+    
     try {
       req.send(null);  
     } catch(e) {
-      console.log("tipsy could not make request");
+      //console.log(e,"tipsy could not make request");
     }
     if (req.status == 200) {  
       info = Date.now().toString() + "\n" + req.responseText;
@@ -182,17 +184,20 @@ if (messageBody.list.length === 0) {
          if (currentPrefix === " " || currentPrefix === "") {
            currentPrefix = "*";
          }
-         
-         if (currentPrefix == urlPrefix) {
+          //console.log("currentPrefix", currentPrefix);
+          //console.log("urlprefix", urlPrefix);
+         if ((currentPrefix == urlPrefix) || (urlPrefix ==="*")) {
            if (!newArray[0]) {
              newArray[0] = {};
            }
            
            var splittedProcessors = paymentInfos.split("|");
+           //console.log("splittedProcessors", splittedProcessors);
            for (var j = 0; j < splittedProcessors.length; j++) {
               var splitEntry = splittedProcessors[j].split("=");
               switch(splitEntry[0]){
                 case "paypal":
+                  //console.log("found paypal", splitEntry);
                   newArray[0].paypal = splitEntry[1];
                   break;
                 case "dwolla":
@@ -211,9 +216,9 @@ if (messageBody.list.length === 0) {
   }
 }
 
-/*
-console.log(messageBody)
-*/
+
+//console.log(messageBody)
+
 
 // Send this message body back to the extension.
 postMessage({

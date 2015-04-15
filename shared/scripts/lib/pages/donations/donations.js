@@ -285,7 +285,7 @@ DonationsPage.prototype = {
       window.localStorage.url = tr.url;
       window.localStorage.host = tr.host;
 
-      window.alert('You will now be redirected to the payment site.');
+      //window.alert('You will now be redirected to the payment site.');
     });
 
     // Inject payment information for each entry.
