@@ -14,7 +14,7 @@
     <table class="pure-table pure-table-bordered pure-table-striped">
       <thead>
         <tr>
-          <th>Host</th>
+          <th>Payee</th>
           <th>Name</th>
           <th>Time spent since last payment</th>
           <th>Recommendation</th>
@@ -34,17 +34,15 @@
                 data-dwolla="{{ author.dwolla }}"
                 data-paypal="{{ author.paypal }}"
                 data-host="{{ entry.author.hostname }}"
-                data-url="{{ entry.tab.url }}"
               >
             {%else%}
               <tr class="entry"
                 data-dwolla="{{ author.dwolla }}"
                 data-paypal="{{ author.paypal }}"
                 data-host="{{ entry.author.hostname }}"
-                data-url="{{ entry.tab.url }}"
               > 
               {%endif%}           
-          <td><a target="_blank" title="{{entry.tab.url}}" href="{{entry.tab.url}}">{{entry.tab.url}}</a></td>
+          <td><a target="_blank" title="{{entry.author.hostname}}" href="http://{{entry.author.hostname}}">{{entry.author.hostname}}</a></td>
           <td>{{author.name|or "Anonymous"}}</td>
           <td>{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>

@@ -12,7 +12,8 @@ function DonationsPage() {
 
   // Set the default table data.
   this.data = {
-    entries: []
+    entries: [],
+    details: []
   };
 
   // Always attempt to render the inner table.
@@ -22,6 +23,20 @@ function DonationsPage() {
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
+  
+  var component = this;
+  
+  
+  this.entryDonation = this.fetch('pages/donations/entry-donation.html')
+  
+    .then(function(contents) {
+      var template = combyne(contents);
+      
+      [].concat(component.filters).forEach(function(filter) {
+        template.registerFilter(filter, component[filter]);  
+      });
+      return template;
+    });
 }
 
 DonationsPage.prototype = {
@@ -33,6 +48,8 @@ DonationsPage.prototype = {
     'change .amount': 'formatAndSave',
     'click .remove': 'remove',
     'click .hide': 'toggleHidden',
+    'click tbody tr': 'toggleEntryDonation',
+    'click .entry-donation': 'cancelEvent'
   },
 
   filters: [
@@ -52,6 +69,42 @@ DonationsPage.prototype = {
       return 1;
     }
     return 0;    
+  },
+  
+  toggleEntryDonation: function(ev) {
+    var component = this;
+    var tr = $(ev.currentTarget);
+    
+    if (tr.parents('th').length) {
+      return false;
+    } 
+    
+    if (!tr.hasClass('entry')) {
+      return false;
+    }
+
+    tr.toggleClass('active');
+    
+    this.entryDonation.then(function(template) {
+      var index = tr.data('host');
+      console.log("here")
+      //console.log(tr.data)
+      //console.log(component.data.entries)
+      //console.log(index)
+      //console.log(Number(tr.data('author')));
+     // console.log(component.data.details)
+     // console.log(index)
+      //console.log(component.data.details[0]);
+      if (tr.is('.active') && component.data.details[0]) {
+        console.log(component.data);
+        tr.after(template.render({entry: component.data}));
+        new Tablesort(component.$('tr.entry-donation table')[0], {
+          descending: true
+        });
+      } else {
+        tr.next('tr.entry-donation').remove();
+      }
+    });
   },
   
   toggleHidden: function(ev) {
@@ -80,27 +133,43 @@ DonationsPage.prototype = {
   },
 
   remove: function(ev) {
-  
+    console.log(ev);
     if (window.confirm('Are you sure you want to remove this entry from your contributions? This action cannot be undone.')) {
-  
-      var row = $(ev.currentTarget).closest('tr').data();
+      var el = $(ev.currentTarget).closest('tr');
+      var row = el.data();
       var host = row.host;
       var url = row.url;
-
-      storage.get('settings').then(function(settings) {
-        storage.get('log').then(function(resp) {
+      if (el.hasClass('entry')) {
+        storage.get('settings').then(function(settings) {
+          storage.get('log').then(function(resp) {
           // Filter out these items.
-          resp[host] = resp[host].filter(function(entry) {
-            if (entry.tab) {
-              return entry.tab.url !== url;
-            } else {
-              return entry;
-            }
+            resp[host] = resp[host].filter(function(entry) {
+              if (entry.tab) {
+                return entry.author.hostname !== host;
+              } else {
+                return entry;
+              }
+            });
+  
+            return storage.set('log', resp);
           });
-
-          return storage.set('log', resp);
         });
-      });
+      } else if (el.hasClass('subentry')) {
+        storage.get('settings').then(function(settings) {
+          storage.get('log').then(function(resp) {
+          // Filter out these items.
+            resp[host] = resp[host].filter(function(entry) {
+              if (entry.tab) {
+                return entry.tab.url !== url;
+              } else {
+                return entry;
+              }
+            });
+  
+            return storage.set('log', resp);
+          });
+        });        
+      }
     }
   },
 
@@ -117,7 +186,7 @@ DonationsPage.prototype = {
       storage.get('log').then(function(resp) {
         var filteredAndSorted = component
           // Convert the log Object to a filterable/sortable Array.
-          .toArray(resp, settings)
+          .toArray(resp, settings, true)
           // Sort and filter passing along the log component instance as
           // context.
           .filter(component.filter, component);
@@ -129,7 +198,7 @@ DonationsPage.prototype = {
         if (component.hidden) {
           var sortedNums = ents.map(function(o) {return Number(o.estimatedAmount);});
           for (var i = 0; i < entries.length; i++) {
-            if (sortedNums.indexOf(Number(entries[i].estimatedAmount)) > defaults.maxDonationsTableSize) {
+            if (sortedNums.indexOf(Number(entries[i].estimatedAmount)) >= defaults.maxDonationsTableSize) {
               entries[i].hidden = true;
             }
           }
@@ -151,12 +220,47 @@ DonationsPage.prototype = {
         console.log(ex.stack);
       });
     });
+    
+    storage.get('settings').then(function(settings) {
+      storage.get('log').then(function(resp) {
+        var filteredAndSorted = component
+          // Convert the log Object to a filterable/sortable Array.
+          .toArray(resp, settings, false)
+          // Sort and filter passing along the log component instance as
+          // context.
+          .filter(component.filter, component);
+
+        return filteredAndSorted;
+      }).then(function(entries) {
+        entries = entries.sort(component.sorter);
+        var ents = entries;
+ 
+        component.data.details = entries;
+        // This page hasn't been officially rendered yet.
+        /*
+        if (component.__rendered__) {
+          component.render();
+        }
+        */
+            
+        var tableSize = $('.pure-table tbody tr').length;
+        /*
+        if (tableSize <=1 ){
+          $('#text').html("Nobody to pay yet, get browsing!");
+        }
+        */
+      }).catch(function(ex) {
+        console.log(ex);
+        console.log(ex.stack);
+      });
+    });
   },
 
   serialize: function() {
     return {
       entries: this.data.entries,
-      hidden: this.data.hidden
+      hidden: this.data.hidden,
+      details: this.data.details
     };
   },
 
@@ -189,13 +293,16 @@ DonationsPage.prototype = {
    * @param resp
    * @return
    */
-  toArray: function(resp, settings) {
+  toArray: function(resp, settings, isDetailed) {
     var entries = [];
     var component = this;
 
     // Reset the data entries.
-    this.data.entries = [];
-
+    if (isDetailed === false) {
+      this.data.entries = [];
+    } else {
+      this.data.details = []
+    }
     // Resp is an object that is broken down by domain to list of entries
     // visited.  The most useful way to
     Object.keys(resp).forEach(function(key) {
@@ -210,11 +317,21 @@ DonationsPage.prototype = {
           memo.forEach(function(entry) {
             // make sure it's not the daysVisited
             entry.host = key;
+            //console.log(entry)
             if (entry.tab && !entry.paid) {
               // If there is already an entry with the same url, update it.
-              if (entry.tab.url === current.tab.url) {
-                entry.timeSpent += current.timeSpent;
-                isUpdated = true;
+              //console.log("isDetailed:", isDetailed);
+              //console.log(entry);
+              if (isDetailed === true) {
+                if (entry.author.hostname === current.author.hostname) {
+                  entry.timeSpent += current.timeSpent;
+                  isUpdated = true;
+                }
+              } else if (isDetailed === false){
+                if (entry.tab.url === current.tab.url) {
+                  entry.timeSpent += current.timeSpent;
+                  isUpdated = true;
+                }
               }
             }
           });
@@ -245,7 +362,7 @@ DonationsPage.prototype = {
 
         return memo;
       }, []);
-
+      
       entries.push.apply(entries, condensed);
     }, this);
 
@@ -322,7 +439,7 @@ DonationsPage.prototype = {
 
       });
 
-      return storage.set('settings', settings);
+      //return storage.set('settings', settings);
     }).catch(function(ex) {
       console.log(ex);
       console.log(ex.stack);
