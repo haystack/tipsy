@@ -53,6 +53,8 @@ table
     &:hover
       td
         background-color #FCE6D2 !important
+      td.clickable
+      		cursor pointer
 
 // Overrides for payment processors.
 
@@ -65,15 +67,14 @@ table
 form[name=_xclick]
   display inline-block
   margin-right 5px
-  
-  
+    
 .tooltip 
     display: inline;
-
 
 .tooltip:hover:after 
     color: #c00;
     text-decoration: none;
+
 tr.hidden
   display:none
 

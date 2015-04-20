@@ -48,7 +48,7 @@ DonationsPage.prototype = {
     'change .amount': 'formatAndSave',
     'click .remove': 'remove',
     'click .hide': 'toggleHidden',
-    'click tbody tr': 'toggleEntryDonation',
+    'click tbody tr td.clickable ': 'toggleEntryDonation',
     'click .entry-donation': 'cancelEvent'
   },
 
@@ -73,7 +73,8 @@ DonationsPage.prototype = {
   
   toggleEntryDonation: function(ev) {
     var component = this;
-    var tr = $(ev.currentTarget);
+    //console.log($(ev.currentTarget));
+    var tr = $(($(ev.currentTarget)).parents()[0]);
     
     if (tr.parents('th').length) {
       return false;
@@ -86,21 +87,47 @@ DonationsPage.prototype = {
     tr.toggleClass('active');
     
     this.entryDonation.then(function(template) {
-      var index = tr.data('host');
-      console.log("here")
-      //console.log(tr.data)
-      //console.log(component.data.entries)
-      //console.log(index)
-      //console.log(Number(tr.data('author')));
-     // console.log(component.data.details)
-     // console.log(index)
-      //console.log(component.data.details[0]);
+      var host = tr.data('host');
+
       if (tr.is('.active') && component.data.details[0]) {
-        console.log(component.data);
-        tr.after(template.render({entry: component.data}));
+        var current = [];
+        current.data = [];
+        current.data.details = [];
+        current.data.details = component.data.details.filter(function(entry) {
+          return entry.author.hostname == host;
+        });
+        tr.after(template.render({entry: current.data}));
         new Tablesort(component.$('tr.entry-donation table')[0], {
           descending: true
         });
+
+        component.$('tr.subentry').each(function() {
+          var component = this;
+          var $component = $(component);
+          // Extract the estimated value.
+          var amount = $component.find('.amount').val().slice(1);
+
+          // The payment container.
+          var payment = $component.find('.payment');
+
+          var dwollaToken = $component.attr('data-dwolla');
+          var paypalToken = $component.attr('data-paypal');
+
+          // Hide the no processors text.
+          if (dwollaToken || paypalToken) {
+            payment.empty();
+          }
+
+          // Only inject if the author has dwolla.
+          if (dwollaToken) {
+            $component.data().dwolla = injectDwolla(payment, amount, dwollaToken);
+          }
+
+          // Only inject if the author has paypal.
+          if (paypalToken) {
+            $component.data().paypal = injectPaypal(payment, amount, paypalToken);
+         }
+      });
       } else {
         tr.next('tr.entry-donation').remove();
       }
@@ -341,7 +368,6 @@ DonationsPage.prototype = {
           if (!isUpdated) {
             memo.push(current);
           }
-
           return memo;
         }, [])
         // Calculate the estimated amount for each entry.

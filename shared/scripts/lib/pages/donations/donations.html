@@ -6,7 +6,7 @@
     <p class="info">
       <i class="fa fa-info-circle"></i>
 
-      Here you can pay your calculated contributions or customize the amount. 
+      Here you can pay your calculated contributions or customize the amount. Click on a payee's row to get a detailed list.
     </p>
     <p>
     <span id="moreButton" class="hide show pure-button">{%if hidden%} Show more {%else%} Hide {%endif%}</span>
@@ -42,9 +42,9 @@
                 data-host="{{ entry.author.hostname }}"
               > 
               {%endif%}           
-          <td><a target="_blank" title="{{entry.author.hostname}}" href="http://{{entry.author.hostname}}">{{entry.author.hostname}}</a></td>
-          <td>{{author.name|or "Anonymous"}}</td>
-          <td>{{entry.timeSpent|timeSpent}}</td>
+          <td class="clickable"><a target="_blank" title="{{entry.author.hostname}}" href="http://{{entry.author.hostname}}">{{entry.author.hostname}}</a></td>
+          <td class="clickable">{{author.name|or "Anonymous"}}</td>
+          <td class="clickable">{{entry.timeSpent|timeSpent}}</td>
           <td><input type="text" class="amount" value="${{entry.estimatedAmount}}"></td>
           <td class="relative">
             <div class="payment">
