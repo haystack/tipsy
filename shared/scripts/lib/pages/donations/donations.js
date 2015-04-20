@@ -160,7 +160,6 @@ DonationsPage.prototype = {
   },
 
   remove: function(ev) {
-    console.log(ev);
     if (window.confirm('Are you sure you want to remove this entry from your contributions? This action cannot be undone.')) {
       var el = $(ev.currentTarget).closest('tr');
       var row = el.data();
@@ -271,11 +270,7 @@ DonationsPage.prototype = {
         */
             
         var tableSize = $('.pure-table tbody tr').length;
-        /*
-        if (tableSize <=1 ){
-          $('#text').html("Nobody to pay yet, get browsing!");
-        }
-        */
+
       }).catch(function(ex) {
         console.log(ex);
         console.log(ex.stack);
@@ -344,11 +339,8 @@ DonationsPage.prototype = {
           memo.forEach(function(entry) {
             // make sure it's not the daysVisited
             entry.host = key;
-            //console.log(entry)
             if (entry.tab && !entry.paid) {
               // If there is already an entry with the same url, update it.
-              //console.log("isDetailed:", isDetailed);
-              //console.log(entry);
               if (isDetailed === true) {
                 if (entry.author.hostname === current.author.hostname) {
                   entry.timeSpent += current.timeSpent;
@@ -406,13 +398,7 @@ DonationsPage.prototype = {
   },
 
   afterRender: function() {
-    /*
-   if (this.hidden === true) {
-      $(".hide").text("Show more")
-    } else if (this.hidden === false) {
-      $(".hide").text("Hide")      
-    }
-    */
+
     var tableSize = $('.pure-table tbody tr').length;
     if (tableSize <= defaults.maxDonationsTableSize) {
       $("#moreButton").hide() ;
