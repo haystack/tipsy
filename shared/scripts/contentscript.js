@@ -20,7 +20,12 @@ function postMessage(body) {
   }
 }
 
-
+// Place little dom node to let page know tipsy is installed. This is 
+// how it should be done according to google:
+// https://developer.chrome.com/webstore/inline_installation
+var isInstalledNode = document.createElement('div');
+isInstalledNode.id = 'tipsy-is-installed';
+document.body.appendChild(isInstalledNode);
 /**
  * Debounce a function to not thrash the message passing.
  *

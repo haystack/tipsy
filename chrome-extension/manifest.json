@@ -28,7 +28,8 @@
       ],
       "js": [
         "js/contentscript.js"
-      ]
+      ],
+      "run_at":"document_end"
     }
   ],
   "permissions": [
