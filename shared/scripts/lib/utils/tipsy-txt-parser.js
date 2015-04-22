@@ -12,10 +12,12 @@ export function parseTxt() {
       
   var shouldRenew = false;
   if (info != null) {
-    
-    
-    var tried = JSON.parse(info);
-    
+    var tried = info;
+    try {
+      tried = JSON.parse(info);
+    } catch (e) {
+      
+    }
     if (tried.tipsyTried) {
       var diff = Date.now() - Number(tried.tipsyTried);
       if (diff > 2 * 3600000 ) {
@@ -26,18 +28,16 @@ export function parseTxt() {
       }
       
     }
-
     version = info.split("\n")[1]
     
     if (version == "0.0.1") {
-       
       cacheDuration = info.split("\n")[2];
       cacheDuration = cacheDuration.split(" ");
       
       amount = cacheDuration[0];
       unit = cacheDuration[1];
-    
-      var diff = Date.now() - Number(info[0]);
+      
+      var diff = Date.now() - Number(info.split("\n")[0]);
       var ms;
       if (unit == 'h') {
         ms = 3600000;
@@ -77,7 +77,7 @@ export function parseTxt() {
       }
     }
   }
-  
+
   if (info == null || shouldRenew) {
     var req = new XMLHttpRequest();
     try {  
@@ -90,8 +90,11 @@ export function parseTxt() {
     } catch(e) {
       localStorage.setItem(document.domain, JSON.stringify({'tipsyTried': Date.now()}));
     }
-    if (req.status == 200) {  
+    if (req.status == 200) {
+      version = req.responseText.split("\n")[0]  
+
       if (version == "0.0.1") { 
+
         info = Date.now().toString() + "\n" + req.responseText;
         localStorage.setItem(document.domain, info);
       } else {
@@ -114,10 +117,17 @@ export function parseTxt() {
   
   
   if (info != null) {
-    var str = JSON.stringify(info);
+
+    var str = info;
+    if (typeof info != "string") {
+      str = JSON.stringify(info);
+    }
+
+
     version = str.split("\n")[1]
-    
+
     if (version == "0.0.1") {
+
       var splitted = info.split("\n");
 
       var tipsyInfo = splitted.slice(3,splitted.length);
@@ -156,7 +166,7 @@ export function parseTxt() {
           }
         }
       }
-      
+
     return newArray;
     } else {
 
