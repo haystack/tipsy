@@ -1,0 +1,43 @@
+<tr class="entry-donation">
+  <td colspan="4">
+ <table class="pure-table pure-table-bordered pure-table-striped">
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Time spent since last payment</th>
+          <th>Recommendation</th>
+          <th>Payment options</th>
+        </tr>
+      </thead>
+      <tbody>
+      <!--
+        <tr>
+          <td colspan="4" id="text">Nobody to pay yet.</td>
+        </tr>-->
+        {%each entry.details as visit%}
+        
+          {%each visit.author.list as author%}
+              <tr class="subentry"
+                data-dwolla="{{ author.dwolla }}"
+                data-paypal="{{ author.paypal }}"
+                data-host="{{ visit.author.hostname }}"
+                data-url="{{ visit.tab.url }}"
+              > 
+          <td><a target="_blank" title="{{visit.tab.url}}" href="{{visit.tab.url}}">{{visit.tab.url}}</a></td>
+          <td>{{visit.timeSpent|timeSpent}}</td>
+          <td><input type="text" class="amount" value="${{visit.estimatedAmount}}"></td>
+          <td class="relative">
+            <div class="payment">
+              No payment processors provided by this page.
+            </div>
+            <a href="#" class="tooltip" title="Click here to delete this entry">
+            <button class="removeInner pure-button">&#10007;</button>
+            </a>
+          </td>
+        </tr>
+          {%endeach%}
+        {%endeach%}
+      </tbody>
+    </table>
+  </td>
+</tr>

@@ -4,6 +4,7 @@ import Component from '../../component';
 import storage from '../../storage';
 import calculate from '../../utils/calculate';
 import { inject as injectDwolla } from '../../processors/dwolla';
+import { getDwollaButton as dwollaBtn } from '../../processors/dwolla';
 import { inject as injectPaypal } from '../../processors/paypal';
 import { defaults } from '../../defaults';
 
@@ -12,7 +13,8 @@ function DonationsPage() {
 
   // Set the default table data.
   this.data = {
-    entries: []
+    entries: [],
+    details: []
   };
 
   // Always attempt to render the inner table.
@@ -22,6 +24,20 @@ function DonationsPage() {
 
   // Whenever the data changes re-render the table.
   storage.onChange(this.renderTable.bind(this));
+  
+  var component = this;
+  
+  
+  this.entryDonation = this.fetch('pages/donations/entry-donation.html')
+  
+    .then(function(contents) {
+      var template = combyne(contents);
+      
+      [].concat(component.filters).forEach(function(filter) {
+        template.registerFilter(filter, component[filter]);  
+      });
+      return template;
+    });
 }
 
 DonationsPage.prototype = {
@@ -32,7 +48,15 @@ DonationsPage.prototype = {
     'blur .amount': 'formatAndSave',
     'change .amount': 'formatAndSave',
     'click .remove': 'remove',
+    'click .removeInner': 'remove',
     'click .hide': 'toggleHidden',
+    'click tbody tr td.clickable ': 'toggleEntryDonation',
+    'mouseenter .remove': 'addHighlight',
+    'mouseenter .removeInner': 'addHighlight',
+    'mouseleave .remove': 'removeHighlight',
+    'mouseleave .removeInner': 'removeHighlight',
+    'mouseleave tr.entry': 'removeHighlight',
+    'mouseenter tr.entry': 'addHighlight',
   },
 
   filters: [
@@ -52,6 +76,99 @@ DonationsPage.prototype = {
       return 1;
     }
     return 0;    
+  },
+  
+  // had to add these events because of CSS limitations. 
+  addHighlight: function(ev) {
+    var curr = $(ev.currentTarget);
+    if (curr.hasClass('entry')) {
+      curr.addClass("highlighted");
+      return;
+    } 
+    if (curr.hasClass("remove")) {
+      curr.closest('tr.entry').addClass("highlighted");
+    } else if (curr.hasClass("removeInner")) {
+      curr.closest('tr.subentry').addClass("highlighted");
+    }
+  },
+  
+  removeHighlight: function(ev) {
+    var curr = $(ev.currentTarget);
+    if (curr.hasClass('entry')) {
+      curr.removeClass("highlighted");
+      return;
+    } 
+    if (curr.hasClass("remove")) {
+      curr.closest('tr.entry').removeClass("highlighted");
+    } else if (curr.hasClass("removeInner")) {
+      curr.closest('tr.subentry').removeClass("highlighted");
+    }
+  },
+  
+  toggleEntryDonation: function(ev) {
+    var component = this;
+    var tr = $(($(ev.currentTarget)).parents()[0]);
+    
+    if (tr.parents('th').length) {
+      return false;
+    } 
+    
+    if (!tr.hasClass('entry')) {
+      return false;
+    }
+
+    tr.toggleClass('active');
+    
+    this.entryDonation.then(function(template) {
+      var host = tr.data('host');
+
+      if (tr.is('.active') && component.data.details[0]) {
+        var current = [];
+        current.data = [];
+        current.data.details = [];
+        current.data.details = component.data.details.filter(function(entry) {
+          return entry.author.hostname == host;
+        });
+        tr.after(template.render({entry: current.data}));
+        new Tablesort(component.$('tr.entry-donation table')[0], {
+          descending: true
+        });
+      
+        component.$('tr.subentry').each(function() {
+          var component = this;
+          var $component = $(component);
+          // Extract the estimated value.
+          var amount = $component.find('.amount').val().slice(1);
+
+          // The payment container.
+          var payment = $component.find('.payment');
+
+          var dwollaToken = $component.attr('data-dwolla');
+          var paypalToken = $component.attr('data-paypal');
+
+          // Hide the no processors text.
+          if (dwollaToken || paypalToken) {
+            payment.empty();
+          }
+
+          // Only inject if the author has dwolla.
+          if (dwollaToken) {
+            $component.data().dwolla = injectDwolla(payment, amount, dwollaToken);
+          }
+
+          // Only inject if the author has paypal.
+          if (paypalToken) {
+            $component.data().paypal = injectPaypal(payment, amount, paypalToken);
+         }
+         
+         if (dwollaToken && !payment.hasClass("d-btn")) {
+           payment.prepend(dwollaBtn(payment, amount, dwollaToken));
+         }
+      });
+      } else {
+        tr.next('tr.entry-donation').remove();
+      }
+    });
   },
   
   toggleHidden: function(ev) {
@@ -80,27 +197,42 @@ DonationsPage.prototype = {
   },
 
   remove: function(ev) {
-  
     if (window.confirm('Are you sure you want to remove this entry from your contributions? This action cannot be undone.')) {
-  
-      var row = $(ev.currentTarget).closest('tr').data();
+      var el = $(ev.currentTarget).closest('tr');
+      var row = el.data();
       var host = row.host;
       var url = row.url;
-
-      storage.get('settings').then(function(settings) {
-        storage.get('log').then(function(resp) {
+      if (el.hasClass('entry')) {
+        storage.get('settings').then(function(settings) {
+          storage.get('log').then(function(resp) {
           // Filter out these items.
-          resp[host] = resp[host].filter(function(entry) {
-            if (entry.tab) {
-              return entry.tab.url !== url;
-            } else {
-              return entry;
-            }
+            resp[host] = resp[host].filter(function(entry) {
+              if (entry.tab) {
+                return entry.author.hostname !== host;
+              } else {
+                return entry;
+              }
+            });
+  
+            return storage.set('log', resp);
           });
-
-          return storage.set('log', resp);
         });
-      });
+      } else if (el.hasClass('subentry')) {
+        storage.get('settings').then(function(settings) {
+          storage.get('log').then(function(resp) {
+          // Filter out these items.
+            resp[host] = resp[host].filter(function(entry) {
+              if (entry.tab) {
+                return entry.tab.url !== url;
+              } else {
+                return entry;
+              }
+            });
+  
+            return storage.set('log', resp);
+          });
+        });        
+      }
     }
   },
 
@@ -117,7 +249,7 @@ DonationsPage.prototype = {
       storage.get('log').then(function(resp) {
         var filteredAndSorted = component
           // Convert the log Object to a filterable/sortable Array.
-          .toArray(resp, settings)
+          .toArray(resp, settings, true)
           // Sort and filter passing along the log component instance as
           // context.
           .filter(component.filter, component);
@@ -129,7 +261,7 @@ DonationsPage.prototype = {
         if (component.hidden) {
           var sortedNums = ents.map(function(o) {return Number(o.estimatedAmount);});
           for (var i = 0; i < entries.length; i++) {
-            if (sortedNums.indexOf(Number(entries[i].estimatedAmount)) > defaults.maxDonationsTableSize) {
+            if (sortedNums.indexOf(Number(entries[i].estimatedAmount)) >= defaults.maxDonationsTableSize) {
               entries[i].hidden = true;
             }
           }
@@ -151,12 +283,43 @@ DonationsPage.prototype = {
         console.log(ex.stack);
       });
     });
+    
+    storage.get('settings').then(function(settings) {
+      storage.get('log').then(function(resp) {
+        var filteredAndSorted = component
+          // Convert the log Object to a filterable/sortable Array.
+          .toArray(resp, settings, false)
+          // Sort and filter passing along the log component instance as
+          // context.
+          .filter(component.filter, component);
+
+        return filteredAndSorted;
+      }).then(function(entries) {
+        entries = entries.sort(component.sorter);
+        var ents = entries;
+ 
+        component.data.details = entries;
+        // This page hasn't been officially rendered yet.
+        /*
+        if (component.__rendered__) {
+          component.render();
+        }
+        */
+            
+        var tableSize = $('.pure-table tbody tr').length;
+
+      }).catch(function(ex) {
+        console.log(ex);
+        console.log(ex.stack);
+      });
+    });
   },
 
   serialize: function() {
     return {
       entries: this.data.entries,
-      hidden: this.data.hidden
+      hidden: this.data.hidden,
+      details: this.data.details
     };
   },
 
@@ -173,8 +336,12 @@ DonationsPage.prototype = {
 
     // Update any payment methods on this element.
     var row = $(ev.currentTarget).closest('tr.entry').data();
+    if (!row) {
+      row = $(ev.currentTarget).closest('tr.subentry').data();
+    }
 
     if (row.dwolla) {
+
       row.dwolla.update(currency);
     }
 
@@ -189,13 +356,16 @@ DonationsPage.prototype = {
    * @param resp
    * @return
    */
-  toArray: function(resp, settings) {
+  toArray: function(resp, settings, isDetailed) {
     var entries = [];
     var component = this;
 
     // Reset the data entries.
-    this.data.entries = [];
-
+    if (isDetailed === false) {
+      this.data.entries = [];
+    } else {
+      this.data.details = [];
+    }
     // Resp is an object that is broken down by domain to list of entries
     // visited.  The most useful way to
     Object.keys(resp).forEach(function(key) {
@@ -212,9 +382,16 @@ DonationsPage.prototype = {
             entry.host = key;
             if (entry.tab && !entry.paid) {
               // If there is already an entry with the same url, update it.
-              if (entry.tab.url === current.tab.url) {
-                entry.timeSpent += current.timeSpent;
-                isUpdated = true;
+              if (isDetailed === true) {
+                if (entry.author.hostname === current.author.hostname) {
+                  entry.timeSpent += current.timeSpent;
+                  isUpdated = true;
+                }
+              } else if (isDetailed === false){
+                if (entry.tab.url === current.tab.url) {
+                  entry.timeSpent += current.timeSpent;
+                  isUpdated = true;
+                }
               }
             }
           });
@@ -224,7 +401,6 @@ DonationsPage.prototype = {
           if (!isUpdated) {
             memo.push(current);
           }
-
           return memo;
         }, [])
         // Calculate the estimated amount for each entry.
@@ -245,7 +421,7 @@ DonationsPage.prototype = {
 
         return memo;
       }, []);
-
+      
       entries.push.apply(entries, condensed);
     }, this);
 
@@ -263,13 +439,7 @@ DonationsPage.prototype = {
   },
 
   afterRender: function() {
-    /*
-   if (this.hidden === true) {
-      $(".hide").text("Show more")
-    } else if (this.hidden === false) {
-      $(".hide").text("Hide")      
-    }
-    */
+
     var tableSize = $('.pure-table tbody tr').length;
     if (tableSize <= defaults.maxDonationsTableSize) {
       $("#moreButton").hide() ;
@@ -313,6 +483,7 @@ DonationsPage.prototype = {
         // Only inject if the author has dwolla.
         if (dwollaToken) {
           $component.data().dwolla = injectDwolla(payment, amount, dwollaToken);
+         
         }
 
         // Only inject if the author has paypal.
@@ -322,7 +493,7 @@ DonationsPage.prototype = {
 
       });
 
-      return storage.set('settings', settings);
+      //return storage.set('settings', settings);
     }).catch(function(ex) {
       console.log(ex);
       console.log(ex.stack);
