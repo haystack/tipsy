@@ -7,8 +7,10 @@ export function parseTxt() {
   var amount;
   var unit;
   var version;
-  
+  var diff;
   var newArray = [];
+  var ms;
+  var currentPrefix;
       
   var shouldRenew = false;
   if (info != null) {
@@ -19,16 +21,16 @@ export function parseTxt() {
       
     }
     if (tried.tipsyTried) {
-      var diff = Date.now() - Number(tried.tipsyTried);
+      diff = Date.now() - Number(tried.tipsyTried);
       if (diff > 2 * 3600000 ) {
         shouldRenew = true;
       } else {
         newArray[0] = {};
-        return newArray
+        return newArray;
       }
       
     }
-    version = info.split("\n")[1]
+    version = info.split("\n")[1];
     
     if (version == "0.0.1") {
       cacheDuration = info.split("\n")[2];
@@ -37,8 +39,8 @@ export function parseTxt() {
       amount = cacheDuration[0];
       unit = cacheDuration[1];
       
-      var diff = Date.now() - Number(info.split("\n")[0]);
-      var ms;
+      diff = Date.now() - Number(info.split("\n")[0]);
+      
       if (unit == 'h') {
         ms = 3600000;
       } else if (unit == 'd') {
@@ -61,8 +63,8 @@ export function parseTxt() {
         unit = info['cache-duration'].unit;
 
         
-        var diff = Date.now() - Number(prevTime);
-        var ms;
+        diff = Date.now() - Number(prevTime);
+        
         if (unit == 'hour' || unit == "hours") {
           ms = 3600000;
         } else if (unit == 'days' || unit == "days") {
@@ -91,7 +93,7 @@ export function parseTxt() {
       localStorage.setItem(document.domain, JSON.stringify({'tipsyTried': Date.now()}));
     }
     if (req.status == 200) {
-      version = req.responseText.split("\n")[0]  
+      version = req.responseText.split("\n")[0];
 
       if (version == "0.0.1") { 
 
@@ -102,10 +104,9 @@ export function parseTxt() {
         
         try {
           info = jsyaml.load(info);
-        } catch (e) {
-        }
-        info.prevTime = Date.now().toString()
-        localStorage.setItem(document.domain, JSON.stringify(info))
+        } catch (e) {}
+        info.prevTime = Date.now().toString();
+        localStorage.setItem(document.domain, JSON.stringify(info));
       }
     } else {
       localStorage.setItem(document.domain, JSON.stringify({'tipsyTried': Date.now()}));
@@ -123,8 +124,7 @@ export function parseTxt() {
       str = JSON.stringify(info);
     }
 
-
-    version = str.split("\n")[1]
+    version = str.split("\n")[1];
 
     if (version == "0.0.1") {
 
@@ -138,7 +138,7 @@ export function parseTxt() {
           var paymentInfos = entry[1];
           var author = entry[2];
 
-          var currentPrefix = document.documentURI.substring(document.documentURI.indexOf(document.domain) + document.domain.length + 1, document.documentURI.length);
+          currentPrefix = document.documentURI.substring(document.documentURI.indexOf(document.domain) + document.domain.length + 1, document.documentURI.length);
         
           if (currentPrefix === " " || currentPrefix === "") {
             currentPrefix = "*";
@@ -149,8 +149,8 @@ export function parseTxt() {
             }
            
             var splittedProcessors = paymentInfos.split("|");
-            for (var j = 0; j < splittedProcessors.length; j++) {
-              var splitEntry = splittedProcessors[j].split("=");
+            for (var k = 0; k < splittedProcessors.length; k++) {
+              var splitEntry = splittedProcessors[k].split("=");
               switch(splitEntry[0]){
                 case "paypal":
                   newArray[0].paypal = splitEntry[1];
@@ -171,28 +171,28 @@ export function parseTxt() {
     } else {
 
       if (typeof info == "string") {
-        info = JSON.parse(info)
+        info = JSON.parse(info);
       }
       
-      var currentPrefix = document.documentURI.substring(document.documentURI.indexOf(document.domain) + document.domain.length + 1, document.documentURI.length);
+      currentPrefix = document.documentURI.substring(document.documentURI.indexOf(document.domain) + document.domain.length + 1, document.documentURI.length);
       
 
       
-      var paymentMethods = info['payment-methods']
-      for (var urlPrefix in paymentMethods ) {
+      var paymentMethods = info['payment-methods'];
+      for (var urlPref in paymentMethods ) {
         if (currentPrefix === " " || currentPrefix === "") {
           currentPrefix = "_";
         }
       
-        if ((currentPrefix == urlPrefix) || (urlPrefix === "_")) {
+        if ((currentPrefix == urlPref) || (urlPref === "_")) {
           if (!newArray[0]) {
             newArray[0] = {};
           }
-          if (paymentMethods[urlPrefix]) {
-            newArray[0].dwolla = paymentMethods[urlPrefix].dwolla;
+          if (paymentMethods[urlPref]) {
+            newArray[0].dwolla = paymentMethods[urlPref].dwolla;
           }
-          if (paymentMethods[urlPrefix]) {
-            newArray[0].paypal = paymentMethods[urlPrefix].paypal
+          if (paymentMethods[urlPref]) {
+            newArray[0].paypal = paymentMethods[urlPref].paypal
           }
           if (info.author) {
             newArray[0].name = info.author;
