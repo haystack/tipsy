@@ -4,6 +4,7 @@ import Component from '../../component';
 import storage from '../../storage';
 import calculate from '../../utils/calculate';
 import { inject as injectDwolla } from '../../processors/dwolla';
+import { getDwollaButton as dwollaBtn } from '../../processors/dwolla';
 import { inject as injectPaypal } from '../../processors/paypal';
 import { defaults } from '../../defaults';
 
@@ -48,8 +49,8 @@ DonationsPage.prototype = {
     'change .amount': 'formatAndSave',
     'click .remove': 'remove',
     'click .hide': 'toggleHidden',
-    'click tbody tr td.clickable ': 'toggleEntryDonation',
-    'click .entry-donation': 'cancelEvent'
+    'click tbody tr td.clickable ': 'toggleEntryDonation'
+   // 'click .entry-donation': 'cancelEvent'
   },
 
   filters: [
@@ -100,7 +101,7 @@ DonationsPage.prototype = {
         new Tablesort(component.$('tr.entry-donation table')[0], {
           descending: true
         });
-
+      
         component.$('tr.subentry').each(function() {
           var component = this;
           var $component = $(component);
@@ -126,6 +127,10 @@ DonationsPage.prototype = {
           // Only inject if the author has paypal.
           if (paypalToken) {
             $component.data().paypal = injectPaypal(payment, amount, paypalToken);
+         }
+         
+         if (dwollaToken && !payment.hasClass("d-btn")) {
+           payment.prepend(dwollaBtn(payment, amount, dwollaToken))
          }
       });
       } else {
@@ -299,8 +304,12 @@ DonationsPage.prototype = {
 
     // Update any payment methods on this element.
     var row = $(ev.currentTarget).closest('tr.entry').data();
+    if (!row) {
+      row = $(ev.currentTarget).closest('tr.subentry').data();
+    }
 
     if (row.dwolla) {
+
       row.dwolla.update(currency);
     }
 
@@ -442,6 +451,7 @@ DonationsPage.prototype = {
         // Only inject if the author has dwolla.
         if (dwollaToken) {
           $component.data().dwolla = injectDwolla(payment, amount, dwollaToken);
+         
         }
 
         // Only inject if the author has paypal.
