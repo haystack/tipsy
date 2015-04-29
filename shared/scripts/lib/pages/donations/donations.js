@@ -48,6 +48,7 @@ DonationsPage.prototype = {
     'blur .amount': 'formatAndSave',
     'change .amount': 'formatAndSave',
     'click .remove': 'remove',
+    'click .removeInner': 'remove',
     'click .hide': 'toggleHidden',
     'click tbody tr td.clickable ': 'toggleEntryDonation',
     'mouseenter .remove': 'addHighlight',
