@@ -50,16 +50,24 @@ table
       top: 30px;
       right: -60px;
       margin-top: 0px;
+      
+    .removeInner
+      position: absolute;
+      top: 30px;
+      right: -60px;
+      margin-top: 0px;
 
   tr
     &:hover
       td
-        background-color #FCE6D2 !important
+        //background-color #FCE6D2 !important
       td.clickable
       		cursor pointer
 
 // Overrides for payment processors.
-
+.highlighted
+  td
+    background-color #FCE6D2 !important
 // Dwolla adjustments.
 .d-btn
   display inline-block

@@ -49,8 +49,13 @@ DonationsPage.prototype = {
     'change .amount': 'formatAndSave',
     'click .remove': 'remove',
     'click .hide': 'toggleHidden',
-    'click tbody tr td.clickable ': 'toggleEntryDonation'
-   // 'click .entry-donation': 'cancelEvent'
+    'click tbody tr td.clickable ': 'toggleEntryDonation',
+    'mouseenter .remove': 'addHighlight',
+    'mouseenter .removeInner': 'addHighlight',
+    'mouseleave .remove': 'removeHighlight',
+    'mouseleave .removeInner': 'removeHighlight',
+    'mouseleave tr.entry': 'removeHighlight',
+    'mouseenter tr.entry': 'addHighlight',
   },
 
   filters: [
@@ -72,9 +77,35 @@ DonationsPage.prototype = {
     return 0;    
   },
   
+  // had to add these events because of CSS limitations. 
+  addHighlight: function(ev) {
+    var curr = $(ev.currentTarget);
+    if (curr.hasClass('entry')) {
+      curr.addClass("highlighted")
+      return
+    } 
+    if (curr.hasClass("remove")) {
+      curr.closest('tr.entry').addClass("highlighted");
+    } else if (curr.hasClass("removeInner")) {
+      curr.closest('tr.subentry').addClass("highlighted");
+    }
+  },
+  
+  removeHighlight: function(ev) {
+    var curr = $(ev.currentTarget);
+    if (curr.hasClass('entry')) {
+      curr.removeClass("highlighted");
+      return;
+    } 
+    if (curr.hasClass("remove")) {
+      curr.closest('tr.entry').removeClass("highlighted");
+    } else if (curr.hasClass("removeInner")) {
+      curr.closest('tr.subentry').removeClass("highlighted");
+    }
+  },
+  
   toggleEntryDonation: function(ev) {
     var component = this;
-    //console.log($(ev.currentTarget));
     var tr = $(($(ev.currentTarget)).parents()[0]);
     
     if (tr.parents('th').length) {
@@ -332,7 +363,7 @@ DonationsPage.prototype = {
     if (isDetailed === false) {
       this.data.entries = [];
     } else {
-      this.data.details = []
+      this.data.details = [];
     }
     // Resp is an object that is broken down by domain to list of entries
     // visited.  The most useful way to
