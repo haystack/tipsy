@@ -1,2 +1,3 @@
 shared/vendor/dwolla.js
 shared/vendor/deparam.js
+shared/scripts/lib/utils/js-yaml.js

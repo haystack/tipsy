@@ -192,7 +192,7 @@ export function parseTxt() {
             newArray[0].dwolla = paymentMethods[urlPref].dwolla;
           }
           if (paymentMethods[urlPref]) {
-            newArray[0].paypal = paymentMethods[urlPref].paypal
+            newArray[0].paypal = paymentMethods[urlPref].paypal;
           }
           if (info.author) {
             newArray[0].name = info.author;
