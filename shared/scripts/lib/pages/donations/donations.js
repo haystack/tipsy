@@ -82,8 +82,8 @@ DonationsPage.prototype = {
   addHighlight: function(ev) {
     var curr = $(ev.currentTarget);
     if (curr.hasClass('entry')) {
-      curr.addClass("highlighted")
-      return
+      curr.addClass("highlighted");
+      return;
     } 
     if (curr.hasClass("remove")) {
       curr.closest('tr.entry').addClass("highlighted");
@@ -162,7 +162,7 @@ DonationsPage.prototype = {
          }
          
          if (dwollaToken && !payment.hasClass("d-btn")) {
-           payment.prepend(dwollaBtn(payment, amount, dwollaToken))
+           payment.prepend(dwollaBtn(payment, amount, dwollaToken));
          }
       });
       } else {
