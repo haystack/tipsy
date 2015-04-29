@@ -12,7 +12,8 @@ describe('watcher', function() {
 
     var driver = this.extensionDriver;
 
-    return driver.get('https://google.com/').then(function() {
+    return driver.get('https://google.com/').then(function() {return driver.refresh();
+    }).then(function() {
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
           driver.navigate('html/index.html#log')
@@ -29,7 +30,7 @@ describe('watcher', function() {
             }).then(function(length) {
               assert.equal(length, 1);
             }).then(resolve, reject);
-        }, 1000);
+        }, 3000);
       });
     })
   });
@@ -67,12 +68,13 @@ describe('watcher', function() {
   });
 
   it('will report correct time when page is visited for five seconds', function() {
-    this.timeout(20000);
+    this.timeout(40000);
 
     var driver = this.extensionDriver;
     var delay = Date.now() + 5000;
 
-    return driver.get('http://reddit.com/').then(function() {
+    return driver.get('http://reddit.com/').then(function() {return driver.refresh();
+    }).then(function() {
       return new Promise(function(resolve) {
         setTimeout(resolve, 5000);
       });
