@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th>Domain</th>
-      <th>Author</th>
+      <th>Has Author Information</th>
       <th>Visit count</th>
       <th>Days with visit</th>
       <th>Time spent</th>
@@ -23,12 +23,12 @@
       </td>
       <td>
         {%if entry.authorCount%}
-          Show
+          {{entry.entries|getAuthor}}
         {%else%}
           No author information
         {%endif%}
       </td>
-      <td>{{entry.entries.length|fixOffByOne}}</td>
+      <td data-sort="{{entry.entries.length|fixOffByOne}}">{{entry.entries.length|fixOffByOne}}</td>
       <td data-sort="{{entry.entries|getDays 'true'}}" class="getDays">{{entry.entries|getDays}}</td>
       <td data-sort="{{entry.entries|timeSpent 'true'}}" class="timeSpent">{{entry.entries|timeSpent}}</td>
       <td data-sort="{{entry.entries|findLast|formatAccessTime 'true'}}">{{entry.entries|findLast|formatAccessTime}}</td>

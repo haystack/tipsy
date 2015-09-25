@@ -18,7 +18,8 @@ LogTableComponent.prototype = {
     'findLast',
     'formatAccessTime',
     'getDays',
-    'fixOffByOne'
+    'fixOffByOne',
+    'getAuthor'
   ],
 
   /**
@@ -101,6 +102,18 @@ LogTableComponent.prototype = {
   getDays: function(val) {
     return val[0].daysVisited;
   },
+  
+  
+  /**
+  * getAuthor
+  *
+  * @param val
+  * @ return the author name
+  */
+  getAuthor: function(val) {
+    console.log(val)
+    return val[1].author.list[0].name;
+  },
 
   /**
    * formatAccessTime
@@ -136,7 +149,7 @@ LogTableComponent.prototype = {
 
     // Enable table sorting.
     this.tablesort = new Tablesort(this.$('table')[0], {
-      descending: true
+      descending: false
     });
   }
 };

@@ -8,12 +8,12 @@ export var defaults = {
   'dayIntervalEnabled': false,
   'days': 1,
   'donationGoalBrowsingRate': '$0.01',
-  'donationGoalCalendarRate': '$0.01',
-  'donationIntervalCalendarRate': 1440, // donationInterval in minutes
+  'donationGoalCalendarRate': '$10.0',
+  'donationIntervalCalendarRate': 43200, // donationInterval in minutes
   'donationIntervalBrowsingRate': 1,
   'globalThresholdReminderEnabled': false,
   'localThresholdReminderEnabled': true,
-  'rateType': 'browsingRate', // 'calendarRate or browsingRate'
+  'rateType': 'calendarRate', // 'calendarRate or browsingRate'
   'reminderThreshGlobal': '$10.00',
   'reminderThreshLocal': '$10.00',
   'timeSpanNumber': '1',

@@ -58,14 +58,19 @@ export function get(name) {
 /**
  * Allows to create notification manually, used for thresholdreminders
  */
-export function notify(name, type, amount) {
+export function notify(name, type, amount, url) {
 
   if (environment === 'chrome') {
+    if (!url) {
+      url = "."
+    } else {
+      url = " to "+url+ "."
+    }
     chrome.notifications.create(name, {
       type: 'basic',
       iconUrl: '../img/logo64.png',
       title: 'Tipsy',
-      message: 'Time to donate! You have reached your '+ type + ' threshold with an amount of $' + amount + '.'
+      message: 'Time to donate! You have reached your '+ type + ' threshold with an amount of $' + amount+ url
     }, function unhandledCallback() {});
     addClickable();
   } else if (environment === 'firefox') {
@@ -92,7 +97,7 @@ function pollForNotifications() {
     var settings = resp[0];
     var log = resp[1];
     var totalOwed = 0;
-
+    var u = ""
     // Iterate all visited pages.
     Object.keys(log).forEach(function(domain) {
       // Filter down to those with valid payment information.
@@ -116,14 +121,14 @@ function pollForNotifications() {
           settings.moneyIsOwed = true;
         }
         if (settings.reminderThreshLocal && (amountNum >= parseFloat(settings.reminderThreshLocal.slice(1))) && !settings.localReminded)  {
-          notify('tipsy-thersh-local', 'local', amountNum.toFixed(2));
+          notify('tipsy-thersh-local', 'local', amountNum.toFixed(2), calculated.author.hostname);
           settings.localReminded = true;
         }
       });
     });
 
     if (settings.reminderThreshGlobal && (totalOwed >= parseFloat(settings.reminderThreshGlobal.slice(1))) && !settings.globalReminded) {
-      notify('tipsy-thresh-global', 'global', totalOwed.toFixed(2));
+      notify('tipsy-thresh-global', 'global', totalOwed.toFixed(2), null);
       settings.globalReminded = true;
     }
   }).catch(function(ex) {
