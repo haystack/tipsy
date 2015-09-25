@@ -62,9 +62,9 @@ export function notify(name, type, amount, url) {
 
   if (environment === 'chrome') {
     if (!url) {
-      url = "."
+      url = ".";
     } else {
-      url = " to "+url+ "."
+      url = " to "+url+ ".";
     }
     chrome.notifications.create(name, {
       type: 'basic',
@@ -97,7 +97,7 @@ function pollForNotifications() {
     var settings = resp[0];
     var log = resp[1];
     var totalOwed = 0;
-    var u = ""
+    var u = "";
     // Iterate all visited pages.
     Object.keys(log).forEach(function(domain) {
       // Filter down to those with valid payment information.

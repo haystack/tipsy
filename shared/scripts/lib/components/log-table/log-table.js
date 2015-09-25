@@ -111,7 +111,7 @@ LogTableComponent.prototype = {
   * @ return the author name
   */
   getAuthor: function(val) {
-    console.log(val)
+    console.log(val);
     return val[1].author.list[0].name;
   },
 
