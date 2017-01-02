@@ -13,14 +13,13 @@ before(function() {
   this.timeout(20000);
   this.environment = 'chrome';
 
-  chrome.setDefaultService(
-    new chrome.ServiceBuilder(chromeDriver.path).build()
-  );
+  var service = new chrome.ServiceBuilder(chromeDriver.path).build();
+  chrome.setDefaultService(service);
 
   var options = new chrome.Options();
   options.addExtensions(path.resolve('chrome-extension/dist/tipsy.crx'));
 
-  var driver = chrome.createDriver(options);
+  var driver = new chrome.Driver(options, service);
 
   driver.manage().timeouts().implicitlyWait(10000);
   this.extensionDriver = new ExtensionDriver(driver, id);
