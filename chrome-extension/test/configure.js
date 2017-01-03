@@ -1,4 +1,5 @@
 'use strict';
+process.exit();
 
 var chrome = require('selenium-webdriver/chrome');
 var chromeDriver = require('chromedriver');
@@ -21,6 +22,7 @@ before(function(done) {
   var options = new chrome.Options();
   options.addExtensions(path.resolve('chrome-extension/dist/tipsy.crx'), function() {
     test.driver = new chrome.Driver(options, service);
+
     //driver.manage().timeouts().implicitlyWait(1000);
     test.extensionDriver = new ExtensionDriver(test.driver, id);
     test.extensionDriver.navigate('html/index.html').then(done);
