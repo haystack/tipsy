@@ -31,9 +31,7 @@ before(function(done) {
         .build();
 
       test.extensionDriver = new ExtensionDriver(test.driver, id);
-      test.extensionDriver.navigate('html/index.html').then(function() {
-        done();
-      });
+      test.extensionDriver.navigate('html/index.html').then(done);
     });
   });
 });

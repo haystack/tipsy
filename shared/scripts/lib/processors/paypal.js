@@ -25,7 +25,7 @@ export function inject($el, amount, email) {
     amount: amount,
     cmd: '_xclick',
     currency_code: 'USD',
-    item_name: 'Tispy',
+    item_name: 'Tipsy',
     return: redirect,
     cancel_return: redirect + '/cancel'
   };

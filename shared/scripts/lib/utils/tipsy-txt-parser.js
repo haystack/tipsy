@@ -105,8 +105,9 @@ export function parseTxt() {
         try {
           info = jsyaml.load(info);
         } catch (e) {}
-        info.prevTime = Date.now().toString();
-        localStorage.setItem(document.domain, JSON.stringify(info));
+        var serialInfo = JSON.parse(JSON.stringify(info)); // copy object or non-object without jquery
+        serialInfo.prevTime = Date.now().toString();
+        localStorage.setItem(document.domain, JSON.stringify(serialInfo));
       }
     } else {
       localStorage.setItem(document.domain, JSON.stringify({'tipsyTried': Date.now()}));
