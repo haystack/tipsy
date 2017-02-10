@@ -13,6 +13,8 @@ module.exports = ->
   # https://code.google.com/p/selenium/wiki/ChromeDriver#Requirements
   if process.platform is 'linux'
     chrome = '/usr/bin/google-chrome'
+    if not fs.existsSync chrome
+      chrome = '/usr/bin/chromium'
   else if process.platform is 'darwin'
     chrome = '"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"'
   else if process.platform is 'win32'
@@ -26,8 +28,10 @@ module.exports = ->
 
   # Only run the s3 task if Travis is building master and not in a pull
   # request.
-  if env.TRAVIS_PULL_REQUEST is 'false' and env.TRAVIS_BRANCH is 'master'
-    s3 = 'grunt s3-sync'
+  # XXX: Disabled because we no longer publish to S3. We've left this here in
+  # case we decide to publish to S3 again in the future.
+  #if env.TRAVIS_PULL_REQUEST is 'false' and env.TRAVIS_BRANCH is 'master'
+  #  s3 = 'grunt s3-sync'
 
   @config 'shell',
     'chrome-extension':
