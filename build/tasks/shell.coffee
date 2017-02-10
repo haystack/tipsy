@@ -13,6 +13,8 @@ module.exports = ->
   # https://code.google.com/p/selenium/wiki/ChromeDriver#Requirements
   if process.platform is 'linux'
     chrome = '/usr/bin/google-chrome'
+    if not fs.existsSync chrome
+      chrome = '/usr/bin/chromium'
   else if process.platform is 'darwin'
     chrome = '"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"'
   else if process.platform is 'win32'
