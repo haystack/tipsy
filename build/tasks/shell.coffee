@@ -8,7 +8,6 @@ module.exports = ->
 
   chrome = 'echo Skipping Chrome'
   python2 = 'echo Skipping Python2'
-  s3 = 'echo Skipping S3'
 
   # https://code.google.com/p/selenium/wiki/ChromeDriver#Requirements
   if process.platform is 'linux'
@@ -26,13 +25,6 @@ module.exports = ->
   if process.platform is 'linux'
     python2 = 'cd build/tools ; grep -Rl python . | xargs sed -ri "s/([^!]|^)python(\\s|$)/\\1python2\\2/g"'
 
-  # Only run the s3 task if Travis is building master and not in a pull
-  # request.
-  # XXX: Disabled because we no longer publish to S3. We've left this here in
-  # case we decide to publish to S3 again in the future.
-  #if env.TRAVIS_PULL_REQUEST is 'false' and env.TRAVIS_BRANCH is 'master'
-  #  s3 = 'grunt s3-sync'
-
   @config 'shell',
     'chrome-extension':
       command: [
@@ -44,6 +36,3 @@ module.exports = ->
 
     'python2':
       command: python2
-
-    's3':
-      command: s3

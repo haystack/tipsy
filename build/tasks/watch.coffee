@@ -13,15 +13,3 @@ module.exports = ->
         'chrome-extension'
         'es6'
       ]
-
-    'firefox-extension':
-      files: [
-        'firefox-extension/**/*'
-        '!firefox-extension/dist/**/*'
-        'shared/**/*'
-      ]
-
-      tasks: [
-        'firefox-extension'
-        'es6'
-      ]

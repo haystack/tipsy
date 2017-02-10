@@ -22,77 +22,29 @@ storage.setSync = function(sync) {
  * @return {Object} storage engine.
  */
 storage.engine = function() {
-  var engine = null;
+  var engine = chrome.storage[this.sync ? 'sync' : 'local'];
 
-  if (environment === 'chrome') {
-    engine = chrome.storage[this.sync ? 'sync' : 'local'];
+  return {
+    // Override the default implementation of `chrome.storage.get`.
+    get: function(key, callback) {
+      engine.get(key, function(result) {
+        if (!result[key]) {
+          callback({});
+        }
+        else {
+          callback(result[key]);
+        }
+      });
+    },
 
-    return {
-      // Override the default implementation of `chrome.storage.get`.
-      get: function(key, callback) {
-        engine.get(key, function(result) {
-          if (!result[key]) {
-            callback({});
-          }
-          else {
-            callback(result[key]);
-          }
-        });
-      },
+    // Use the default implementation of `chrome.storage.set`.
+    set: engine.set.bind(engine),
 
-      // Use the default implementation of `chrome.storage.set`.
-      set: engine.set.bind(engine),
-
-      // Whenever the engine has data updated trigger the callback.
-      onChange: function(callback) {
-        chrome.storage.onChanged.addListener(callback);
-      }
-    };
-  }
-  else if (environment === 'firefox') {
-    try {
-      engine = require('sdk/simple-storage');
+    // Whenever the engine has data updated trigger the callback.
+    onChange: function(callback) {
+      chrome.storage.onChanged.addListener(callback);
     }
-    catch (unhandledException) {}
-
-    return {
-      get: function(key, callback) {
-        if (typeof self === 'undefined' || !self.port) {
-          return callback(engine.storage[key] || {});
-        }
-
-        self.port.emit('storage.get', key);
-        self.port.once('storage.get', function(result) {
-          callback(result || {});
-        });
-      },
-
-      set: function(object, callback) {
-        // The only key is the actual key name.
-        var key = Object.keys(object)[0];
-
-        if (typeof self === 'undefined' || !self.port) {
-          engine.storage[key] = object[key];
-          return callback();
-        }
-
-        self.port.emit('storage.set', { key: key, value: object[key] });
-        self.port.once('storage.set', callback);
-
-        if (this.onChangeCallback) {
-          this.onChangeCallback();
-        }
-      },
-
-      // At the moment we can know if data is updated when set is called.
-      onChange: function(callback) {
-        this.onChangeCallback = callback;
-
-        // Trigger immediately.
-        callback();
-      }
-    };
-  }
+  };
 };
 
 /**
