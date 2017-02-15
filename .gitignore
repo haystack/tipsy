@@ -5,3 +5,4 @@
 /firefox-extension/dist
 /cjs
 /test/coverage
+*.pem
