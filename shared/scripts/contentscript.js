@@ -86,50 +86,56 @@ function findDomain() {
   return domain;
 }
 
-// Find all links on the page.
-var links = selectAll('link');
-
 // Build up an object with page and author details for the extension.
 var messageBody = {
   hostname: findDomain(),
   list: []
 };
 
-// Iterate over all links and filter down to the last link that contains the
-// correct metadata.
 
-if (!domains[messageBody.hostname]) {
+// Enforce HTTPS requirement for parsing payment info from page. Page
+// can still be HTTP, but then /tipsy.txt must be served over HTTPS.
+if (document.location.protocol == 'https:') {
 
-  messageBody.list = links.filter(function(link) {
-    return link.rel === 'author';
-  }).map(function(link) {
-    var author = {};
+  // Find all links on the page.
+  var links = selectAll('link');
 
-    // Personal identification.
-    author.name = link.getAttribute('name');
-    author.href = link.getAttribute('href');
-    author.gravatar = link.getAttribute('gravatar');
+  // Iterate over all links and filter down to the last link that contains the
+  // correct metadata.
 
-   // Payment information.
-    author.dwolla = link.getAttribute('dwolla') || link.getAttribute('data-dwolla');
-    author.bitcoin = link.getAttribute('bitcoin') || link.getAttribute('data-bitcoin');
-    author.paypal = link.getAttribute('paypal') || link.getAttribute('data-paypal'); 
-    author.stripe = link.getAttribute('stripe') || link.getAttribute('data-stripe');
-    return author;
-  });
-  
-} else {
-  var newArray = [];
-  newArray[0] = domains[messageBody.hostname];
-  var author = newArray;
-  messageBody.list = author;
-}
+  if (!domains[messageBody.hostname]) {
 
-// if nothing, check for tipsy.txt
-if (messageBody.list.length === 0) {
+    messageBody.list = links.filter(function(link) {
+      return link.rel === 'author';
+    }).map(function(link) {
+      var author = {};
 
+      // Personal identification.
+      author.name = link.getAttribute('name');
+      author.href = link.getAttribute('href');
+      author.gravatar = link.getAttribute('gravatar');
 
-  
+     // Payment information.
+      author.dwolla = link.getAttribute('dwolla') || link.getAttribute('data-dwolla');
+      author.bitcoin = link.getAttribute('bitcoin') || link.getAttribute('data-bitcoin');
+      author.paypal = link.getAttribute('paypal') || link.getAttribute('data-paypal');
+      author.stripe = link.getAttribute('stripe') || link.getAttribute('data-stripe');
+      return author;
+    });
+
+  } else {
+    var newArray = [];
+    newArray[0] = domains[messageBody.hostname];
+    var author = newArray;
+    messageBody.list = author;
+  }
+
+  // if nothing, check for tipsy.txt
+  if (messageBody.list.length === 0) {
+    messageBody.list = parseTxt();
+  }
+} else {
+  // Page loaded over HTTP, but give /tipsy.txt a shot (also requires HTTPS)
   messageBody.list = parseTxt();
 }
 

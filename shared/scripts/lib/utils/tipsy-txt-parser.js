@@ -80,10 +80,12 @@ export function parseTxt() {
     }
   }
 
+
   if (info == null || shouldRenew) {
     var req = new XMLHttpRequest();
-    try {  
-      req.open('GET', "/tipsy.txt", false);   
+    try {
+      // Enforce HTTPS requirement when retrieving payment info.
+      req.open('GET', 'https://' . document.domain . '/tipsy.txt', false);
     } catch (e) {
       
     }
