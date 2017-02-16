@@ -21,9 +21,9 @@ module.exports = ->
 
   @registerTask 'chrome-extension', [
     'clean:chrome-extension'
-    'compress:chrome-extension'
     'copy:chrome-extension'
     'stylus:chrome-extension'
     'es6:chrome-extension'
+    'compress:chrome-extension'
     'shell:chrome-extension'
   ]
