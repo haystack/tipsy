@@ -21,24 +21,14 @@ export function getCurrentTab() {
   return new Promise(function(resolve, reject) {
     var tabs = null;
 
-    if (environment === 'chrome') {
-      chrome.tabs.query({
-        windowId: chrome.windows.WINDOW_ID_CURRENT,
-        active: true
-      }, function(activeTabs) {
-        tab.id = activeTabs[0].id;
-        tab.url = activeTabs[0].url;
-
-        resolve(tab);
-      });
-    }
-    else if (environment === 'firefox') {
-      tabs = require('sdk/tabs');
-
-      tab.id = tabs.activeTab.id;
-      tab.url = tabs.activeTab.url;
+    chrome.tabs.query({
+      windowId: chrome.windows.WINDOW_ID_CURRENT,
+      active: true
+    }, function(activeTabs) {
+      tab.id = activeTabs[0].id;
+      tab.url = activeTabs[0].url;
 
       resolve(tab);
-    }
+    });
   });
 }

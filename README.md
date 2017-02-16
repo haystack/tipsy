@@ -51,36 +51,6 @@ npm run watch-chrome
 
 chrome-extension://ajcjbhihdfmefgbenbkpgalkjglcbmmp/html/index.html
 
-### Working on Firefox extension ###
-
-Build the *.crx* file with:
-
-``` shell
-npm run build-firefox
-```
-
-#### Watching the filesystem for changes ####
-
-You can have the extension automatically recompiled with:
-
-``` shell
-npm run watch-firefox
-```
-
-#### Extension url ####
-
-resource://jid1-onbkbcx9o5ylwa-at-jetpack/tipsy/data/html/index.html
-
-### Working on both Chrome and Firefox ###
-
-To build both extensions you will need to ensure that you can build them
-individually per the instructions above.  Then the following command should
-work:
-
-``` shell
-npm run build
-```
-
 #### Watching the filesystem for changes ####
 
 You can have both extensions automatically recompiled with:

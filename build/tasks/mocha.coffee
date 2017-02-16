@@ -13,15 +13,6 @@ module.exports = ->
         'test/integration/tests/**/*.js'
       ]
 
-    'firefox-extension':
-      src: [
-        'test/integration/setup.js'
-        'test/integration/extension-driver.js'
-        'firefox-extension/test/configure.js'
-        'test/integration/tests/basic.js'
-        #'test/integration/tests/**/*.js'
-      ]
-
     'shared':
       src: [
         'test/unit/runner.js'

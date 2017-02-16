@@ -6,7 +6,6 @@ At a high level, the folder structure breaks down into:
 - `/build`
 - `/docs`
 - `/chrome-extension`
-- `/firefox-extension`
 - `/shared`
 - `/test`
 
@@ -34,18 +33,6 @@ sign the extension.  This also contains the extension manifest file.
 
 The distribution directory, `dist`, contains the unpacked built extension and
 the signed `.crx` file.
-
-The `test` directory contains configuration for the Webdriver test runner which
-allows it to load and navigate to the extension.
-
-#### Firefox extension
-
-The firefox-extension directory does not need any unique files or folders to
-build.  Firefox infers almost everything it needs from the source code and
-everything else is loaded from the package.json.
-
-The distribution directory, `dist`, contains the unpacked built extension and
-the `.xpi` file.
 
 The `test` directory contains configuration for the Webdriver test runner which
 allows it to load and navigate to the extension.

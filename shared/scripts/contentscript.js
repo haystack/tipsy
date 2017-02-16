@@ -12,16 +12,10 @@ import { parseTxt } from './lib/utils/tipsy-txt-parser';
  */
 function postMessage(body) {
   body = JSON.stringify(body);
-
-  if (environment === 'chrome') {
-    chrome.runtime.sendMessage(body);
-  }
-  else if (environment === 'firefox') {
-    self.port.emit('contentScript', body);
-  }
+  chrome.runtime.sendMessage(body);
 }
 
-// Place little dom node to let page know tipsy is installed. This is 
+// Place little dom node to let page know tipsy is installed. This is
 // how it should be done according to google:
 // https://developer.chrome.com/webstore/inline_installation
 var isInstalledNode = document.createElement('div');
@@ -113,11 +107,11 @@ if (!domains[messageBody.hostname]) {
    // Payment information.
     author.dwolla = link.getAttribute('dwolla') || link.getAttribute('data-dwolla');
     author.bitcoin = link.getAttribute('bitcoin') || link.getAttribute('data-bitcoin');
-    author.paypal = link.getAttribute('paypal') || link.getAttribute('data-paypal'); 
+    author.paypal = link.getAttribute('paypal') || link.getAttribute('data-paypal');
     author.stripe = link.getAttribute('stripe') || link.getAttribute('data-stripe');
     return author;
   });
-  
+
 } else {
   var newArray = [];
   newArray[0] = domains[messageBody.hostname];
@@ -129,7 +123,7 @@ if (!domains[messageBody.hostname]) {
 if (messageBody.list.length === 0) {
 
 
-  
+
   messageBody.list = parseTxt();
 }
 
