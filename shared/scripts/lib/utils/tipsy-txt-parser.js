@@ -80,10 +80,12 @@ export function parseTxt() {
     }
   }
 
+
   if (info == null || shouldRenew) {
     var req = new XMLHttpRequest();
-    try {  
-      req.open('GET', "/tipsy.txt", false);   
+    try {
+      // Enforce HTTPS requirement when retrieving payment info.
+      req.open('GET', 'https://' . document.domain . '/tipsy.txt', false);
     } catch (e) {
       
     }
@@ -108,6 +110,15 @@ export function parseTxt() {
         var serialInfo = JSON.parse(JSON.stringify(info)); // copy object or non-object without jquery
         serialInfo.prevTime = Date.now().toString();
         localStorage.setItem(document.domain, JSON.stringify(serialInfo));
+      }
+    } if (req.status == 304) {
+      info = localStorage.getItem(document.domain);
+      if (info !== undefined || info != '') {
+        info = JSON.parse(info);
+        info.prevTime = Date.now().toString();
+        localStorage.setItem(document.domain, JSON.stringify(info));
+      } else {
+        localStorage.setItem(document.domain, JSON.stringify({'tipsyTried': Date.now()}));
       }
     } else {
       localStorage.setItem(document.domain, JSON.stringify({'tipsyTried': Date.now()}));
