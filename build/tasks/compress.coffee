@@ -8,14 +8,6 @@ module.exports = ->
         mode: 'zip'
 
       files: [
-        { src: ['node_modules/purecss/*'], dest: '.' }
-        { src: ['**/*'], expand: true, cwd: 'shared' }
-        {
-          src: [
-            'key.pem'
-            '_locales/**'
-          ]
-          expand: true
-          cwd: 'chrome-extension'
-        }
+        { src: ['key.pem'], cwd: 'chrome-extension/dist' }
+        { src: ['**/*'], expand: true, cwd: 'chrome-extension/dist/tipsy' }
       ]
