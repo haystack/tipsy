@@ -4,3 +4,4 @@
 /chrome-extension/dist
 /cjs
 /test/coverage
+*.pem
