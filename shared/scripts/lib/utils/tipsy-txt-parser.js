@@ -111,6 +111,15 @@ export function parseTxt() {
         serialInfo.prevTime = Date.now().toString();
         localStorage.setItem(document.domain, JSON.stringify(serialInfo));
       }
+    } if (req.status == 304) {
+      info = localStorage.getItem(document.domain);
+      if (info !== undefined || info != '') {
+        info = JSON.parse(info);
+        info.prevTime = Date.now().toString();
+        localStorage.setItem(document.domain, JSON.stringify(info));
+      } else {
+        localStorage.setItem(document.domain, JSON.stringify({'tipsyTried': Date.now()}));
+      }
     } else {
       localStorage.setItem(document.domain, JSON.stringify({'tipsyTried': Date.now()}));
     }
