@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "tipsy",
-  "version": "0.1.12",
+  "version": "0.1.14",
   "description": "A prototype",
   "icons": {
     "19": "img/logo19.png",
