@@ -6,6 +6,7 @@ import calculate from '../../utils/calculate';
 import { inject as injectDwolla } from '../../processors/dwolla';
 import { getDwollaButton as dwollaBtn } from '../../processors/dwolla';
 import { inject as injectPaypal } from '../../processors/paypal';
+import { inject as injectBitcoin } from '../../processors/bitcoin';
 import { defaults } from '../../defaults';
 
 function DonationsPage() {
@@ -145,9 +146,10 @@ DonationsPage.prototype = {
 
           var dwollaToken = $component.attr('data-dwolla');
           var paypalToken = $component.attr('data-paypal');
+          var bitcoinToken = $component.attr('data-bitcoin');
 
           // Hide the no processors text.
-          if (dwollaToken || paypalToken) {
+          if (dwollaToken || paypalToken || bitcoinToken) {
             payment.empty();
           }
 
@@ -159,6 +161,11 @@ DonationsPage.prototype = {
           // Only inject if the author has paypal.
           if (paypalToken) {
             $component.data().paypal = injectPaypal(payment, amount, paypalToken);
+         }
+
+          // Only inject if the author has bitcoin.
+          if (bitcoinToken) {
+            $component.data().bitcoin = injectBitcoin(payment, amount, bitcoinToken);
          }
          
          if (dwollaToken && !payment.hasClass("d-btn")) {
@@ -474,9 +481,10 @@ DonationsPage.prototype = {
 
         var dwollaToken = $component.attr('data-dwolla');
         var paypalToken = $component.attr('data-paypal');
+        var bitcoinToken = $component.attr('data-bitcoin');
 
         // Hide the no processors text.
-        if (dwollaToken || paypalToken) {
+        if (dwollaToken || paypalToken || bitcoinToken) {
           payment.empty();
         }
 
@@ -489,6 +497,11 @@ DonationsPage.prototype = {
         // Only inject if the author has paypal.
         if (paypalToken) {
           $component.data().paypal = injectPaypal(payment, amount, paypalToken);
+        }
+
+        // Only inject if the author has bitcoin.
+        if (bitcoinToken) {
+          $component.data().bitcoin = injectBitcoin(payment, amount, bitcoinToken);
         }
 
       });

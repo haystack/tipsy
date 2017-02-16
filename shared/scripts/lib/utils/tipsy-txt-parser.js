@@ -158,6 +158,10 @@ export function parseTxt() {
                   break;
                 case "dwolla":
                   newArray[0].dwolla = splitEntry[1];
+                  break;
+                case "bitcoin":
+                  newArray[0].bitcoin = splitEntry[1];
+                  break;
               }
             }
            
@@ -194,6 +198,9 @@ export function parseTxt() {
           }
           if (paymentMethods[urlPref]) {
             newArray[0].paypal = paymentMethods[urlPref].paypal;
+          }
+          if (paymentMethods[urlPref]) {
+            newArray[0].bitcoin = paymentMethods[urlPref].bitcoin;
           }
           if (info.author) {
             newArray[0].name = info.author;
