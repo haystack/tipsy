@@ -6,9 +6,11 @@ module.exports = ->
   npmDeps = [
     'node_modules/jquery/dist/*',
     'node_modules/purecss/build/*',
-    'node_modules/combyne/dist/*'
-    'node_modules/moment/min/*'
-    'node_modules/tablesort/*'
+    'node_modules/combyne/dist/*',
+    'node_modules/moment/min/*',
+    'node_modules/tablesort/*',
+    'node_modules/tablesort/src/*',
+    'node_modules/tablesort/src/sorts/*'
   ]
 
   @config 'copy',
