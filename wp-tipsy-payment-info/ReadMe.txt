@@ -1,15 +1,15 @@
-=== Plugin Name ===
+=== Tipsy Payment Info ===
 Contributors: schilippe, geekysoft
-Tags: code insert, head tag, tipsy
+Tags: tipsy, monetization, micropayments, paypal, dwolla
 Requires at least: 2.1
 Tested up to: 4
 Stable tag: 2.0
 
-Inserts Tipsy Payment Info into head tag of wordpress webpage
+Enables micropayments from visitors with the [Tipsy browser extension](http://tipsy.csail.mit.edu/).
 
 == Description ==
 
-This plugin makes it easy for content creators to include the necessary information in their page's source so that they can be paid by Tipsy users. It opens as a simple form under the Tools menu.
+This plugin makes it easy for content creators to include the necessary information in their page's source so that they can be paid by Tipsy users. Invisible metadata with payment information is added to your pages, so Tipsy works with any and all theme.
 
 
 == Installation ==

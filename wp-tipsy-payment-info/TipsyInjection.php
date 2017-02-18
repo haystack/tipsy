@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Insert Tipsy Payment Info
-Plugin URI: tipsy.csail.mit.edu
-Description: Inserts Tipsy payment info into your site's head tag.
+Plugin Name: Tipsy Payment Info
+Plugin URI: http://tipsy.csail.mit.edu/
+Description: Enables micropayments from visitors with the Tipsy browser extension.
 Version: 2.0
 Author: schilippe
 License: GPL
