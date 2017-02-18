@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: schilippe
+Contributors: schilippe, geekysoft
 Tags: code insert, head tag, tipsy
 Requires at least: 2.1
 Tested up to: 4
