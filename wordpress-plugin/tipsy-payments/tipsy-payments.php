@@ -3,7 +3,7 @@
 Plugin Name: Tipsy Payment Info
 Plugin URI: http://tipsy.csail.mit.edu/
 Description: Enables micropayments from visitors with the Tipsy browser extension.
-Version: 2.0
+Version: 2.1
 Author: schilippe
 License: GPL
 */

@@ -2,8 +2,8 @@
 Contributors: schilippe, geekysoft
 Tags: tipsy, monetization, micropayments, paypal, dwolla
 Requires at least: 2.1
-Tested up to: 4
-Stable tag: 2.0
+Tested up to: 4.7.2
+Stable tag: 2.1
 
 Enables micropayments from visitors with the [Tipsy browser extension](http://tipsy.csail.mit.edu/).
 
