@@ -8,6 +8,11 @@ Author: schilippe
 License: GPL
 */
 
+if (!defined('ABSPATH')) {
+    header('HTTP/1.1 403 Forbidden');
+    exit('HTTP/1.1 403 Forbidden');
+}
+
 add_option("tipsy_paypal_email");
 add_option("tipsy_dwolla_key");
 add_action("admin_menu" , 'tipsy_wp_admin_options_page');
